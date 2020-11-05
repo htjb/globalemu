@@ -21,7 +21,7 @@ class nn():
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
 
-        train_dataset_fp = '/home/harry/Documents/21cmNN/' + self.base_dir + 'zT_train_dataset.csv'
+        train_dataset_fp = '/home/harry/Documents/emulator/21cmNN/' + self.base_dir + 'zT_train_dataset.csv'
 
         column_names = ['fstar', 'Vc', 'fx', 'tau', 'alpha', 'nu_min', 'Rmfp', 'z', 'T']
         feature_names = column_names[:-1]
