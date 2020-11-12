@@ -1,9 +1,7 @@
 import numpy as np
-from zT.two_preprocess import process
-#from zT.three_preprocess import process
+from zT.preprocess import process
 from zT.network import nn
 from zT.eval import prediction
-#from zT.f_eval import prediction
 import matplotlib.pyplot as plt
 
 layer_size = [8, 8]
