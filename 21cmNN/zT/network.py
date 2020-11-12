@@ -6,17 +6,22 @@ from tensorflow.keras import backend as K
 import time
 from zT.models import network_models
 import os
+import pandas as pd
 
 class nn():
     def __init__(
-        self, batch_size, layer_sizes, activation, drop_val, epochs, lr, **kwargs):
+        self, batch_size, layer_sizes, activation, drop_val, epochs, lr,
+        input_shape, output_shape, **kwargs):
         self.batch_size = batch_size #136
         self.layer_sizes =layer_sizes
         self.activation = activation
         self.drop_val = drop_val
         self.epochs = epochs
         self.lr = lr
+        self.input_shape = input_shape
+        self.output_shape = output_shape
         self.base_dir = kwargs.pop('base_dir', 'results/')
+        self.BN = kwargs.pop('BN', 'True')
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
@@ -24,6 +29,7 @@ class nn():
         train_dataset_fp = '/home/harry/Documents/emulator/21cmNN/' + self.base_dir + 'zT_train_dataset.csv'
 
         column_names = ['fstar', 'Vc', 'fx', 'tau', 'alpha', 'nu_min', 'Rmfp', 'z', 'T']
+        #column_names = ['a', 'b', 'x', 'T']
         feature_names = column_names[:-1]
         label_names = column_names[-1]
 
@@ -33,8 +39,7 @@ class nn():
         	column_names = column_names,
         	label_name = label_names,
         	num_epochs=1)
-
-        #features, labels = next(iter(train_dataset))
+            #shuffle=False)
 
         def pack_features_vector(features, labels):
             features = tf.stack(list(features.values()), axis=1)
@@ -42,9 +47,19 @@ class nn():
 
         train_dataset = train_dataset.map(pack_features_vector)
         #features, labels = next(iter(train_dataset))
+        #print(features, labels)
+        #print(train_dataset)
 
-        model = network_models().basic_model(
-            8, 1, self.layer_sizes, self.activation, self.drop_val)
+        if self.BN is True:
+            model = network_models().basic_model_norm(
+                self.input_shape, self.output_shape,
+                self.layer_sizes, self.activation, self.drop_val)
+        else:
+            model = network_models().basic_model(
+                self.input_shape, self.output_shape,
+                self.layer_sizes, self.activation, self.drop_val)
+
+        #print(model.summary())
 
         def root_mean_squared_error(y, y_):
         	return K.sqrt(K.mean(K.square(y - y_)))/ \
@@ -53,9 +68,13 @@ class nn():
         def mean_squared_error(y, y_):
             return K.mean(K.square(y - y_))
 
+        #def chi(y, y_):
+        #    return K.sum(K.square(y - y_))
+
         def loss(model, x, y, training):
-        	y_ = model(x, training=training)
-        	return mean_squared_error(y, y_), root_mean_squared_error(y, y_)
+            y_ = tf.transpose(model(x, training=training))[0]
+            return mean_squared_error(y, y_), root_mean_squared_error(y, y_)
+            #return chi(y, y_), mean_squared_error(y, y_), root_mean_squared_error(y, y_)
 
         def grad(model, inputs, targets):
         	with tf.GradientTape() as tape:
@@ -86,11 +105,11 @@ class nn():
             if len(train_loss_results) > 10:
                 if np.isclose(
                         train_loss_results[-10], train_loss_results[-1],
-                        1e-3, 1e-3):
+                        1e-4, 1e-4):
                     print('Early Stop')
                     model.save(self.base_dir + 'zT_model')
                     break
-            if type(epoch//10) is int:
+            if epoch % 10 == 0:
                 model.save(self.base_dir + 'zT_model')
 
         model.save(self.base_dir + 'zT_model')
