@@ -17,31 +17,27 @@ class process():
         full_train_data = np.loadtxt('21cmGEM_data/Par_train_21cmGEM.txt')
         full_train_labels = np.loadtxt('21cmGEM_data/T21_train_21cmGEM.txt')
 
-        ind = []
-        for i in range(len(full_train_labels)):
-            index = np.random.randint(0, len(full_train_labels))
-            if index not in set(ind):
-                ind.append(index)
-            if len(ind) == self.num:
-                break
-        ind = np.array(ind)
-
-        #import matplotlib.pyplot as plt
-
         res = calc_signal(orig_z, reionization='unity')
 
-        train_data, train_labels = [], []
-        for i in range(len(full_train_labels)):
-            if np.any(ind == i):
-                train_data.append(full_train_data[i, :])
-                train_labels.append(full_train_labels[i]- res.deltaT*1e3)
-        train_data, train_labels = np.array(train_data), np.array(train_labels)
+        if self.num == 'full':
+            train_data = full_train_data.copy()
+            train_labels = full_train_labels.copy() - res.deltaT*1e3
+        else:
+            ind = []
+            for i in range(len(full_train_labels)):
+                index = np.random.randint(0, len(full_train_labels))
+                if index not in set(ind):
+                    ind.append(index)
+                if len(ind) == self.num:
+                    break
+            ind = np.array(ind)
 
-        """for i in range(len(train_labels)):
-            plt.plot(orig_z, train_labels[i], c='gray', alpha=0.5)
-            plt.plot(orig_z, train_labels[i] - res.deltaT*1e3, c='k')
-        plt.show()
-        sys.exit(1)"""
+            train_data, train_labels = [], []
+            for i in range(len(full_train_labels)):
+                if np.any(ind == i):
+                    train_data.append(full_train_data[i, :])
+                    train_labels.append(full_train_labels[i]- res.deltaT*1e3)
+            train_data, train_labels = np.array(train_data), np.array(train_labels)
 
         log_td = []
         for i in range(train_data.shape[1]):
