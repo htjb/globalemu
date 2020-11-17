@@ -31,7 +31,7 @@ class prediction():
             (params[i] - data_means[i])/data_stds[i]
             for i in range(len(params))]
         #print('norm', normalised_params)
-        norm_z = (self.z - self.orig_z.mean())/self.orig_z.std()
+        norm_z = (self.z - self.z.mean())/self.z.std() # Using the resampled mean and std
 
         if isinstance(norm_z, np.ndarray):
             predicted_spectra = []
@@ -55,8 +55,8 @@ class prediction():
             predicted_spectra += label_means
         #print(predicted_spectra)
 
-        res = calc_signal(self.z, reionization='unity')
+        res = calc_signal(self.orig_z, reionization='unity')
+        predicted_spec = np.interp(self.orig_z, self.z, predicted_spectra)
+        predicted_spectra = predicted_spec + res.deltaT*1e3
 
-        predicted_spectra += res.deltaT*1e3
-
-        return predicted_spectra, self.z
+        return predicted_spectra, self.orig_z

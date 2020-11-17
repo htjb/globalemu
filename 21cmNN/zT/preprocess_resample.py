@@ -13,8 +13,6 @@ class process():
             os.mkdir(self.base_dir)
 
         orig_z = np.arange(5, 50.1, 0.1)
-        #z = (z - z.min())/(z.max()-z.min())
-        z = (orig_z - orig_z.mean())/orig_z.std()
 
         full_train_data = np.loadtxt('21cmGEM_data/Par_train_21cmGEM.txt')
         full_train_labels = np.loadtxt('21cmGEM_data/T21_train_21cmGEM.txt')
@@ -52,6 +50,14 @@ class process():
             else:
                 log_td.append(train_data[:, i])
         train_data = np.array(log_td).T
+
+        samples = np.loadtxt('samples.txt')
+        resampled_labels = []
+        for i in range(len(train_labels)):
+            resampled_labels.append(np.interp(samples, orig_z, train_labels[i]))
+        train_labels = np.array(resampled_labels)
+
+        norm_s = (samples - samples.mean())/samples.std()
 
         #labels_min = np.abs(train_labels.min())
         labels_means = train_labels.mean()
@@ -110,8 +116,8 @@ class process():
 
         flattened_train_data = []
         for i in range(len(norm_train_data)):
-            for j in range(len(z)):
-                flattened_train_data.append(np.hstack([norm_train_data[i, :], z[j]]))
+            for j in range(len(norm_s)):
+                flattened_train_data.append(np.hstack([norm_train_data[i, :], norm_s[j]]))
         flattened_train_data = np.array(flattened_train_data)
 
         #train_data, train_label = shuffle(flattened_train_data, norm_train_labels, random_state=0)

@@ -1,11 +1,12 @@
 import numpy as np
-from zT.preprocess import process
+#from zT.preprocess import process
+from zT.preprocess_resample import process
 from zT.network import nn
 from zT.eval import prediction
 import matplotlib.pyplot as plt
 
 layer_size = [8, 8]
-base_dir = '8-8_improved/'
+base_dir = '8-8_global_large_resample_take2/'
 #layer_size = [128, 64, 64, 128]
 #base_dir = '128-64-64-128/'
 process(3000, base_dir=base_dir)
@@ -20,7 +21,7 @@ orig_z = np.arange(5, 50.1, 0.1)
 test_data = np.loadtxt('21cmGEM_data/Par_test_21cmGEM.txt')
 test_labels = np.loadtxt('21cmGEM_data/T21_test_21cmGEM.txt')
 
-ids = np.loadtxt('testing/indices.txt')
+ids = np.loadtxt(base_dir + 'indices.txt')
 
 for i in range(len(ids)):
     ids[i] = int(ids[i])
@@ -30,9 +31,11 @@ inds = np.random.randint(0, len(ids), 4)
 train_data = np.loadtxt('21cmGEM_data/Par_train_21cmGEM.txt')
 train_labels = np.loadtxt('21cmGEM_data/T21_train_21cmGEM.txt')
 
+samples = np.loadtxt('samples.txt')
+
 signals = []
 for i in range(len(inds)):
-    res = prediction(train_data[int(ids[inds[i]])], base_dir=base_dir)
+    res = prediction(train_data[int(ids[inds[i]])], base_dir=base_dir, z=samples)
     signals.append(res.signal)
 signals = np.array(signals)
 z = res.z
@@ -69,7 +72,7 @@ plt.show()"""
 ind = np.random.randint(0, len(test_data), 4)
 sigs = []
 for i in range(len(ind)):
-    res = prediction(test_data[ind[i]], base_dir=base_dir)
+    res = prediction(test_data[ind[i]], base_dir=base_dir, z=samples)
     print(res.signal.min())
     #res = prediction(f, train_data[int(ids[100])], base_dir=base_dir)
     #predicted_spectrum = res.signal
