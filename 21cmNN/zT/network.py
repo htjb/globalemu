@@ -105,7 +105,7 @@ class nn():
             if len(train_loss_results) > 10:
                 if np.isclose(
                         train_loss_results[-10], train_loss_results[-1],
-                        1e-4, 1e-4):
+                        1e-3, 1e-3):
                     print('Early Stop')
                     model.save(self.base_dir + 'zT_model')
                     break

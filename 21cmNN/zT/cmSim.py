@@ -16,8 +16,13 @@ class calc_signal:
         # 21cmGEM code
         self.h = 0.6704
         self.H0 = 100*self.h * 1000/3.089e22
+        #self.omega_c = 0.12038/self.h**2
+        #self.omega_b = 0.022032/self.h**2
+        #self.omega_m = self.omega_b + self.omega_c
+        #print(self.omega_m)
+        #self.omega_lam = 1 - self.omega_m
 
-        self.T_cmb0 = 2.75 # K
+        self.T_cmb0 = 2.725 # K
         self.z = z
         self.orig_z = np.arange(5, 50.1, 0.1)
         self.planck_h = 6.626e-34 # m^2 kg s^-1

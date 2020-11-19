@@ -5,16 +5,17 @@ from zT.network import nn
 from zT.eval import prediction
 import matplotlib.pyplot as plt
 
-layer_size = [8, 8]
-base_dir = '8-8_global_large_resample_take2/'
+layer_size = [8, 16, 8]
+base_dir = 'snakeviz_test/'
 #layer_size = [128, 64, 64, 128]
 #base_dir = '128-64-64-128/'
-process(3000, base_dir=base_dir)
+num = 3000
+#process(num, base_dir=base_dir)
 
 # batchsize, layersize, activation, dropout, epochs, learning rate, kwargs
-nn(
-    451, layer_size, 'tanh', 0.0,
-    500, 5e-3, 8, 1, base_dir=base_dir)#, BN=False)
+#nn(
+#    451, layer_size, 'tanh', 0.0,
+#    500, 1e-3, 8, 1, base_dir=base_dir)#, BN=False)
 
 orig_z = np.arange(5, 50.1, 0.1)
 
@@ -38,7 +39,7 @@ for i in range(len(inds)):
     res = prediction(train_data[int(ids[inds[i]])], base_dir=base_dir, z=samples)
     signals.append(res.signal)
 signals = np.array(signals)
-z = res.z
+z = res.z_out
 fig, axes = plt.subplots(2, 2, sharex=True, sharey=True)
 axes[0, 0].plot(orig_z, train_labels[int(ids[inds[0]])])
 axes[0, 0].plot(z, signals[0])
@@ -79,7 +80,7 @@ for i in range(len(ind)):
     sigs.append(res.signal)
 sigs = np.array(sigs)
 print(sigs.shape)
-z = res.z
+z = res.z_out
 
 fig, axes = plt.subplots(2, 2, sharex=True, sharey=True)
 axes[0, 0].plot(orig_z, test_labels[ind[0]])

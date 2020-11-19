@@ -94,7 +94,8 @@ class process():
         #plt.show()
         #sys.exit(1)
 
-        np.savetxt(self.base_dir + 'indices.txt', ind)
+        if self.num != 'full':
+            np.savetxt(self.base_dir + 'indices.txt', ind)
         #np.savetxt(self.base_dir + 'data_abs_max.txt', data_abs_max)
         np.savetxt(self.base_dir + 'data_means.txt', data_means)
         np.savetxt(self.base_dir + 'data_stds.txt', data_stds)

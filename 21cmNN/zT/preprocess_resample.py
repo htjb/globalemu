@@ -39,6 +39,13 @@ class process():
                     train_labels.append(full_train_labels[i]- res.deltaT*1e3)
             train_data, train_labels = np.array(train_data), np.array(train_labels)
 
+        """for i in range(len(train_labels)):
+            plt.plot(orig_z, train_labels[i, :])
+            if i == 0:
+                print(train_labels[i, :])
+        plt.show()
+        sys.exit(1)"""
+
         log_td = []
         for i in range(train_data.shape[1]):
             if i in set([0, 1]):
@@ -53,7 +60,10 @@ class process():
             resampled_labels.append(np.interp(samples, orig_z, train_labels[i]))
         train_labels = np.array(resampled_labels)
 
-        norm_s = (samples - samples.mean())/samples.std()
+        #log_samples = np.log10(samples)
+        #norm_s = (log_samples - log_samples.min())/(log_samples.max() - log_samples.min())
+        #norm_s = (log_samples - log_samples.mean())/log_samples.std()
+        norm_s = (samples.copy() - samples.min())/(samples.max()-samples.min())
 
         #labels_min = np.abs(train_labels.min())
         labels_means = train_labels.mean()
@@ -64,21 +74,16 @@ class process():
         #for i in range(len(train_labels)):
         #    axes[0].plot(np.arange(5, 50.1, 0.1), train_labels[i])
 
-        data_means = train_data.mean(axis=0)
-        data_stds = train_data.std(axis=0)
-        #data_mins = train_data.min(axis=0)
-        #data_maxs = train_data.max(axis=0)
-
-        #data_abs_max = []
-        #for i in range(train_data.shape[1]):
-        #    data_abs_max.append(np.abs(train_data[:, i]).max())
-        #data_abs_max = np.array(data_abs_max)
+        #data_means = train_data.mean(axis=0)
+        #data_stds = train_data.std(axis=0)
+        data_mins = train_data.min(axis=0)
+        data_maxs = train_data.max(axis=0)
 
         norm_train_data = []
         for i in range(train_data.shape[1]):
             #norm_train_data.append(train_data[:, i]/data_abs_max[i])
-            norm_train_data.append((train_data[:, i] - data_means[i])/data_stds[i])
-            #norm_train_data.append((train_data[:, i] - data_maxs[i])/(data_mins[i]-data_maxs[i]))
+            #norm_train_data.append((train_data[:, i] - data_means[i])/data_stds[i])
+            norm_train_data.append((train_data[:, i] - data_mins[i])/(data_maxs[i]-data_mins[i]))
         norm_train_data = np.array(norm_train_data).T
 
         norm_train_labels = []
@@ -99,16 +104,16 @@ class process():
         #    axes[2].plot(z, norm_train_labels[i:i+451])
         #plt.show()
         #sys.exit(1)
-
-        np.savetxt(self.base_dir + 'indices.txt', ind)
+        if self.num != 'full':
+            np.savetxt(self.base_dir + 'indices.txt', ind)
         #np.savetxt(self.base_dir + 'data_abs_max.txt', data_abs_max)
-        np.savetxt(self.base_dir + 'data_means.txt', data_means)
-        np.savetxt(self.base_dir + 'data_stds.txt', data_stds)
+        #np.savetxt(self.base_dir + 'data_means.txt', data_means)
+        #np.savetxt(self.base_dir + 'data_stds.txt', data_stds)
         #np.save(self.base_dir + 'label_min.npy', labels_min)
         np.save(self.base_dir + 'labels_means.npy', labels_means)
         np.save(self.base_dir + 'labels_stds.npy', labels_stds)
-        #np.savetxt(self.base_dir + 'data_mins.txt', data_mins)
-        #np.savetxt(self.base_dir + 'data_maxs.txt', data_maxs)
+        np.savetxt(self.base_dir + 'data_mins.txt', data_mins)
+        np.savetxt(self.base_dir + 'data_maxs.txt', data_maxs)
 
         flattened_train_data = []
         for i in range(len(norm_train_data)):
