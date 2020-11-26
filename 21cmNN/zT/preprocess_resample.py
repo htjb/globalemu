@@ -14,8 +14,8 @@ class process():
 
         orig_z = np.arange(5, 50.1, 0.1)
 
-        full_train_data = np.loadtxt('21cmGEM_data/Par_train_21cmGEM.txt')
-        full_train_labels = np.loadtxt('21cmGEM_data/T21_train_21cmGEM.txt')
+        full_train_data = np.loadtxt('Resplit_data/train_data.txt')
+        full_train_labels = np.loadtxt('Resplit_data/train_labels.txt')
 
         res = calc_signal(orig_z, reionization='unity')
 
@@ -60,12 +60,12 @@ class process():
             resampled_labels.append(np.interp(samples, orig_z, train_labels[i]))
         train_labels = np.array(resampled_labels)
 
-        #log_samples = np.log10(samples)
-        #norm_s = (log_samples - log_samples.min())/(log_samples.max() - log_samples.min())
-        #norm_s = (log_samples - log_samples.mean())/log_samples.std()
         norm_s = (samples.copy() - samples.min())/(samples.max()-samples.min())
+        #ls = np.log10(samples)
+        #norm_s = (ls.copy() - ls.min())/(ls.max()-ls.min())
 
-        #labels_min = np.abs(train_labels.min())
+        #labels_min = train_labels.min()
+        #labels_max = train_labels.max()
         labels_means = train_labels.mean()
         labels_stds = train_labels.std()
 
@@ -89,6 +89,7 @@ class process():
         norm_train_labels = []
         for i in range(train_labels.shape[0]):
             norm_train_labels.append((train_labels[i, :]- labels_means)/labels_stds)
+            #norm_train_labels.append((train_labels[i, :]- labels_min)/(labels_max-labels_min))
         norm_train_labels = np.array(norm_train_labels)
         #print(norm_train_labels.shape)
         #sys.exit(1)
@@ -110,6 +111,7 @@ class process():
         #np.savetxt(self.base_dir + 'data_means.txt', data_means)
         #np.savetxt(self.base_dir + 'data_stds.txt', data_stds)
         #np.save(self.base_dir + 'label_min.npy', labels_min)
+        #np.save(self.base_dir + 'label_max.npy', labels_max)
         np.save(self.base_dir + 'labels_means.npy', labels_means)
         np.save(self.base_dir + 'labels_stds.npy', labels_stds)
         np.savetxt(self.base_dir + 'data_mins.txt', data_mins)

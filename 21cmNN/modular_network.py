@@ -4,23 +4,25 @@ from zT.preprocess_resample import process
 from zT.network import nn
 from zT.eval import prediction
 import matplotlib.pyplot as plt
+from zT.losses import loss_functions
 
 layer_size = [8, 16, 8]
-base_dir = 'snakeviz_test/'
+#layer_size = [2, 4, 4, 4]
+base_dir = '8-16-8_resplit/'
 #layer_size = [128, 64, 64, 128]
 #base_dir = '128-64-64-128/'
 num = 3000
-#process(num, base_dir=base_dir)
+process(num, base_dir=base_dir)
 
 # batchsize, layersize, activation, dropout, epochs, learning rate, kwargs
-#nn(
-#    451, layer_size, 'tanh', 0.0,
-#    500, 1e-3, 8, 1, base_dir=base_dir)#, BN=False)
+nn(
+    451, layer_size, 'tanh', 0.0,
+    500, 1e-3, 8, 1, base_dir=base_dir)#, BN=False)
 
 orig_z = np.arange(5, 50.1, 0.1)
 
-test_data = np.loadtxt('21cmGEM_data/Par_test_21cmGEM.txt')
-test_labels = np.loadtxt('21cmGEM_data/T21_test_21cmGEM.txt')
+test_data = np.loadtxt('Resplit_data/test_data.txt')
+test_labels = np.loadtxt('Resplit_data/test_labels.txt')
 
 ids = np.loadtxt(base_dir + 'indices.txt')
 
@@ -29,26 +31,32 @@ for i in range(len(ids)):
 
 inds = np.random.randint(0, len(ids), 4)
 
-train_data = np.loadtxt('21cmGEM_data/Par_train_21cmGEM.txt')
-train_labels = np.loadtxt('21cmGEM_data/T21_train_21cmGEM.txt')
+train_data = np.loadtxt('Resplit_data/train_data.txt')
+train_labels = np.loadtxt('Resplit_data/train_labels.txt')
 
 samples = np.loadtxt('samples.txt')
 
-signals = []
+signals, rmse = [], []
 for i in range(len(inds)):
     res = prediction(train_data[int(ids[inds[i]])], base_dir=base_dir, z=samples)
     signals.append(res.signal)
+    rmse.append(loss_functions(train_labels[int(ids[inds[i]])], res.signal).rmse())
 signals = np.array(signals)
+rmse = np.array(rmse)
 z = res.z_out
 fig, axes = plt.subplots(2, 2, sharex=True, sharey=True)
 axes[0, 0].plot(orig_z, train_labels[int(ids[inds[0]])])
-axes[0, 0].plot(z, signals[0])
+axes[0, 0].plot(z, signals[0], label='rmse = {:.3f} mK'.format(rmse[0]))
+axes[0, 0].legend()
 axes[0, 1].plot(orig_z, train_labels[int(ids[inds[1]])])
-axes[0, 1].plot(z, signals[1])
+axes[0, 1].plot(z, signals[1], label='rmse = {:.3f} mK'.format(rmse[1]))
+axes[0, 1].legend()
 axes[1, 0].plot(orig_z, train_labels[int(ids[inds[2]])])
-axes[1, 0].plot(z, signals[2])
+axes[1, 0].plot(z, signals[2], label='rmse = {:.3f} mK'.format(rmse[2]))
+axes[1, 0].legend()
 axes[1, 1].plot(orig_z, train_labels[int(ids[inds[3]])])
-axes[1, 1].plot(z, signals[3])
+axes[1, 1].plot(z, signals[3], label='rmse = {:.3f} mK'.format(rmse[3]))
+axes[1, 1].legend()
 fig.add_subplot(111, frame_on=False)
 plt.tick_params(bottom=False, left=False, labelcolor='none')
 plt.xlabel('z')
@@ -71,26 +79,30 @@ plt.show()"""
 
 #res = prediction(f, test_data[15], base_dir=base_dir)
 ind = np.random.randint(0, len(test_data), 4)
-sigs = []
+sigs, rmse = [], []
 for i in range(len(ind)):
     res = prediction(test_data[ind[i]], base_dir=base_dir, z=samples)
     print(res.signal.min())
-    #res = prediction(f, train_data[int(ids[100])], base_dir=base_dir)
-    #predicted_spectrum = res.signal
+    rmse.append(loss_functions(test_labels[ind[i]], res.signal).rmse())
     sigs.append(res.signal)
 sigs = np.array(sigs)
+rmse = np.array(rmse)
 print(sigs.shape)
 z = res.z_out
 
 fig, axes = plt.subplots(2, 2, sharex=True, sharey=True)
 axes[0, 0].plot(orig_z, test_labels[ind[0]])
-axes[0, 0].plot(z, sigs[0])
+axes[0, 0].plot(z, sigs[0], label='rmse = {:.3f} mK'.format(rmse[0]))
+axes[0, 0].legend()
 axes[0, 1].plot(orig_z, test_labels[ind[1]])
-axes[0, 1].plot(z, sigs[1])
+axes[0, 1].plot(z, sigs[1], label='rmse = {:.3f} mK'.format(rmse[1]))
+axes[0, 1].legend()
 axes[1, 0].plot(orig_z, test_labels[ind[2]])
-axes[1, 0].plot(z, sigs[2])
+axes[1, 0].plot(z, sigs[2], label='rmse = {:.3f} mK'.format(rmse[2]))
+axes[1, 0].legend()
 axes[1, 1].plot(orig_z, test_labels[ind[3]])
-axes[1, 1].plot(z, sigs[3])
+axes[1, 1].plot(z, sigs[3], label='rmse = {:.3f} mK'.format(rmse[3]))
+axes[1, 1].legend()
 fig.add_subplot(111, frame_on=False)
 plt.tick_params(bottom=False, left=False, labelcolor='none')
 plt.xlabel('z')

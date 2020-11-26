@@ -7,6 +7,7 @@ import time
 from zT.models import network_models
 import os
 import pandas as pd
+from zT.losses import loss_functions
 
 class nn():
     def __init__(
@@ -21,7 +22,7 @@ class nn():
         self.input_shape = input_shape
         self.output_shape = output_shape
         self.base_dir = kwargs.pop('base_dir', 'results/')
-        self.BN = kwargs.pop('BN', 'True')
+        self.BN = kwargs.pop('BN', False)
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
@@ -61,19 +62,14 @@ class nn():
 
         #print(model.summary())
 
-        def root_mean_squared_error(y, y_):
-        	return K.sqrt(K.mean(K.square(y - y_)))/ \
-                K.max(K.abs(y))
-
-        def mean_squared_error(y, y_):
-            return K.mean(K.square(y - y_))
-
         #def chi(y, y_):
         #    return K.sum(K.square(y - y_))
 
         def loss(model, x, y, training):
             y_ = tf.transpose(model(x, training=training))[0]
-            return mean_squared_error(y, y_), root_mean_squared_error(y, y_)
+            lf = loss_functions(y, y_)
+            return lf.mse(), lf.rmse()
+            #return mean_squared_error(y, y_), root_mean_squared_error(y, y_)
             #return chi(y, y_), mean_squared_error(y, y_), root_mean_squared_error(y, y_)
 
         def grad(model, inputs, targets):
