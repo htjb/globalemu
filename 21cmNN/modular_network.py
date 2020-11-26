@@ -24,48 +24,81 @@ orig_z = np.arange(5, 50.1, 0.1)
 test_data = np.loadtxt('Resplit_data/test_data.txt')
 test_labels = np.loadtxt('Resplit_data/test_labels.txt')
 
-ids = np.loadtxt(base_dir + 'indices.txt')
-
-for i in range(len(ids)):
-    ids[i] = int(ids[i])
-
-inds = np.random.randint(0, len(ids), 4)
-
 train_data = np.loadtxt('Resplit_data/train_data.txt')
 train_labels = np.loadtxt('Resplit_data/train_labels.txt')
 
 samples = np.loadtxt('samples.txt')
 
-signals, rmse = [], []
-for i in range(len(inds)):
-    res = prediction(train_data[int(ids[inds[i]])], base_dir=base_dir, z=samples)
-    signals.append(res.signal)
-    rmse.append(loss_functions(train_labels[int(ids[inds[i]])], res.signal).rmse())
-signals = np.array(signals)
-rmse = np.array(rmse)
-z = res.z_out
-fig, axes = plt.subplots(2, 2, sharex=True, sharey=True)
-axes[0, 0].plot(orig_z, train_labels[int(ids[inds[0]])])
-axes[0, 0].plot(z, signals[0], label='rmse = {:.3f} mK'.format(rmse[0]))
-axes[0, 0].legend()
-axes[0, 1].plot(orig_z, train_labels[int(ids[inds[1]])])
-axes[0, 1].plot(z, signals[1], label='rmse = {:.3f} mK'.format(rmse[1]))
-axes[0, 1].legend()
-axes[1, 0].plot(orig_z, train_labels[int(ids[inds[2]])])
-axes[1, 0].plot(z, signals[2], label='rmse = {:.3f} mK'.format(rmse[2]))
-axes[1, 0].legend()
-axes[1, 1].plot(orig_z, train_labels[int(ids[inds[3]])])
-axes[1, 1].plot(z, signals[3], label='rmse = {:.3f} mK'.format(rmse[3]))
-axes[1, 1].legend()
-fig.add_subplot(111, frame_on=False)
-plt.tick_params(bottom=False, left=False, labelcolor='none')
-plt.xlabel('z')
-plt.ylabel(r'$\delta T$ [mk]')
-plt.tight_layout()
-plt.subplots_adjust(hspace=0, wspace=0)
-plt.savefig(base_dir + 'train_prediction_example.pdf')
-plt.show()
-#sys.exit(1)
+if num != 'full':
+    ids = np.loadtxt(base_dir + 'indices.txt')
+
+    for i in range(len(ids)):
+        ids[i] = int(ids[i])
+
+    inds = np.random.randint(0, len(ids), 4)
+
+    signals, rmse = [], []
+    for i in range(len(inds)):
+        res = prediction(train_data[int(ids[inds[i]])], base_dir=base_dir, z=samples)
+        signals.append(res.signal)
+        rmse.append(loss_functions(train_labels[int(ids[inds[i]])], res.signal).rmse())
+    signals = np.array(signals)
+    rmse = np.array(rmse)
+    z = res.z_out
+    fig, axes = plt.subplots(2, 2, sharex=True, sharey=True)
+    axes[0, 0].plot(orig_z, train_labels[int(ids[inds[0]])])
+    axes[0, 0].plot(z, signals[0], label='rmse = {:.3f} mK'.format(rmse[0]))
+    axes[0, 0].legend()
+    axes[0, 1].plot(orig_z, train_labels[int(ids[inds[1]])])
+    axes[0, 1].plot(z, signals[1], label='rmse = {:.3f} mK'.format(rmse[1]))
+    axes[0, 1].legend()
+    axes[1, 0].plot(orig_z, train_labels[int(ids[inds[2]])])
+    axes[1, 0].plot(z, signals[2], label='rmse = {:.3f} mK'.format(rmse[2]))
+    axes[1, 0].legend()
+    axes[1, 1].plot(orig_z, train_labels[int(ids[inds[3]])])
+    axes[1, 1].plot(z, signals[3], label='rmse = {:.3f} mK'.format(rmse[3]))
+    axes[1, 1].legend()
+    fig.add_subplot(111, frame_on=False)
+    plt.tick_params(bottom=False, left=False, labelcolor='none')
+    plt.xlabel('z')
+    plt.ylabel(r'$\delta T$ [mk]')
+    plt.tight_layout()
+    plt.subplots_adjust(hspace=0, wspace=0)
+    plt.savefig(base_dir + 'train_prediction_example.pdf')
+    plt.show()
+    #sys.exit(1)
+else:
+    inds = np.random.randint(0, len(ids), 4)
+
+    signals, rmse = [], []
+    for i in range(len(inds)):
+        res = prediction(train_data[int(inds[i])], base_dir=base_dir, z=samples)
+        signals.append(res.signal)
+        rmse.append(loss_functions(train_labels[int(inds[i])], res.signal).rmse())
+    signals = np.array(signals)
+    rmse = np.array(rmse)
+    z = res.z_out
+    fig, axes = plt.subplots(2, 2, sharex=True, sharey=True)
+    axes[0, 0].plot(orig_z, train_labels[int(inds[0])])
+    axes[0, 0].plot(z, signals[0], label='rmse = {:.3f} mK'.format(rmse[0]))
+    axes[0, 0].legend()
+    axes[0, 1].plot(orig_z, train_labels[int(inds[1])])
+    axes[0, 1].plot(z, signals[1], label='rmse = {:.3f} mK'.format(rmse[1]))
+    axes[0, 1].legend()
+    axes[1, 0].plot(orig_z, train_labels[int(inds[2])])
+    axes[1, 0].plot(z, signals[2], label='rmse = {:.3f} mK'.format(rmse[2]))
+    axes[1, 0].legend()
+    axes[1, 1].plot(orig_z, train_labels[int(inds[3])])
+    axes[1, 1].plot(z, signals[3], label='rmse = {:.3f} mK'.format(rmse[3]))
+    axes[1, 1].legend()
+    fig.add_subplot(111, frame_on=False)
+    plt.tick_params(bottom=False, left=False, labelcolor='none')
+    plt.xlabel('z')
+    plt.ylabel(r'$\delta T$ [mk]')
+    plt.tight_layout()
+    plt.subplots_adjust(hspace=0, wspace=0)
+    plt.savefig(base_dir + 'train_prediction_example.pdf')
+    plt.show()
 
 """for i in range(len(train_data)):
     if np.any(i == ids):
