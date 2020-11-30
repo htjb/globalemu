@@ -10,7 +10,7 @@ class network_models():
         self.BN = tf.keras.layers.BatchNormalization
 
     def basic_model(self, input_dim, output_dim, layer_sizes, activation, drop_val):
-        a0 = self.Inputs(shape = (input_dim))
+        a0 = self.Inputs(shape = (input_dim,))
         inputs = a0
         for layer_size in layer_sizes:
             outputs = self.Dense(layer_size, activation=activation)(a0)
@@ -21,7 +21,7 @@ class network_models():
         return model
 
     def basic_model_norm(self, input_dim, output_dim, layer_sizes, activation, drop_val):
-        a0 = self.Inputs(shape = (input_dim))
+        a0 = self.Inputs(shape = (input_dim,))
         inputs = a0
         for layer_size in layer_sizes:
             outputs = self.Dense(layer_size, activation=activation)(a0)

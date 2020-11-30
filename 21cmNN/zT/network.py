@@ -103,12 +103,12 @@ class nn():
                         train_loss_results[-10], train_loss_results[-1],
                         1e-3, 1e-3):
                     print('Early Stop')
-                    model.save(self.base_dir + 'zT_model')
+                    model.save(self.base_dir + 'zT_model.h5')
                     break
             if epoch % 10 == 0:
-                model.save(self.base_dir + 'zT_model')
+                model.save(self.base_dir + 'zT_model.h5')
 
-        model.save(self.base_dir + 'zT_model')
+        model.save(self.base_dir + 'zT_model.h5')
 
         plt.figure()
         plt.ylabel('Loss', fontsize=14)

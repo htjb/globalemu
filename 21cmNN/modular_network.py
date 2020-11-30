@@ -8,18 +8,18 @@ from zT.losses import loss_functions
 
 layer_size = [8, 16, 8]
 #layer_size = [2, 4, 4, 4]
-base_dir = '8-16-8_resplit/'
+base_dir = '8-16-8_normAFB_logfx/'
 #layer_size = [128, 64, 64, 128]
 #base_dir = '128-64-64-128/'
 num = 3000
-process(num, base_dir=base_dir)
+#process(num, base_dir=base_dir)
 
 # batchsize, layersize, activation, dropout, epochs, learning rate, kwargs
-nn(
-    451, layer_size, 'tanh', 0.0,
-    500, 1e-3, 8, 1, base_dir=base_dir)#, BN=False)
+#nn(
+#    451, layer_size, 'tanh', 0.0,
+#    50, 1e-3, 8, 1, base_dir=base_dir)#, BN=False)
 
-orig_z = np.arange(5, 50.1, 0.1)
+orig_z = np.linspace(5, 50, 451)
 
 test_data = np.loadtxt('Resplit_data/test_data.txt')
 test_labels = np.loadtxt('Resplit_data/test_labels.txt')
@@ -27,7 +27,7 @@ test_labels = np.loadtxt('Resplit_data/test_labels.txt')
 train_data = np.loadtxt('Resplit_data/train_data.txt')
 train_labels = np.loadtxt('Resplit_data/train_labels.txt')
 
-samples = np.loadtxt('samples.txt')
+samples = np.loadtxt(base_dir + 'samples.txt')
 
 if num != 'full':
     ids = np.loadtxt(base_dir + 'indices.txt')

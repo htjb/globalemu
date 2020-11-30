@@ -9,45 +9,43 @@ class calc_signal:
         # Furlanetto pg 13
         #self.h = 0.74
         #self.H0 = 74 * 1000/3.089e22 # s^-1
-        self.omega_b = 0.044
-        self.omega_m = 0.26
-        self.omega_lam = 0.74
+        #self.omega_b = 0.044
+        #self.omega_m = 0.26
+        #self.omega_lam = 0.74
 
         # 21cmGEM code
         self.h = 0.6704
         self.H0 = 100*self.h * 1000/3.089e22
-        #self.omega_c = 0.12038/self.h**2
-        #self.omega_b = 0.022032/self.h**2
-        #self.omega_m = self.omega_b + self.omega_c
+        self.omega_c = 0.12038/self.h**2
+        self.omega_b = 0.022032/self.h**2
+        self.omega_m = self.omega_b + self.omega_c
         #print(self.omega_m)
-        #self.omega_lam = 1 - self.omega_m
+        self.omega_lam = 1 - self.omega_m
 
         self.T_cmb0 = 2.725 # K
         self.z = z
-        self.orig_z = np.arange(5, 50.1, 0.1)
+        self.orig_z = np.linspace(5, 50, 451)
         self.planck_h = 6.626e-34 # m^2 kg s^-1
         self.c = 3e8 # m/s
 
-        self.reionization = kwargs.pop('reionization', 'tanh')
         self.collisions = kwargs.pop('collisions', True)
 
         self.deltaT, self.T_K, self.T_s, self.T_r = self.calc()
 
     def calc(self):
 
-        z_dec = 150*((self.omega_b*self.h**2)/0.023)**(2/5) - 1
-        T_K_dec = self.T_cmb0*(1+z_dec)
         T_r = self.T_cmb0*(1+self.orig_z)
+        #z_ref = 50
+        #T_K_ref = 50.6660 #K
+        z_ref = 40
+        T_K_ref = 33.7340#K
 
-        T_K = np.empty(len(self.orig_z))
-        for i in range(len(self.orig_z)):
-            if self.orig_z[i] < z_dec:
-                T_K[i] = T_K_dec*(1+self.orig_z[i])**2/(1+z_dec)**2
-            else:
-                T_K[i] = T_r[i]
+        T_K = T_K_ref*((1+self.orig_z)/(1+z_ref))**2
 
-        #The Intergalactic Medium, Piero Madau
-        nH = 1.67e-7*(self.omega_b*self.h**2)/0.019*(1+self.orig_z)**3*1e6
+        Y = 0.274 #Helium abundance by mass
+        rhoc = 1.36e11*(self.h/0.7)**2 #M_sol/cMpc^3
+        mp = 8.40969762e-58 # m_p in M_sol
+        nH = (rhoc/mp)*(1-Y)*self.omega_b*(1+self.orig_z)**3*3.40368e-68
 
         if self.collisions is False:
             T_s = T_K.copy()
@@ -60,23 +58,10 @@ class calc_signal:
             invT_s = (1/T_r + xc*(1/T_K))/(1+xc)
             T_s = 1/invT_s
 
-        if self.reionization == 'unity':
-            xHI = 1
-        if self.reionization == 'tanh':
-            # Witnessing the reionization history using CMB observations from
-            # Planck, D. K. Hazra and G. F. Smoot
-            Fe = 0.08
-            dz = 0.5
-            zre = 10
-            y = (1 + self.orig_z)**(3/2)
-            yre = (1 + zre)**(3/2)
-            DeltaRegion = 1.5*np.sqrt(1+zre)*dz
-            xe = ((1+Fe)/2)*(1 + np.tanh((yre - y)/DeltaRegion))
-            xHI = 1 - xe
-
+        xHI = 1
         nu0 = 1420.4e6
 
-        Hz = (self.H0)*np.sqrt(self.omega_m*(1+self.orig_z)**3+self.omega_lam)
+        Hz = (self.H0)*np.sqrt(self.omega_m*(1+self.orig_z)**3)#+self.omega_lam)
 
         tau = (3*self.planck_h*self.c**3*self.A10*xHI*nH)/ \
             (32*np.pi*self.kb*T_s*nu0**2*(1+self.orig_z)*Hz/(1+self.orig_z))
@@ -89,5 +74,16 @@ class calc_signal:
         T_s = np.interp(self.z, self.orig_z, T_s)
         T_r = np.interp(self.z, self.orig_z, T_r)
         #return deltaT_interp, T_k_interp,
+
+        """import matplotlib.pyplot as plt
+        plt.plot(self.z, T_r, label='T_r')
+        plt.plot(self.z, T_K, label='T_K')
+        plt.plot(self.z, T_s, label='T_s')
+        plt.loglog()
+        plt.legend()
+        plt.show()"""
+
+        train_labels = np.loadtxt('Resplit_data/train_labels.txt')
+        deltaT = deltaT/np.abs(deltaT).max()*np.abs(train_labels[0, -1])
 
         return deltaT, T_K, T_s, T_r
