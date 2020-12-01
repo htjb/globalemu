@@ -17,7 +17,7 @@ num = 3000
 # batchsize, layersize, activation, dropout, epochs, learning rate, kwargs
 #nn(
 #    451, layer_size, 'tanh', 0.0,
-#    50, 1e-3, 8, 1, base_dir=base_dir)#, BN=False)
+#    500, 1e-3, 8, 1, base_dir=base_dir)#, BN=False)
 
 orig_z = np.linspace(5, 50, 451)
 
