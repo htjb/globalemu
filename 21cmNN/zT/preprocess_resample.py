@@ -17,8 +17,9 @@ class process():
 
         full_train_data = np.loadtxt('Resplit_data/train_data.txt')
         full_train_labels = np.loadtxt('Resplit_data/train_labels.txt')
+        np.save(self.base_dir + 'AFB_norm_factor.npy', full_train_labels[0, -1])
 
-        res = calc_signal(orig_z)
+        res = calc_signal(orig_z, base_dir=self.base_dir)
 
         if self.num == 'full':
             train_data = full_train_data.copy()

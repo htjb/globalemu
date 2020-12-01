@@ -11,11 +11,15 @@ class prediction():
         self.orig_z = np.linspace(5, 50, 451)
         self.z = kwargs.pop('z', np.linspace(5, 50.1, 451))
         self.base_dir = kwargs.pop('base_dir', 'results/')
+        self.model = kwargs.pop('model', 'load')
 
         self.signal, self.z_out = self.result()
 
     def result(self):
-        model = keras.models.load_model(self.base_dir + 'zT_model.h5', compile=False)
+        if self.model == 'load':
+            model = keras.models.load_model(self.base_dir + 'zT_model.h5', compile=False)
+        else:
+            model = self.model
 
         data_mins = np.loadtxt(self.base_dir + 'data_mins.txt')
         data_maxs = np.loadtxt(self.base_dir + 'data_maxs.txt')
@@ -55,13 +59,13 @@ class prediction():
                 K.clear_session()
                 gc.collect()
             predicted_spectra = np.array(predicted_spectra)"""
+
             predicted_spectra = []
             x = []
             for j in range(len(norm_z)):
                 x.append(np.hstack([normalised_params, norm_z[j]]))#.astype(np.float32)
             x = np.array(x)
             tensor = tf.convert_to_tensor(x, dtype=tf.float32)
-            print(tensor.shape)
             temp = model.predict(tensor)#, training=False)
             predicted_spectra.append(temp.T[0])#.numpy())
             K.clear_session()
@@ -85,7 +89,7 @@ class prediction():
             predicted_spectra += label_means
         #print(predicted_spectra)
 
-        res = calc_signal(self.z)
+        res = calc_signal(self.z, base_dir=self.base_dir)
         predicted_spectra += res.deltaT
         predicted_spec = np.interp(self.orig_z, self.z, predicted_spectra)
 

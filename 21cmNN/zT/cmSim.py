@@ -29,6 +29,7 @@ class calc_signal:
         self.c = 3e8 # m/s
 
         self.collisions = kwargs.pop('collisions', True)
+        self.base_dir = kwargs.pop('base_dir', 'results/')
 
         self.deltaT, self.T_K, self.T_s, self.T_r = self.calc()
 
@@ -75,15 +76,7 @@ class calc_signal:
         T_r = np.interp(self.z, self.orig_z, T_r)
         #return deltaT_interp, T_k_interp,
 
-        """import matplotlib.pyplot as plt
-        plt.plot(self.z, T_r, label='T_r')
-        plt.plot(self.z, T_K, label='T_K')
-        plt.plot(self.z, T_s, label='T_s')
-        plt.loglog()
-        plt.legend()
-        plt.show()"""
-
-        train_labels = np.loadtxt('Resplit_data/train_labels.txt')
-        deltaT = deltaT/np.abs(deltaT).max()*np.abs(train_labels[0, -1])
+        norm_factor = np.load(self.base_dir + 'AFB_norm_factor.npy')
+        deltaT = deltaT/np.abs(deltaT).max()*np.abs(norm_factor)
 
         return deltaT, T_K, T_s, T_r

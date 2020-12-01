@@ -96,12 +96,12 @@ class nn():
             train_loss_results.append(epoch_loss_avg.result())
             train_rmse_results.append(epoch_rmse_avg.result())
             e = time.time()
-            print('Epoch: {:03d}, Loss: {:.3f}, RMSE: {:.3f}, Time: {:.3f}'.format(epoch,
+            print('Epoch: {:03d}, Loss: {:.4f}, RMSE: {:.4f}, Time: {:.3f}'.format(epoch,
             epoch_loss_avg.result(), epoch_rmse_avg.result(), e-s))
             if len(train_loss_results) > 10:
                 if np.isclose(
                         train_loss_results[-10], train_loss_results[-1],
-                        1e-3, 1e-3):
+                        1e-4, 1e-4):
                     print('Early Stop')
                     model.save(self.base_dir + 'zT_model.h5')
                     break
