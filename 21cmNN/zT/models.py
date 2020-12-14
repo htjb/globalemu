@@ -31,3 +31,15 @@ class network_models():
         outputs = self.Dense(output_dim, activation='linear')(a0)
         model = self.Model(inputs, outputs)
         return model
+
+    def basic_model_L2(self, input_dim, output_dim, layer_sizes, activation, drop_val):
+        a0 = self.Inputs(shape = (input_dim,))
+        reg = tf.keras.regularizers.L2(l2=0.1)
+        inputs = a0
+        for layer_size in layer_sizes:
+            outputs = self.Dense(layer_size, activation=activation, kernel_regularizer=reg)(a0)
+            outputs = self.Dropout(drop_val)(outputs)
+            a0 = outputs
+        outputs = self.Dense(output_dim, activation='linear')(a0)
+        model = self.Model(inputs, outputs)
+        return model

@@ -11,14 +11,15 @@ class sampling():
 
         train_labels = np.loadtxt('Resplit_data/train_labels.txt')
 
-        res = calc_signal(orig_z, reionization='unity')
+        res = calc_signal(orig_z, base_dir=self.base_dir)
 
         for i in range(len(train_labels)):
             train_labels[i] -= res.deltaT
 
-        stds =[]
+        stds = []
         for i in range(train_labels.shape[1]):
-            stds.append(train_labels[:, i].std())
+            stds.append(train_labels[:, i].max() - train_labels[:, i].min())
+            #stds.append(train_labels[:, i].std())
         stds=np.array(stds)
 
         if self.plot is True:

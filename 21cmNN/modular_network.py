@@ -1,5 +1,4 @@
 import numpy as np
-#from zT.preprocess import process
 from zT.preprocess_resample import process
 from zT.network import nn
 from zT.eval import prediction
@@ -7,17 +6,15 @@ import matplotlib.pyplot as plt
 from zT.losses import loss_functions
 
 layer_size = [8, 16, 8]
-#layer_size = [2, 4, 4, 4]
-base_dir = '8-16-8_normAFB_logfx/'
-#layer_size = [128, 64, 64, 128]
-#base_dir = '128-64-64-128/'
+base_dir = 'testing/'
+
 num = 3000
-#process(num, base_dir=base_dir)
+#process(num, base_dir=base_dir)#, weights=True)
 
 # batchsize, layersize, activation, dropout, epochs, learning rate, kwargs
-#nn(
-#    451, layer_size, 'tanh', 0.0,
-#    500, 1e-3, 8, 1, base_dir=base_dir)#, BN=False)
+nn(
+    451, layer_size, 'tanh', 0.0,
+    500, 1e-3, 8, 1, base_dir=base_dir)#, weights=True)#, reg='l2')#, BN=False)
 
 orig_z = np.linspace(5, 50, 451)
 

@@ -23,7 +23,7 @@ class prediction():
 
         data_mins = np.loadtxt(self.base_dir + 'data_mins.txt')
         data_maxs = np.loadtxt(self.base_dir + 'data_maxs.txt')
-        label_means = np.load(self.base_dir + 'labels_means.npy')
+        #label_means = np.load(self.base_dir + 'labels_means.npy')
         label_stds = np.load(self.base_dir + 'labels_stds.npy')
         samples = np.loadtxt(self.base_dir + 'samples.txt')
 
@@ -80,13 +80,13 @@ class prediction():
 
         if isinstance(predicted_spectra, np.ndarray):
             for i in range(predicted_spectra.shape[0]):
-                predicted_spectra[i] = predicted_spectra[i]*label_stds +label_means
+                predicted_spectra[i] = predicted_spectra[i]*label_stds# +label_means
                 #predicted_spectra[i] = predicted_spectra[i]*(label_max - label_min) + label_min
         else:
             #predicted_spectra *= (label_max - label_min)
             #predicted_spectra += label_min
             predicted_spectra *= label_stds
-            predicted_spectra += label_means
+            #predicted_spectra += label_means
         #print(predicted_spectra)
 
         res = calc_signal(self.z, base_dir=self.base_dir)
