@@ -6,7 +6,6 @@ from tensorflow.keras import backend as K
 import time
 from zT.models import network_models
 import os
-import pandas as pd
 from zT.losses import loss_functions
 
 class nn():
