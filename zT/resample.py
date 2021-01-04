@@ -6,10 +6,11 @@ class sampling():
     def __init__(self, base_dir, **kwargs):
         self.base_dir = base_dir
         self.plot = kwargs.pop('plot', False)
+        self.data_location = kwargs.pop('data_location', 'data/')
 
         orig_z = np.linspace(5, 50, 451)
 
-        train_labels = np.loadtxt('Resplit_data/train_labels.txt')
+        train_labels = np.loadtxt(self.data_location + 'train_labels.txt')
 
         res = calc_signal(orig_z, base_dir=self.base_dir)
 
@@ -19,7 +20,6 @@ class sampling():
         stds = []
         for i in range(train_labels.shape[1]):
             stds.append(train_labels[:, i].max() - train_labels[:, i].min())
-            #stds.append(train_labels[:, i].std())
         stds=np.array(stds)
 
         if self.plot is True:

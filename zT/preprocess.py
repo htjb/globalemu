@@ -3,14 +3,12 @@ from sklearn.utils import shuffle
 import os
 from zT.cmSim import calc_signal
 from zT.resample import sampling
-from zT.weights import weight_calc
 
 class process():
     def __init__(self, num, **kwargs):
         print('Preprocessing started...')
         self.num = num
         self.base_dir = kwargs.pop('base_dir', 'results/')
-        self.weights = kwargs.pop('weights', False)
         self.data_location = kwargs.pop('data_location', 'data/')
 
         if not os.path.exists(self.base_dir):
@@ -45,9 +43,6 @@ class process():
                     train_labels.append(full_train_labels[i]- res.deltaT)
             train_data, train_labels = np.array(train_data), np.array(train_labels)
 
-        if self.weights is True:
-            w = weight_calc(train_data).w
-
         log_td = []
         for i in range(train_data.shape[1]):
             if i in set([0, 1]):
@@ -61,7 +56,7 @@ class process():
                 log_td.append(train_data[:, i])
         train_data = np.array(log_td).T
 
-        samples = sampling(self.base_dir).samples
+        samples = sampling(self.base_dir, data_location=self.data_location).samples
         resampled_labels = []
         for i in range(len(train_labels)):
             resampled_labels.append(np.interp(samples, orig_z, train_labels[i]))
@@ -96,12 +91,8 @@ class process():
         flattened_train_data = []
         for i in range(len(norm_train_data)):
             for j in range(len(norm_s)):
-                if self.weights is True:
-                    flattened_train_data.append(
-                        np.hstack([norm_train_data[i, :], norm_s[j], w[i]]))
-                else:
-                    flattened_train_data.append(
-                        np.hstack([norm_train_data[i, :], norm_s[j]]))
+                flattened_train_data.append(
+                    np.hstack([norm_train_data[i, :], norm_s[j]]))
         flattened_train_data = np.array(flattened_train_data)
 
         train_data, train_label = flattened_train_data, norm_train_labels

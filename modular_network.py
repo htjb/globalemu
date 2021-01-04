@@ -1,34 +1,31 @@
 import numpy as np
-from zT.preprocess_resample import process
+from zT.preprocess import process
 from zT.network import nn
 from zT.eval import prediction
 import matplotlib.pyplot as plt
 from zT.losses import loss_functions
 
 layer_size = [8, 16, 8]
-base_dir = '8-16-8_uni_splits/'
+base_dir = 'testing/'
+data_location = 'Resplit_data/'
 
 num = 3000
-process(num, base_dir=base_dir, data_location='Resplit_data/')#, weights=True)
+process(num, base_dir=base_dir, data_location=data_location)
 
 # batchsize, layersize, activation, dropout, epochs, learning rate, kwargs
 nn(
     451, layer_size, 'tanh', 0.0,
-    500, 1e-3, 8, 1, base_dir=base_dir)#, weights=True)#, reg='l2')#, BN=False)
+    10, 1e-3, 8, 1, base_dir=base_dir)
 
 orig_z = np.linspace(5, 50, 451)
 
-"""test_data = np.loadtxt('Resplit_data/test_data.txt')
-test_labels = np.loadtxt('Resplit_data/test_labels.txt')
+test_data = np.loadtxt(data_location + 'test_data.txt')
+test_labels = np.loadtxt(data_location + 'test_labels.txt')
+#test_data = np.loadtxt(data_location + 'insample_test_data.txt')
+#test_labels = np.loadtxt(data_location + 'insample_test_labels.txt')
 
-train_data = np.loadtxt('Resplit_data/train_data.txt')
-train_labels = np.loadtxt('Resplit_data/train_labels.txt')"""
-
-test_data = np.loadtxt('uni_split/insample_test_data.txt')
-test_labels = np.loadtxt('uni_split/insample_test_labels.txt')
-
-train_data = np.loadtxt('uni_split/train_data.txt')
-train_labels = np.loadtxt('uni_split/train_labels.txt')
+train_data = np.loadtxt(data_location + 'train_data.txt')
+train_labels = np.loadtxt(data_location + 'train_labels.txt')
 
 samples = np.loadtxt(base_dir + 'samples.txt')
 
@@ -103,17 +100,6 @@ else:
     plt.savefig(base_dir + 'train_prediction_example.pdf')
     plt.show()
 
-"""for i in range(len(train_data)):
-    if np.any(i == ids):
-        print(train_labels[i, 450])
-        plt.plot(i, train_labels[i, 0], marker='.', c='k')
-        plt.plot(i+ids.max(), train_labels[i, 50], marker='.', c='r')
-        plt.plot(i+(2*ids.max()), train_labels[i, 450], marker='.', c='r')
-plt.show()"""
-
-#f = np.loadtxt('optimum_f.txt')
-
-#res = prediction(f, test_data[15], base_dir=base_dir)
 ind = np.random.randint(0, len(test_data), 4)
 sigs, rmse = [], []
 for i in range(len(ind)):
