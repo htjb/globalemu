@@ -11,14 +11,16 @@ class process():
         self.num = num
         self.base_dir = kwargs.pop('base_dir', 'results/')
         self.weights = kwargs.pop('weights', False)
+        self.data_location = kwargs.pop('data_location', 'data/')
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
 
         orig_z = np.linspace(5, 50, 451)
 
-        full_train_data = np.loadtxt('Resplit_data/train_data.txt')
-        full_train_labels = np.loadtxt('Resplit_data/train_labels.txt')
+        full_train_data = np.loadtxt(self.data_location + 'train_data.txt')
+        full_train_labels = np.loadtxt(self.data_location + 'train_labels.txt')
+
         np.save(self.base_dir + 'AFB_norm_factor.npy', full_train_labels[0, -1]*1e-3)
 
         res = calc_signal(orig_z, base_dir=self.base_dir)

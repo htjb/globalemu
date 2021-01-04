@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 from zT.losses import loss_functions
 
 layer_size = [8, 16, 8]
-base_dir = 'testing/'
+base_dir = '8-16-8_uni_splits/'
 
 num = 3000
-#process(num, base_dir=base_dir)#, weights=True)
+process(num, base_dir=base_dir, data_location='Resplit_data/')#, weights=True)
 
 # batchsize, layersize, activation, dropout, epochs, learning rate, kwargs
 nn(
@@ -18,11 +18,17 @@ nn(
 
 orig_z = np.linspace(5, 50, 451)
 
-test_data = np.loadtxt('Resplit_data/test_data.txt')
+"""test_data = np.loadtxt('Resplit_data/test_data.txt')
 test_labels = np.loadtxt('Resplit_data/test_labels.txt')
 
 train_data = np.loadtxt('Resplit_data/train_data.txt')
-train_labels = np.loadtxt('Resplit_data/train_labels.txt')
+train_labels = np.loadtxt('Resplit_data/train_labels.txt')"""
+
+test_data = np.loadtxt('uni_split/insample_test_data.txt')
+test_labels = np.loadtxt('uni_split/insample_test_labels.txt')
+
+train_data = np.loadtxt('uni_split/train_data.txt')
+train_labels = np.loadtxt('uni_split/train_labels.txt')
 
 samples = np.loadtxt(base_dir + 'samples.txt')
 

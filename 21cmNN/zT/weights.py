@@ -7,7 +7,16 @@ class weight_calc():
         weights = []
         for j in range(self.train_data.shape[1]):
             hist, edges = np.histogram(self.train_data[:, j], bins=50)
-            avg_hist = hist.mean()
+            data_means = []
+            for p in range(len(edges)):
+                if p > 0:
+                    data_means.append((edges[p] - edges[p-1])/2 + edges[p-1])
+            data_means = np.array(data_means)
+            count = 0
+            for f in range(len(hist)):
+                if hist[f] != 0:
+                    count += 1
+            avg_hist = np.sum(hist)/count
             w = []
             for i in range(len(self.train_data[:, j])):
                 h, e = np.histogram(
@@ -15,11 +24,10 @@ class weight_calc():
                     range=(
                     self.train_data[:, j].min(), self.train_data[:, j].max()))
                 val_hist = hist[np.where(h == 1)][0]
-                if val_hist == 0:
-                    print(val_hist)
-                w.append(avg_hist/val_hist)
+                mean = data_means[np.where(h == 1)][0]
+                w.append(avg_hist/(val_hist*mean))
             w = np.array(w)
-            weights.append(w)
+            weights.append(w/np.sum(w))
         weights = np.array(weights).T
         w = []
         for i in range(weights.shape[0]):

@@ -31,9 +31,7 @@ class nn():
 
         pwd = os.getcwd()
         train_dataset_fp = pwd + '/' + self.base_dir + 'zT_train_dataset.csv'
-        print(pwd)
-        print(train_dataset_fp)
-        sys.exit(1)
+
         if self.weights is True:
             column_names = ['fstar', 'Vc', 'fx', 'tau', 'alpha', 'nu_min', 'Rmfp', 'z', 'w', 'T']
         else:
