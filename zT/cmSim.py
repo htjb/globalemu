@@ -69,14 +69,12 @@ class calc_signal:
 
         deltaT = (T_s-T_r)/(1+self.orig_z)*(1-np.exp(-tau))
 
-        #if np.all(self.z == self.orig_z):
+        norm_factor = np.load(self.base_dir + 'AFB_norm_factor.npy')
+        deltaT = deltaT/np.abs(deltaT).max()*np.abs(norm_factor)*1e3
+
         deltaT = np.interp(self.z, self.orig_z, deltaT)
         T_K = np.interp(self.z, self.orig_z, T_K)
         T_s = np.interp(self.z, self.orig_z, T_s)
         T_r = np.interp(self.z, self.orig_z, T_r)
-        #return deltaT_interp, T_k_interp,
-
-        norm_factor = np.load(self.base_dir + 'AFB_norm_factor.npy')
-        deltaT = deltaT/np.abs(deltaT).max()*np.abs(norm_factor)*1e3
 
         return deltaT, T_K, T_s, T_r

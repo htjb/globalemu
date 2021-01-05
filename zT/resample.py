@@ -38,10 +38,7 @@ class sampling():
             plt.savefig(self.base_dir + 'stds_as_pdf.pdf')
             plt.close()
 
-        cdf = []
-        for i in range(len(stds)):
-            cdf.append(np.sum(stds[:i]))
-        cdf = np.array(cdf)
+        cdf = np.cumsum(stds)
 
         if self.plot is True:
             plt.plot(orig_z, cdf)
