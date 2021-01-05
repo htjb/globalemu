@@ -45,7 +45,8 @@ class prediction():
             (params[i] - data_mins[i])/(data_maxs[i] - data_mins[i])
             for i in range(len(params))]
         #print('norm', normalised_params)
-        norm_z = (samples.copy() - samples.min())/(samples.max()-samples.min())
+        #norm_z = (samples.copy() - samples.min())/(samples.max()-samples.min())
+        norm_z = (self.z - samples.min())/(samples.max()-samples.min())
         #ls = np.log10(samples)
         #norm_z = (ls.copy() - ls.min())/(ls.max()-ls.min())
 
