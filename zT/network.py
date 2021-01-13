@@ -11,15 +11,15 @@ from zT.losses import loss_functions
 class nn():
     def __init__(
         self, batch_size, layer_sizes, activation, drop_val, epochs, lr,
-        input_shape, output_shape, **kwargs):
-        self.batch_size = batch_size #136
+        **kwargs):
+        self.batch_size = batch_size
         self.layer_sizes =layer_sizes
         self.activation = activation
         self.drop_val = drop_val
         self.epochs = epochs
         self.lr = lr
-        self.input_shape = input_shape
-        self.output_shape = output_shape
+        self.input_shape = kwargs.pop('input_shape', 8)
+        self.output_shape = kwargs.pop('output_shape', 1)
         self.base_dir = kwargs.pop('base_dir', 'results/')
         self.BN = kwargs.pop('BN', False)
         self.reg = kwargs.pop('reg', None)
@@ -31,7 +31,7 @@ class nn():
         pwd = os.getcwd()
         train_dataset_fp = pwd + '/' + self.base_dir + 'zT_train_dataset.csv'
 
-        column_names = ['fstar', 'Vc', 'fx', 'tau', 'alpha', 'nu_min', 'Rmfp', 'z', 'T']
+        column_names = ['fstar', 'Vc', 'fx', 'tau', 'alpha', 'nu_min', 'Rmfp', 'z', 'output']
         feature_names = column_names[:-1]
         label_names = column_names[-1]
 

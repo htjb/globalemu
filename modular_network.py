@@ -15,7 +15,7 @@ process(num, base_dir=base_dir, data_location=data_location)
 # batchsize, layersize, activation, dropout, epochs, learning rate, kwargs
 nn(
     451, layer_size, 'tanh', 0.0,
-    10, 1e-3, 8, 1, base_dir=base_dir)
+    10, 1e-3, base_dir=base_dir)
 
 orig_z = np.linspace(5, 50, 451)
 
