@@ -152,7 +152,7 @@ class processXHI():
                 log_td.append(train_data[:, i])
         train_data = np.array(log_td).T
 
-        samples = samplingXHI(self.base_dir, data_location=self.data_location, plot=True).samples
+        samples = samplingXHI(self.base_dir, data_location=self.data_location).samples
         resampled_labels = []
         for i in range(len(train_labels)):
             resampled_labels.append(np.interp(samples, orig_z, train_labels[i]))

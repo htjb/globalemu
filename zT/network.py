@@ -24,6 +24,7 @@ class nn():
         self.BN = kwargs.pop('BN', False)
         self.reg = kwargs.pop('reg', None)
         self.early_stop = kwargs.pop('early_stop', False)
+        self.output_activation = kwargs.pop('output_activation', 'linear')
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
@@ -51,16 +52,19 @@ class nn():
         if self.BN is True:
             model = network_models().basic_model_norm(
                 self.input_shape, self.output_shape,
-                self.layer_sizes, self.activation, self.drop_val)
+                self.layer_sizes, self.activation, self.drop_val,
+                self.output_activation)
         else:
             if self.reg == 'l2':
                 model = network_models().basic_model_L2(
                     self.input_shape, self.output_shape,
-                    self.layer_sizes, self.activation, self.drop_val)
+                    self.layer_sizes, self.activation, self.drop_val,
+                    self.output_activation)
             else:
                 model = network_models().basic_model(
                     self.input_shape, self.output_shape,
-                    self.layer_sizes, self.activation, self.drop_val)
+                    self.layer_sizes, self.activation, self.drop_val,
+                    self.output_activation)
 
 
         def loss(model, x, y, training):
