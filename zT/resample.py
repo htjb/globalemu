@@ -17,28 +17,28 @@ class sampling():
         for i in range(len(train_labels)):
             train_labels[i] -= res.deltaT
 
-        stds = []
+        difference = []
         for i in range(train_labels.shape[1]):
-            stds.append(train_labels[:, i].max() - train_labels[:, i].min())
-        stds=np.array(stds)
+            difference.append(train_labels[:, i].max() - train_labels[:, i].min())
+        difference = np.array(difference)
 
         if self.plot is True:
-            plt.plot(orig_z, stds)
+            plt.plot(orig_z, difference)
             plt.xlabel('z')
             plt.ylabel(r'$\sigma$')
-            plt.savefig(self.base_dir + 'stds.pdf')
+            plt.savefig(self.base_dir + 'difference.pdf')
             plt.close()
 
-        stds = [stds[i]/np.sum(stds) for i in range(len(stds))]
+        difference = [difference[i]/np.sum(difference) for i in range(len(difference))]
 
         if self.plot is True:
-            plt.plot(orig_z, stds)
+            plt.plot(orig_z, difference)
             plt.xlabel('z')
             plt.ylabel(r'$\sigma$')
-            plt.savefig(self.base_dir + 'stds_as_pdf.pdf')
+            plt.savefig(self.base_dir + 'difference_as_pdf.pdf')
             plt.close()
 
-        cdf = np.cumsum(stds)
+        cdf = np.cumsum(difference)
 
         if self.plot is True:
             plt.plot(orig_z, cdf)
@@ -47,32 +47,26 @@ class sampling():
             plt.savefig(self.base_dir + 'cdf.pdf')
             plt.close()
 
-        norm_z = (orig_z - orig_z.min())/(orig_z.max() - orig_z.min())
+        x = np.linspace(0, 1, len(orig_z))
 
-        samples = []
-        for r in norm_z:
-            if r == 1:
-                samples.append(orig_z.max())
-            else:
-                samples.append(orig_z[np.argwhere(cdf == min(cdf[(cdf - r) >= 0]))][0][0])
-        self.samples = np.array(samples)
+        self.samples = np.interp(x, cdf, orig_z)
         np.savetxt(self.base_dir + 'samples.txt', self.samples)
 
         tl = []
         for i in range(len(train_labels)):
-            tl.append(np.interp(samples, orig_z, train_labels[i]))
+            tl.append(np.interp(self.samples, orig_z, train_labels[i]))
         tl = np.array(tl)
 
         if self.plot is True:
             fig, axes = plt.subplots(2, 2, figsize=(10, 10))
             axes[0, 0].plot(orig_z, train_labels[0])
-            axes[0, 0].plot(samples, tl[0], marker='.')
+            axes[0, 0].plot(self.samples, tl[0], marker='.')
             axes[0, 1].plot(orig_z, train_labels[2700])
-            axes[0, 1].plot(samples, tl[2700], marker='.')
+            axes[0, 1].plot(self.samples, tl[2700], marker='.')
             axes[1, 0].plot(orig_z, train_labels[26000])
-            axes[1, 0].plot(samples, tl[26000], marker='.')
+            axes[1, 0].plot(self.samples, tl[26000], marker='.')
             axes[1, 1].plot(orig_z, train_labels[10000])
-            axes[1, 1].plot(samples, tl[10000], marker='.')
+            axes[1, 1].plot(self.samples, tl[10000], marker='.')
             fig.add_subplot(111, frame_on=False)
             plt.tick_params(bottom=False, left=False, labelcolor='none')
             plt.xlabel('z')
@@ -84,8 +78,8 @@ class sampling():
 
             plt.figure()
             plt.plot(orig_z, cdf)
-            plt.plot(samples, norm_z, ls='', marker='.')
-            plt.plot(samples, [-0.1]*len(samples),  ls='', marker='.')
+            plt.plot(self.samples, x, ls='', marker='.')
+            plt.plot(self.samples, [-0.1]*len(self.samples),  ls='', marker='.')
             plt.xlabel('z', fontsize=12)
             plt.ylabel('CDF', fontsize=12)
             plt.savefig(self.base_dir + 'icdf.pdf')
@@ -101,28 +95,28 @@ class samplingXHI():
 
         train_labels = np.loadtxt(self.data_location + 'train_labels.txt')
 
-        stds = []
+        difference = []
         for i in range(train_labels.shape[1]):
-            stds.append(train_labels[:, i].max() - train_labels[:, i].min())
-        stds=np.array(stds)
+            difference.append(train_labels[:, i].max() - train_labels[:, i].min())
+        difference=np.array(difference)
 
         if self.plot is True:
-            plt.plot(orig_z, stds)
+            plt.plot(orig_z, difference)
             plt.xlabel('z')
             plt.ylabel(r'$\sigma$')
-            plt.savefig(self.base_dir + 'stds.pdf')
+            plt.savefig(self.base_dir + 'difference.pdf')
             plt.close()
 
-        stds = [stds[i]/np.sum(stds) for i in range(len(stds))]
+        difference = [difference[i]/np.sum(difference) for i in range(len(difference))]
 
         if self.plot is True:
-            plt.plot(orig_z, stds)
+            plt.plot(orig_z, difference)
             plt.xlabel('z')
             plt.ylabel(r'$\sigma$')
-            plt.savefig(self.base_dir + 'stds_as_pdf.pdf')
+            plt.savefig(self.base_dir + 'difference_as_pdf.pdf')
             plt.close()
 
-        cdf = np.cumsum(stds)
+        cdf = np.cumsum(difference)
 
         if self.plot is True:
             plt.plot(orig_z, cdf)
@@ -131,32 +125,26 @@ class samplingXHI():
             plt.savefig(self.base_dir + 'cdf.pdf')
             plt.close()
 
-        norm_z = (orig_z - orig_z.min())/(orig_z.max() - orig_z.min())
+        x = np.linspace(0, 1, len(orig_z))
 
-        samples = []
-        for r in norm_z:
-            if r == 1:
-                samples.append(orig_z.max())
-            else:
-                samples.append(orig_z[np.argwhere(cdf == min(cdf[(cdf - r) >= 0]))][0][0])
-        self.samples = np.array(samples)
+        self.samples = np.interp(x, cdf, orig_z)
         np.savetxt(self.base_dir + 'samples.txt', self.samples)
 
         tl = []
         for i in range(len(train_labels)):
-            tl.append(np.interp(samples, orig_z, train_labels[i]))
+            tl.append(np.interp(self.samples, orig_z, train_labels[i]))
         tl = np.array(tl)
 
         if self.plot is True:
             fig, axes = plt.subplots(2, 2, figsize=(10, 10))
             axes[0, 0].plot(orig_z, train_labels[0])
-            axes[0, 0].plot(samples, tl[0], marker='.')
+            axes[0, 0].plot(self.samples, tl[0], marker='.')
             axes[0, 1].plot(orig_z, train_labels[2700])
-            axes[0, 1].plot(samples, tl[2700], marker='.')
+            axes[0, 1].plot(self.samples, tl[2700], marker='.')
             axes[1, 0].plot(orig_z, train_labels[10046])
-            axes[1, 0].plot(samples, tl[10046], marker='.')
+            axes[1, 0].plot(self.samples, tl[10046], marker='.')
             axes[1, 1].plot(orig_z, train_labels[9000])
-            axes[1, 1].plot(samples, tl[9000], marker='.')
+            axes[1, 1].plot(self.samples, tl[9000], marker='.')
             fig.add_subplot(111, frame_on=False)
             plt.tick_params(bottom=False, left=False, labelcolor='none')
             plt.xlabel('z')
@@ -168,8 +156,8 @@ class samplingXHI():
 
             plt.figure()
             plt.plot(orig_z, cdf)
-            plt.plot(samples, norm_z, ls='', marker='.')
-            plt.plot(samples, [-0.1]*len(samples),  ls='', marker='.')
+            plt.plot(self.samples, x, ls='', marker='.')
+            plt.plot(self.samples, [-0.1]*len(self.samples),  ls='', marker='.')
             plt.xlabel('z', fontsize=12)
             plt.ylabel('CDF', fontsize=12)
             plt.savefig(self.base_dir + 'icdf.pdf')
