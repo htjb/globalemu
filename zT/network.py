@@ -21,10 +21,8 @@ class nn():
         self.input_shape = kwargs.pop('input_shape', 8)
         self.output_shape = kwargs.pop('output_shape', 1)
         self.base_dir = kwargs.pop('base_dir', 'results/')
-        self.BN = kwargs.pop('BN', False)
-        self.reg = kwargs.pop('reg', None)
         self.early_stop = kwargs.pop('early_stop', False)
-        self.output_activation = kwargs.pop('output_activation', 'linear')
+        self.xHI = kwargs.pop('xHI', False)
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
@@ -49,23 +47,16 @@ class nn():
 
         train_dataset = train_dataset.map(pack_features_vector)
 
-        if self.BN is True:
-            model = network_models().basic_model_norm(
+        if self.xHI is False:
+            model = network_models().basic_model(
                 self.input_shape, self.output_shape,
                 self.layer_sizes, self.activation, self.drop_val,
-                self.output_activation)
+                'linear')
         else:
-            if self.reg == 'l2':
-                model = network_models().basic_model_L2(
-                    self.input_shape, self.output_shape,
-                    self.layer_sizes, self.activation, self.drop_val,
-                    self.output_activation)
-            else:
-                model = network_models().basic_model(
-                    self.input_shape, self.output_shape,
-                    self.layer_sizes, self.activation, self.drop_val,
-                    self.output_activation)
-
+            model = network_models().basic_model(
+                self.input_shape, self.output_shape,
+                self.layer_sizes, self.activation, self.drop_val,
+                'relu')
 
         def loss(model, x, y, training):
             y_ = tf.transpose(model(x, training=training))[0]
@@ -98,7 +89,7 @@ class nn():
             e = time.time()
 
             print(
-                'Epoch: {:03d}, Loss: {:.4f}, RMSE: {:.4f}, Time: {:.3f}'.format(epoch,
+                'Epoch: {:03d}, Loss: {:.5f}, RMSE: {:.5f}, Time: {:.3f}'.format(epoch,
                 epoch_loss_avg.result(),
                 epoch_rmse_avg.result(), e-s))
 
