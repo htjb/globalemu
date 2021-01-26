@@ -11,7 +11,3 @@ z = np.arange(10, 20, 100)
 
 def test_existing_dir():
     res = evaluate(params, z=z, base_dir='best_T/', xHI=True)
-
-def test_existing_default_dir():
-    os.rename('best_T/', 'model_dir')
-    res = evaluate(params, z=z)
