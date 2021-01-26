@@ -28,9 +28,11 @@ class nn():
             os.mkdir(self.base_dir)
 
         pwd = os.getcwd()
-        train_dataset_fp = pwd + '/' + self.base_dir + 'zT_train_dataset.csv'
+        train_dataset_fp = pwd + '/' + self.base_dir + 'train_dataset.csv'
 
-        column_names = ['fstar', 'Vc', 'fx', 'tau', 'alpha', 'nu_min', 'Rmfp', 'z', 'output']
+        column_names = [
+            'p' + str(i)
+            for i in range(self.input_shape + self.output_shape)]
         feature_names = column_names[:-1]
         label_names = column_names[-1]
 
@@ -99,18 +101,11 @@ class nn():
                             train_loss_results[-10], train_loss_results[-1],
                             1e-4, 1e-4):
                         print('Early Stop')
-                        model.save(self.base_dir + 'zT_model.h5')
+                        model.save(self.base_dir + 'model.h5')
                         break
             if epoch % 10 == 0:
-                model.save(self.base_dir + 'zT_model.h5')
+                model.save(self.base_dir + 'model.h5')
                 np.savetxt(self.base_dir + 'loss_history.txt', train_loss_results)
 
-        model.save(self.base_dir + 'zT_model.h5')
+        model.save(self.base_dir + 'model.h5')
         np.savetxt(self.base_dir + 'loss_history.txt', train_loss_results)
-
-        plt.figure()
-        plt.ylabel('Loss', fontsize=14)
-        plt.plot(train_loss_results)
-        plt.xlabel('Epoch', fontsize=14)
-        plt.savefig(self.base_dir + 'accurcay_loss.pdf')
-        plt.show()

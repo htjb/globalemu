@@ -9,15 +9,18 @@ layer_size = [8, 16, 8]
 base_dir = 'testing/'
 data_location = 'Resplit_data/'
 
-num = 3000
-process(num, base_dir=base_dir, data_location=data_location)
+orig_z = np.linspace(5, 50, 451)
 
-# batchsize, layersize, activation, dropout, epochs, learning rate, kwargs
+num = 300
+process(num, orig_z, base_dir=base_dir, data_location=data_location)
+
 nn(
     451, layer_size, 'tanh', 0.0,
-    10, 1e-3, base_dir=base_dir)
+    5, 1e-3, base_dir=base_dir)
 
-orig_z = np.linspace(5, 50, 451)
+loss_history = np.loadtxt(base_dir + 'loss_history.txt')
+plt.plot(np.arange(0, len(loss_history), 1), loss_history)
+plt.show()
 
 test_data = np.loadtxt(data_location + 'test_data.txt')
 test_labels = np.loadtxt(data_location + 'test_labels.txt')

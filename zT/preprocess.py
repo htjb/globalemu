@@ -5,20 +5,16 @@ from zT.cmSim import calc_signal
 from zT.resample import sampling
 
 class process():
-    def __init__(self, num, **kwargs):
+    def __init__(self, num, z, **kwargs):
         print('Preprocessing started...')
         self.num = num
+        self.z = z
         self.base_dir = kwargs.pop('base_dir', 'results/')
         self.data_location = kwargs.pop('data_location', 'data/')
         self.xHI = kwargs.pop('xHI', False)
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
-
-        if self.xHI is False:
-            orig_z = np.linspace(5, 50, 451)
-        else:
-            orig_z = np.hstack([np.arange(5, 15.1, 0.1), np.arange(16, 31, 1)])
 
         full_train_data = np.loadtxt(self.data_location + 'train_data.txt')
         full_train_labels = np.loadtxt(self.data_location + 'train_labels.txt')
@@ -27,7 +23,7 @@ class process():
             np.save(
                 self.base_dir + 'AFB_norm_factor.npy',
                 full_train_labels[0, -1]*1e-3)
-            res = calc_signal(orig_z, base_dir=self.base_dir)
+            res = calc_signal(self.z, base_dir=self.base_dir)
 
         if self.num == 'full':
             train_data = full_train_data.copy()
@@ -69,12 +65,12 @@ class process():
         train_data = np.array(log_td).T
 
         samples = sampling(
-            self.base_dir, self.xHI,
+            self.z, self.base_dir, self.xHI,
             data_location=self.data_location).samples
 
         resampled_labels = []
         for i in range(len(train_labels)):
-            resampled_labels.append(np.interp(samples, orig_z, train_labels[i]))
+            resampled_labels.append(np.interp(samples, self.z, train_labels[i]))
         train_labels = np.array(resampled_labels)
 
         norm_s = (samples.copy() - samples.min())/(samples.max()-samples.min())
@@ -114,8 +110,8 @@ class process():
         train_data, train_label = flattened_train_data, norm_train_labels
         train_dataset = np.hstack([train_data, train_label[:, np.newaxis]])
 
-        np.savetxt(self.base_dir + 'zT_train_dataset.csv', train_dataset, delimiter=',')
-        np.savetxt(self.base_dir + 'zT_train_data.txt', train_data)
-        np.savetxt(self.base_dir + 'zT_train_label.txt', train_label)
+        np.savetxt(self.base_dir + 'train_dataset.csv', train_dataset, delimiter=',')
+        np.savetxt(self.base_dir + 'train_data.txt', train_data)
+        np.savetxt(self.base_dir + 'train_label.txt', train_label)
 
         print('...preprocessing done.')

@@ -22,20 +22,19 @@ class calc_signal:
         omega_lam = 1 - omega_m
 
         T_cmb0 = 2.725 # K
-        orig_z = np.linspace(5, 50, 451)
         planck_h = 6.626e-34 # m^2 kg s^-1
         c = 3e8 # m/s
 
-        T_r = T_cmb0*(1+orig_z)
+        T_r = T_cmb0*(1+self.z)
         z_ref = 40
         T_K_ref = 33.7340#K
 
-        T_K = T_K_ref*((1+orig_z)/(1+z_ref))**2
+        T_K = T_K_ref*((1+self.z)/(1+z_ref))**2
 
         Y = 0.274 #Helium abundance by mass
         rhoc = 1.36e11*(h/0.7)**2 #M_sol/cMpc^3
         mp = 8.40969762e-58 # m_p in M_sol
-        nH = (rhoc/mp)*(1-Y)*omega_b*(1+orig_z)**3*3.40368e-68
+        nH = (rhoc/mp)*(1-Y)*omega_b*(1+self.z)**3*3.40368e-68
 
         Tstar = 0.068 #K
         t, kappa10_HH_data = np.loadtxt('kappa_HH.txt', unpack=True)
@@ -48,19 +47,14 @@ class calc_signal:
         xHI = 1
         nu0 = 1420.4e6
 
-        Hz = (H0)*np.sqrt(omega_m*(1+orig_z)**3)
+        Hz = (H0)*np.sqrt(omega_m*(1+self.z)**3)
 
         tau = (3*planck_h*c**3*A10*xHI*nH)/ \
-            (32*np.pi*kb*T_s*nu0**2*(1+orig_z)*Hz/(1+orig_z))
+            (32*np.pi*kb*T_s*nu0**2*(1+self.z)*Hz/(1+self.z))
 
-        deltaT = (T_s-T_r)/(1+orig_z)*(1-np.exp(-tau))
+        deltaT = (T_s-T_r)/(1+self.z)*(1-np.exp(-tau))
 
         norm_factor = np.load(self.base_dir + 'AFB_norm_factor.npy')
         deltaT = deltaT/np.abs(deltaT).max()*np.abs(norm_factor)*1e3
-
-        deltaT = np.interp(self.z, orig_z, deltaT)
-        T_K = np.interp(self.z, orig_z, T_K)
-        T_s = np.interp(self.z, orig_z, T_s)
-        T_r = np.interp(self.z, orig_z, T_r)
 
         return deltaT, T_K, T_s, T_r

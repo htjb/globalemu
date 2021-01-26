@@ -20,7 +20,7 @@ class prediction():
 
     def result(self):
         if self.model == 'load':
-            model = keras.models.load_model(self.base_dir + 'zT_model.h5', compile=False)
+            model = keras.models.load_model(self.base_dir + 'model.h5', compile=False)
         else:
             model = self.model
 

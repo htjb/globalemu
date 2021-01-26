@@ -14,11 +14,5 @@ class loss_functions():
     def mse(self):
         return K.mean(K.square(self.y - self.y_))
 
-    def mre(self):
-        #print(np.abs((self.y.min()-self.y_.min())/self.y.min()))
-        # 21cmGEM paper has relative error of abosrbtion trough temp not mean
-        # over whole spectrum
-        return K.mean(K.abs((self.y - self.y_)/self.y))
-
     def GEMLoss(self):
         return (K.sqrt(K.mean(K.square(self.y - self.y_)))/K.max(K.abs(self.y)))
