@@ -9,9 +9,9 @@ class download():
     def model(self):
 
         if self.xHI is False:
-            base_dir = 'best_T/'
+            base_dir = 'T_release/'
         else:
-            base_dir = 'best_xHI/'
+            base_dir = 'xHI_release/'
 
         os.mkdir(base_dir)
 
@@ -21,11 +21,11 @@ class download():
         if self.xHI is False:
             base_url = \
                 'https://raw.githubusercontent.com/' + \
-                'htjb/emulator/master/best_T/'
+                'htjb/GlobalEmu/master/T_release/'
         else:
             base_url = \
                 'https://raw.githubusercontent.com/' + \
-                'htjb/emulator/master/best_xHI/'
+                'htjb/GlobalEmu/master/xHI_release/'
 
         for i in range(len(files)):
             if i > 3 and self.xHI is True:
@@ -40,7 +40,7 @@ class download():
 
         base_url = \
             'https://raw.githubusercontent.com/' + \
-            'htjb/emulator/master/'
+            'htjb/GlobalEmu/master/'
 
         r = requests.get(base_url + files)
         open(files, 'wb').write(r.content)
