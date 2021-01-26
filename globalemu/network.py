@@ -1,11 +1,9 @@
-import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 from tensorflow.keras import backend as K
-import time
+import time, os
 from globalemu.models import network_models
-import os
 from globalemu.losses import loss_functions
 
 class nn():

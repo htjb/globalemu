@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 class calc_signal:
     def __init__(self, z, base_dir, **kwargs):
@@ -42,7 +41,7 @@ class calc_signal:
         except:
             download('dummy').kappa()
             t, kappa10_HH_data = np.loadtxt('kappa_HH.txt', unpack=True)
-            
+
         kappa10_HH = np.interp(T_K, t, kappa10_HH_data)
 
         xc = (nH*kappa10_HH*1e-6*Tstar)/(A10*T_r)

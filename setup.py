@@ -1,6 +1,5 @@
 from setuptools import setup, find_packages
 
-
 def readme(short=False):
     with open('README.rst') as f:
         if short:
@@ -17,13 +16,8 @@ setup(
     author_email='htjb2@cam.ac.uk',
     url='https://github.com/htjb/GlobalEmu',
     packages=find_packages(),
-    install_requires=[],
+    install_requires=['numpy', 'tensorflow'],
     license='MIT',
-    #entry_points={
-    #    'console_scripts': [
-    #        'GlobalEmu=globalemu:run'
-    #    ]
-    #},
     scripts=['scripts/globalemu'],
     extras_require={
           'docs': ['sphinx', 'sphinx_rtd_theme', 'numpydoc'],

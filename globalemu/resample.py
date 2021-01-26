@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from globalemu.cmSim import calc_signal
 
 class sampling():
