@@ -16,7 +16,7 @@ class download():
         os.mkdir(base_dir)
 
         files = ['model.h5', 'data_mins.txt', 'data_maxs.txt', 'samples.txt',
-            'AFB_norm_factor.npy', 'label_stds.npy']
+            'AFB_norm_factor.npy', 'labels_stds.npy']
 
         if self.xHI is False:
             base_url = \
