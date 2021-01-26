@@ -20,7 +20,7 @@ class nn():
         self.lr = lr
         self.input_shape = kwargs.pop('input_shape', 8)
         self.output_shape = kwargs.pop('output_shape', 1)
-        self.base_dir = kwargs.pop('base_dir', 'results/')
+        self.base_dir = kwargs.pop('base_dir', 'model_dir/')
         self.early_stop = kwargs.pop('early_stop', False)
         self.xHI = kwargs.pop('xHI', False)
 

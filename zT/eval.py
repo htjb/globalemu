@@ -2,15 +2,18 @@ import tensorflow as tf
 import numpy as np
 from tensorflow import keras
 from zT.cmSim import calc_signal
+from zT.downloads import download
 from tensorflow.keras import backend as K
 import gc
+import warnings
+import os
 
-class prediction():
+class evaluate():
     def __init__(self, parameters, **kwargs):
         self.params = parameters
-        self.base_dir = kwargs.pop('base_dir', 'results/')
-        self.model = kwargs.pop('model', 'load')
         self.xHI = kwargs.pop('xHI', False)
+        self.base_dir = kwargs.pop('base_dir', 'model_dir/')
+
         if self.xHI is False:
             self.z = kwargs.pop('z', np.linspace(5, 50, 451))
         else:
@@ -19,10 +22,25 @@ class prediction():
         self.signal, self.z_out = self.result()
 
     def result(self):
-        if self.model == 'load':
+        def pull(path):
+            if not os.path.exists(path):
+                warnings.warn(
+                    'Unable to find base directory ' +
+                    self.base_dir + '. Downloading the trained model from ' +
+                    'https://github.com/htjb/emulator.')
+                download(self.xHI).model()
+            self.base_dir = path
+            model = keras.models.load_model(
+                self.base_dir + 'model.h5',
+                compile=False)
+
+        try:
             model = keras.models.load_model(self.base_dir + 'model.h5', compile=False)
-        else:
-            model = self.model
+        except:
+            if self.xHI is False:
+                pull('best_T/')
+            else:
+                pull('best_xHI/')
 
         data_mins = np.loadtxt(self.base_dir + 'data_mins.txt')
         data_maxs = np.loadtxt(self.base_dir + 'data_maxs.txt')
@@ -68,7 +86,7 @@ class prediction():
             else:
                 evaluation *= label_stds
 
-            res = calc_signal(self.z, base_dir=self.base_dir)
+            res = calc_signal(self.z, self.base_dir)
             evaluation += res.deltaT
 
         return evaluation, self.z

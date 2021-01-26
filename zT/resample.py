@@ -12,7 +12,7 @@ class sampling():
         train_labels = np.loadtxt(self.data_location + 'train_labels.txt')
 
         if self.xHI is False:
-            res = calc_signal(self.z, base_dir=self.base_dir)
+            res = calc_signal(self.z, self.base_dir)
             for i in range(len(train_labels)):
                 train_labels[i] -= res.deltaT
 

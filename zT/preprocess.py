@@ -9,7 +9,7 @@ class process():
         print('Preprocessing started...')
         self.num = num
         self.z = z
-        self.base_dir = kwargs.pop('base_dir', 'results/')
+        self.base_dir = kwargs.pop('base_dir', 'model_dir/')
         self.data_location = kwargs.pop('data_location', 'data/')
         self.xHI = kwargs.pop('xHI', False)
 
@@ -23,7 +23,7 @@ class process():
             np.save(
                 self.base_dir + 'AFB_norm_factor.npy',
                 full_train_labels[0, -1]*1e-3)
-            res = calc_signal(self.z, base_dir=self.base_dir)
+            res = calc_signal(self.z, self.base_dir)
 
         if self.num == 'full':
             train_data = full_train_data.copy()

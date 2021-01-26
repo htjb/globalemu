@@ -2,10 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class calc_signal:
-    def __init__(self, z, **kwargs):
+    def __init__(self, z, base_dir, **kwargs):
 
         self.z = z
-        self.base_dir = kwargs.pop('base_dir', 'results/')
+        self.base_dir = base_dir
         self.deltaT, self.T_K, self.T_s, self.T_r = self.calc()
 
     def calc(self):
@@ -37,7 +37,12 @@ class calc_signal:
         nH = (rhoc/mp)*(1-Y)*omega_b*(1+self.z)**3*3.40368e-68
 
         Tstar = 0.068 #K
-        t, kappa10_HH_data = np.loadtxt('kappa_HH.txt', unpack=True)
+        try:
+            t, kappa10_HH_data = np.loadtxt('kappa_HH.txt', unpack=True)
+        except:
+            download('dummy').kappa()
+            t, kappa10_HH_data = np.loadtxt('kappa_HH.txt', unpack=True)
+            
         kappa10_HH = np.interp(T_K, t, kappa10_HH_data)
 
         xc = (nH*kappa10_HH*1e-6*Tstar)/(A10*T_r)
