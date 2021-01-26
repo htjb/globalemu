@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from zT.cmSim import calc_signal
+from globalemu.cmSim import calc_signal
 
 class sampling():
     def __init__(self, z, base_dir, xHI, **kwargs):

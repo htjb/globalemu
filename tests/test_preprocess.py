@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from zT.preprocess import process
+from globalemu.preprocess import process
 import pytest
 import requests, zipfile, io
 import os

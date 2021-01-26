@@ -1,8 +1,8 @@
 import numpy as np
 from sklearn.utils import shuffle
 import os
-from zT.cmSim import calc_signal
-from zT.resample import sampling
+from globalemu.cmSim import calc_signal
+from globalemu.resample import sampling
 
 class process():
     def __init__(self, num, z, **kwargs):

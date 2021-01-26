@@ -1,7 +1,7 @@
 from tkinter import *
 import matplotlib.pyplot as plt
 from PIL import ImageTk, Image
-from zT.eval import evaluate
+from globalemu.eval import evaluate
 import numpy as np
 import sys
 

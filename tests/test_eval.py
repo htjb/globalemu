@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from zT.eval import evaluate
-from zT.downloads import download
+from globalemu.eval import evaluate
+from globalemu.downloads import download
 import pytest
 
 params = [0.25, 30, 2, 0.056, 1.3, 2, 30]

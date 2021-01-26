@@ -9,22 +9,22 @@ def readme(short=False):
             return f.read()
 
 setup(
-    name='21cmGlo',
+    name='GlobalEmu',
     version='1.0.0',
-    description='21cmGlo: Robust Global 21-cm Signal Emulation',
+    description='GlobalEmu: Robust Global 21-cm Signal Emulation',
     long_description=readme(),
     author='Harry T. J. Bevins',
     author_email='htjb2@cam.ac.uk',
-    url='https://github.com/htjb/emulator',
+    url='https://github.com/htjb/GlobalEmu',
     packages=find_packages(),
     install_requires=[],
     license='MIT',
     #entry_points={
     #    'console_scripts': [
-    #        '21cmGlo=21cmGlo:run'
+    #        'GlobalEmu=globalemu:run'
     #    ]
     #},
-    scripts=['scripts/21cmGlo'],
+    scripts=['scripts/globalemu'],
     extras_require={
           'docs': ['sphinx', 'sphinx_rtd_theme', 'numpydoc'],
           },

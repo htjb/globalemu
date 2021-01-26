@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 from tensorflow import keras
-from zT.cmSim import calc_signal
+from globalemu.cmSim import calc_signal
 from tensorflow.keras import backend as K
 import gc
 import os
