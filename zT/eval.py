@@ -12,12 +12,13 @@ class evaluate():
     def __init__(self, parameters, **kwargs):
         self.params = parameters
         self.xHI = kwargs.pop('xHI', False)
-        self.base_dir = kwargs.pop('base_dir', 'model_dir/')
+        self.base_dir = kwargs.pop('base_dir', None)
 
         if self.xHI is False:
             self.z = kwargs.pop('z', np.linspace(5, 50, 451))
         else:
-            self.z = kwargs.pop('z', np.hstack([np.arange(5, 15.1, 0.1), np.arange(16, 31, 1)]))
+            self.z = kwargs.pop('z', np.hstack([np.arange(5, 15.1, 0.1),
+                np.arange(16, 31, 1)]))
 
         self.signal, self.z_out = self.result()
 
@@ -34,13 +35,15 @@ class evaluate():
                 self.base_dir + 'model.h5',
                 compile=False)
 
-        try:
-            model = keras.models.load_model(self.base_dir + 'model.h5', compile=False)
-        except:
+        if self.base_dir is None:
             if self.xHI is False:
                 pull('best_T/')
             else:
                 pull('best_xHI/')
+        else:
+            model = keras.models.load_model(
+                self.base_dir + 'model.h5',
+                compile=False)
 
         data_mins = np.loadtxt(self.base_dir + 'data_mins.txt')
         data_maxs = np.loadtxt(self.base_dir + 'data_maxs.txt')
