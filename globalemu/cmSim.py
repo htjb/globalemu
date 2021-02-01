@@ -1,7 +1,7 @@
 import numpy as np
 
 class calc_signal:
-    def __init__(self, z, base_dir, **kwargs):
+    def __init__(self, z, base_dir):
 
         self.z = z
         self.base_dir = base_dir

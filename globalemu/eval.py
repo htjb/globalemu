@@ -11,6 +11,7 @@ class evaluate():
         self.params = parameters
         self.xHI = kwargs.pop('xHI', False)
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
+        self.model = kwargs.pop('model', None)
 
         if self.xHI is False:
             self.z = kwargs.pop('z', np.linspace(5, 50, 451))
@@ -22,9 +23,11 @@ class evaluate():
 
     def result(self):
 
-        model = keras.models.load_model(
-            self.base_dir + 'model.h5',
-            compile=False)
+        if self.model is None:
+            model = keras.models.load_model(
+                self.base_dir + 'model.h5',
+                compile=False)
+        else: model = self.model
 
         data_mins = np.loadtxt(self.base_dir + 'data_mins.txt')
         data_maxs = np.loadtxt(self.base_dir + 'data_maxs.txt')
@@ -70,7 +73,7 @@ class evaluate():
             else:
                 evaluation *= label_stds
 
-            res = calc_signal(self.z, self.base_dir)
-            evaluation += res.deltaT
+            res = calc_signal(np.linspace(5, 50, 451), self.base_dir)
+            evaluation += np.interp(self.z, np.linspace(5, 50, 451), res.deltaT)
 
         return evaluation, self.z
