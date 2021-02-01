@@ -21,9 +21,6 @@ window.configure(background='white')
 
 def init_signal(mode='null'):
     params = [1e-3, 46.5, 1e-2, 0.0775, 1.25, 1.5, 30]
-    if xHI is True:
-        idx = [0, 1, 2, 4, 5, 3, 6]
-        params = [params[i] for i in idx]
     plt.figure(figsize=(4, 3))
     res = evaluate(params, base_dir=base_dir, xHI=xHI)
     np.savetxt('img/prev_sig.txt', res.signal)
@@ -53,9 +50,6 @@ def signal():#dummy):
     nu_min = float(nu_min_entry.get())
     rmfp = float(rmfp_entry.get())
     params = [f_star, Vc, f_x, tau, alpha, nu_min, rmfp]
-    if xHI is True:
-        idx = [0, 1, 2, 4, 5, 3, 6]
-        params = [params[i] for i in idx]
     old_sig = np.loadtxt('img/prev_sig.txt')
     res = evaluate(params, base_dir=base_dir, xHI=xHI)
     np.savetxt('img/prev_sig.txt', res.signal)
