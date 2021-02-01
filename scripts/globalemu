@@ -3,14 +3,17 @@ import matplotlib.pyplot as plt
 from PIL import ImageTk, Image
 from globalemu.eval import evaluate
 import numpy as np
-import sys
+import argparse
 
-
-base_dir = sys.argv[1]
-if len(sys.argv) > 2:
-    xHI=bool(sys.argv[2])
-else:
-    xHI=False
+parser = argparse.ArgumentParser(
+    description='Interactive exploration of the Global 21-cm Signal')
+parser.add_argument('base_dir', type=str, nargs=1,
+    help='a base directory containing a trained model.')
+parser.add_argument('--xHI', type=bool, const=True, default=False, nargs='?',
+    help='a boolean indication if the network is for neutral fraction history.')
+args = parser.parse_args()
+base_dir = args.base_dir[0]
+xHI = args.xHI
 
 window = Tk()
 window.geometry("800x600")
