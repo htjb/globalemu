@@ -60,5 +60,6 @@ class calc_signal:
 
         norm_factor = np.load(self.base_dir + 'AFB_norm_factor.npy')
         deltaT = deltaT/np.abs(deltaT).max()*np.abs(norm_factor)*1e3
-
+        np.savetxt(self.base_dir + 'AFB.txt', deltaT)
+        
         return deltaT, T_K, T_s, T_r
