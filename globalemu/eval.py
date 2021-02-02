@@ -73,7 +73,7 @@ class evaluate():
             else:
                 evaluation *= label_stds
 
-            res = calc_signal(np.linspace(5, 50, 451), self.base_dir)
-            evaluation += np.interp(self.z, np.linspace(5, 50, 451), res.deltaT)
+            AFB = np.loadtxt(self.base_dir + 'AFB.txt')
+            evaluation += np.interp(self.z, np.linspace(5, 50, 451), AFB)
 
         return evaluation, self.z
