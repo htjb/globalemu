@@ -21,6 +21,7 @@ class nn():
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
         self.early_stop = kwargs.pop('early_stop', False)
         self.xHI = kwargs.pop('xHI', False)
+        self.resume = kwargs.pop('resume', False)
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
@@ -47,7 +48,11 @@ class nn():
 
         train_dataset = train_dataset.map(pack_features_vector)
 
-        if self.xHI is False:
+        if self.resume is True:
+            model = keras.models.load_model(
+                self.base_dir + 'model.h5',
+                compile=False)
+        elif self.xHI is False:
             model = network_models().basic_model(
                 self.input_shape, self.output_shape,
                 self.layer_sizes, self.activation, self.drop_val,
@@ -70,7 +75,10 @@ class nn():
 
         optimizer = keras.optimizers.Adam(learning_rate=self.lr)
 
-        train_loss_results = []
+        if self.resume is True:
+            train_loss_results = list(np.loadtxt(self.base_dir + 'loss_history.txt'))
+        else:
+            train_loss_results = []
         train_rmse_results = []
         num_epochs = self.epochs
         for epoch in range(num_epochs):
