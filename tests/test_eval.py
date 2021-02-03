@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from globalemu.eval import evaluate
 from globalemu.downloads import download
 import pytest
@@ -10,6 +9,6 @@ z = np.arange(10, 20, 100)
 def test_existing_dir():
     #download(False).model()
     #download(True).model()
-    res = evaluate(params, z=z, base_dir='T_release/')
-    #res = evaluate(params, z=z, base_dir='xHI_release/', xHI=True)
-    res = evaluate(params, z=10, base_dir='T_release/')
+    res = evaluate(params, z=z, base_dir='hpc_T_release/')
+    res = evaluate(params, z=z, base_dir='hpc_xHI_release/', xHI=True)
+    res = evaluate(params, z=10, base_dir='hpc_T_release/')
