@@ -8,14 +8,14 @@ from globalemu.losses import loss_functions
 
 class nn():
     def __init__(
-        self, batch_size, layer_sizes, activation, drop_val, epochs, lr,
+        self, batch_size, layer_sizes, activation, epochs, lr,
         **kwargs):
         self.batch_size = batch_size
         self.layer_sizes =layer_sizes
         self.activation = activation
-        self.drop_val = drop_val
         self.epochs = epochs
         self.lr = lr
+        self.drop_val = kwargs.pop('dropout', 0)
         self.input_shape = kwargs.pop('input_shape', 8)
         self.output_shape = kwargs.pop('output_shape', 1)
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
