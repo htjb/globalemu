@@ -1,5 +1,7 @@
 from tkinter import *
 import matplotlib.pyplot as plt
+from matplotlib.mathtext import math_to_image
+from io import BytesIO
 from PIL import ImageTk, Image
 from globalemu.eval import evaluate
 import numpy as np
@@ -10,7 +12,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('base_dir', type=str, nargs=1,
     help='a base directory containing a trained model.')
 parser.add_argument('--xHI', type=bool, const=True, default=False, nargs='?',
-    help='a boolean indication if the network is for neutral fraction history.')
+    help='a boolean indicating if the network is for neutral fraction history.')
 args = parser.parse_args()
 base_dir = args.base_dir[0]
 xHI = args.xHI
@@ -21,6 +23,9 @@ window.configure(background='white')
 
 def init_signal(mode='null'):
     params = [1e-3, 46.5, 1e-2, 0.0775, 1.25, 1.5, 30]
+    if xHI is True:
+        idx = [0, 1, 2, 5, 3, 4, 6]
+        params = [params[i] for i in idx]
     plt.figure(figsize=(4, 3))
     res = evaluate(params, base_dir=base_dir, xHI=xHI)
     np.savetxt('img/prev_sig.txt', res.signal)
@@ -31,7 +36,6 @@ def init_signal(mode='null'):
         plt.ylim([-250, 30])
     else:
         plt.ylabel(r'$x_{HI}$')
-        plt.ylim([0, 1])
     plt.legend(loc=4)
     plt.tight_layout()
     plt.savefig('img/img.png', dpi=100)
@@ -50,6 +54,9 @@ def signal():#dummy):
     nu_min = float(nu_min_entry.get())
     rmfp = float(rmfp_entry.get())
     params = [f_star, Vc, f_x, tau, alpha, nu_min, rmfp]
+    if xHI is True:
+        idx = [0, 1, 2, 5, 3, 4, 6]
+        params = [params[i] for i in idx]
     old_sig = np.loadtxt('img/prev_sig.txt')
     res = evaluate(params, base_dir=base_dir, xHI=xHI)
     np.savetxt('img/prev_sig.txt', res.signal)
@@ -62,7 +69,7 @@ def signal():#dummy):
         plt.ylim([-250, 30])
     else:
         plt.ylabel(r'$x_{HI}$')
-        plt.ylim([0, 1])
+        #plt.ylim([0, 1])
     plt.legend(loc=4)
     plt.tight_layout()
     plt.savefig('img/img.png', dpi=100)
@@ -93,60 +100,95 @@ text = Label(window,
     ' and\nthen hit generate\nto see the new signal.', bg='white', font='sans')
 text.place(x=460, y=10)
 
+buffer = BytesIO()
+math_to_image('$\log(f_*)$', buffer, dpi=200, format='png')
+buffer.seek(0)
+
+fstar_img = ImageTk.PhotoImage(Image.open(buffer).resize((50, 15)))
 f_star_entry = Scale(window, from_=-6, to=-0.3,
     orient=HORIZONTAL, length=325, resolution=0.1,
     tickinterval=1, background='white')
 f_star_entry.place(x=10, y=340)
 f_star_entry.set(np.log10(1e-3))
-label = Label(window, text='log(f_*)')
+label = Label(window, image=fstar_img)
 label.place(x=345, y=360)
 
+buffer = BytesIO()
+math_to_image('$\log(V_c)$', buffer, dpi=200, format='png')
+buffer.seek(0)
+
+Vc_img = ImageTk.PhotoImage(Image.open(buffer).resize((50, 15)))
 Vc_entry = Scale(window, from_=16.5, to=76.5,
     orient=HORIZONTAL, length=325, resolution=0.1,
     tickinterval=5, background='white')
 Vc_entry.place(x=405, y=340)
 Vc_entry.set(46.5)
-label = Label(window, text='V_c')
+label = Label(window, image=Vc_img)
 label.place(x=740, y=360)
 
+buffer = BytesIO()
+math_to_image('$\log(f_x)$', buffer, dpi=200, format='png')
+buffer.seek(0)
+
+fx_img = ImageTk.PhotoImage(Image.open(buffer).resize((50, 15)))
 f_x_entry = Scale(window, from_=-6, to=2,
     orient=HORIZONTAL, length=325, resolution=0.1,
     tickinterval=1, background='white')
 f_x_entry.place(x=10, y=400)
 f_x_entry.set(np.log10(1e-2))
-label = Label(window, text='log(f_x)')
+label = Label(window, image=fx_img)
 label.place(x=345, y=410)
 
+buffer = BytesIO()
+math_to_image(r'$\tau$', buffer, dpi=200, format='png')
+buffer.seek(0)
+
+tau_img = ImageTk.PhotoImage(Image.open(buffer).resize((15, 15)))
 tau_entry = Scale(window, from_=0.055, to=0.1,
     orient=HORIZONTAL, length=325, resolution=0.001,
     tickinterval=0.01, background='white')
 tau_entry.place(x=405, y=400)
 tau_entry.set(0.0775)
-label = Label(window, text=r'$\tau$')
+label = Label(window, image=tau_img)
 label.place(x=740, y=410)
 
+buffer = BytesIO()
+math_to_image(r'$\alpha$', buffer, dpi=200, format='png')
+buffer.seek(0)
+
+alpha_img = ImageTk.PhotoImage(Image.open(buffer).resize((15, 15)))
 alpha_entry = Scale(window, from_=1, to=1.5,
     orient=HORIZONTAL, length=325, resolution=0.01,
     tickinterval=0.1, background='white')
 alpha_entry.place(x=10, y=460)
 alpha_entry.set(1.25)
-label = Label(window, text=r'$\alpha$')
+label = Label(window, image=alpha_img)
 label.place(x=345, y=470)
 
+buffer = BytesIO()
+math_to_image(r'$\nu_\mathrm{min}$', buffer, dpi=200, format='png')
+buffer.seek(0)
+
+numin_img = ImageTk.PhotoImage(Image.open(buffer).resize((50, 15)))
 nu_min_entry = Scale(window, from_=0.1, to=3,
     orient=HORIZONTAL, length=325, resolution=0.1,
     tickinterval=0.5, background='white')
 nu_min_entry.place(x=405, y=460)
 nu_min_entry.set(1.5)
-label = Label(window, text='nu_min')
+label = Label(window, image=numin_img)
 label.place(x=740, y=470)
 
+buffer = BytesIO()
+math_to_image('$R_\mathrm{mfp}$', buffer, dpi=200, format='png')
+buffer.seek(0)
+
+rmfp_img = ImageTk.PhotoImage(Image.open(buffer).resize((40, 15)))
 rmfp_entry = Scale(window, from_=10, to=50,
     orient=HORIZONTAL, length=325, resolution=1,
     tickinterval=10, background='white')
 rmfp_entry.place(x=10, y=520)
 rmfp_entry.set(30)
-label = Label(window, text='rmfp')
+label = Label(window, image=rmfp_img)
 label.place(x=345, y=530)
 
 btn = Button(window, text='Generate', command=signal)
