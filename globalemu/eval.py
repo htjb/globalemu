@@ -11,6 +11,7 @@ class evaluate():
         self.xHI = kwargs.pop('xHI', False)
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
         self.model = kwargs.pop('model', None)
+        self.garbage_collection = kwargs.pop('gc', False)
 
         if self.xHI is False:
             self.AFB = np.loadtxt(self.base_dir + 'AFB.txt')
@@ -25,7 +26,7 @@ class evaluate():
         self.samples = np.loadtxt(self.base_dir + 'samples.txt')
 
         self.signal, self.z_out = self.result()
-
+    
     def result(self):
 
         if self.model is None:
@@ -52,13 +53,14 @@ class evaluate():
         if isinstance(norm_z, np.ndarray):
             x = [np.hstack([normalised_params, norm_z[j]]) for j in range(len(norm_z))]
             tensor = tf.convert_to_tensor(x, dtype=tf.float32)
-            result = model.predict(tensor)
+            result = model(tensor, training=False).numpy()
             evaluation = result.T[0]
-            K.clear_session()
-            gc.collect()
+            if self.garbage_collection is True:
+                K.clear_session()
+                gc.collect()
         else:
             x = np.hstack([normalised_params, norm_z]).astype(np.float32)
-            result = model.predict_on_batch(x[np.newaxis, :])
+            result = model(x[np.newaxis, :], training=False).numpy()
             evaluation = result[0][0]
 
         if self.xHI is False:
