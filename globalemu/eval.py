@@ -11,6 +11,7 @@ class evaluate():
         self.xHI = kwargs.pop('xHI', False)
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
         self.model = kwargs.pop('model', None)
+        self.logs = kwargs.pop('logs', [0, 1, 2])
         self.garbage_collection = kwargs.pop('gc', False)
 
         if self.xHI is False:
@@ -26,7 +27,7 @@ class evaluate():
         self.samples = np.loadtxt(self.base_dir + 'samples.txt')
 
         self.signal, self.z_out = self.result()
-    
+
     def result(self):
 
         if self.model is None:
@@ -37,9 +38,7 @@ class evaluate():
 
         params = []
         for i in range(len(self.params)):
-            if i in set([0, 1]):
-                params.append(np.log10(self.params[i]))
-            elif i == 2:
+            if i in set(self.logs):
                 if self.params[i] == 0:
                     self.params[i] = 1e-6
                 params.append(np.log10(self.params[i]))

@@ -12,6 +12,7 @@ class process():
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
         self.data_location = kwargs.pop('data_location', 'data/')
         self.xHI = kwargs.pop('xHI', False)
+        self.logs = kwargs.pop('logs', [0, 1, 2])
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
@@ -53,9 +54,7 @@ class process():
 
         log_td = []
         for i in range(train_data.shape[1]):
-            if i in set([0, 1]):
-                log_td.append(np.log10(train_data[:, i]))
-            elif i == 2:
+            if i in set(self.logs):
                 for j in range(train_data.shape[0]):
                     if train_data[j, i] == 0:
                         train_data[j, i] = 1e-6
@@ -80,7 +79,8 @@ class process():
 
         norm_train_data = []
         for i in range(train_data.shape[1]):
-            norm_train_data.append((train_data[:, i] - data_mins[i])/(data_maxs[i]-data_mins[i]))
+            norm_train_data.append(
+                (train_data[:, i] - data_mins[i])/(data_maxs[i]-data_mins[i]))
         norm_train_data = np.array(norm_train_data).T
 
         if self.xHI is False:
