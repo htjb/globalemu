@@ -3,8 +3,7 @@ import numpy as np
 from tensorflow import keras
 from globalemu.cmSim import calc_signal
 from tensorflow.keras import backend as K
-import gc
-import os
+import gc, os
 
 class evaluate():
     def __init__(self, parameters, **kwargs):
@@ -14,10 +13,16 @@ class evaluate():
         self.model = kwargs.pop('model', None)
 
         if self.xHI is False:
+            self.AFB = np.loadtxt(self.base_dir + 'AFB.txt')
+            self.label_stds = np.load(self.base_dir + 'labels_stds.npy')
             self.z = kwargs.pop('z', np.linspace(5, 50, 451))
         else:
             self.z = kwargs.pop('z', np.hstack([np.arange(5, 15.1, 0.1),
                 np.arange(16, 31, 1)]))
+
+        self.data_mins = np.loadtxt(self.base_dir + 'data_mins.txt')
+        self.data_maxs = np.loadtxt(self.base_dir + 'data_maxs.txt')
+        self.samples = np.loadtxt(self.base_dir + 'samples.txt')
 
         self.signal, self.z_out = self.result()
 
@@ -28,10 +33,6 @@ class evaluate():
                 self.base_dir + 'model.h5',
                 compile=False)
         else: model = self.model
-
-        data_mins = np.loadtxt(self.base_dir + 'data_mins.txt')
-        data_maxs = np.loadtxt(self.base_dir + 'data_maxs.txt')
-        samples = np.loadtxt(self.base_dir + 'samples.txt')
 
         params = []
         for i in range(len(self.params)):
@@ -44,36 +45,30 @@ class evaluate():
             else: params.append(self.params[i])
 
         normalised_params = [
-            (params[i] - data_mins[i])/(data_maxs[i] - data_mins[i])
+            (params[i] - self.data_mins[i])/(self.data_maxs[i] - self.data_mins[i])
             for i in range(len(params))]
-        norm_z = (self.z - samples.min())/(samples.max()-samples.min())
+        norm_z = (self.z - self.samples.min())/(self.samples.max()-self.samples.min())
 
         if isinstance(norm_z, np.ndarray):
-            evaluation = []
-            x = []
-            for j in range(len(norm_z)):
-                x.append(np.hstack([normalised_params, norm_z[j]]))
-            x = np.array(x)
+            x = [np.hstack([normalised_params, norm_z[j]]) for j in range(len(norm_z))]
             tensor = tf.convert_to_tensor(x, dtype=tf.float32)
             result = model.predict(tensor)
-            evaluation.append(result.T[0])
+            evaluation = result.T[0]
             K.clear_session()
             gc.collect()
-            evaluation = np.array(evaluation)[0]
         else:
             x = np.hstack([normalised_params, norm_z]).astype(np.float32)
             result = model.predict_on_batch(x[np.newaxis, :])
             evaluation = result[0][0]
 
         if self.xHI is False:
-            label_stds = np.load(self.base_dir + 'labels_stds.npy')
             if isinstance(evaluation, np.ndarray):
-                for i in range(evaluation.shape[0]):
-                    evaluation[i] = evaluation[i]*label_stds
+                evaluation = [
+                    evaluation[i]*self.label_stds
+                    for i in range(evaluation.shape[0])]
             else:
-                evaluation *= label_stds
+                evaluation *= self.label_stds
 
-            AFB = np.loadtxt(self.base_dir + 'AFB.txt')
-            evaluation += np.interp(self.z, np.linspace(5, 50, 451), AFB)
+            evaluation += np.interp(self.z, np.linspace(5, 50, 451), self.AFB)
 
         return evaluation, self.z
