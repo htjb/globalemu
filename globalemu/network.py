@@ -7,17 +7,17 @@ from globalemu.models import network_models
 from globalemu.losses import loss_functions
 
 class nn():
-    def __init__(
-        self, batch_size, layer_sizes, activation, epochs, lr,
-        **kwargs):
-        self.batch_size = batch_size
-        self.layer_sizes =layer_sizes
-        self.activation = activation
-        self.epochs = epochs
-        self.lr = lr
+    def __init__(self, **kwargs):
+
+        self.batch_size = kwargs.pop('batch_size', 100)
+        self.activation = kwargs.pop('activation', 'tanh')
+        self.epochs = kwargs.pop('epochs', 10)
+        self.lr = kwargs.pop('lr', 1e-3)
         self.drop_val = kwargs.pop('dropout', 0)
         self.input_shape = kwargs.pop('input_shape', 8)
         self.output_shape = kwargs.pop('output_shape', 1)
+        self.layer_sizes = kwargs.pop(
+            'layer_sizes', [self.input_shape, self.input_shape])
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
         self.early_stop = kwargs.pop('early_stop', False)
         self.xHI = kwargs.pop('xHI', False)
@@ -37,7 +37,7 @@ class nn():
 
         train_dataset = tf.data.experimental.make_csv_dataset(
         	train_dataset_fp,
-        	batch_size,
+        	self.batch_size,
         	column_names = column_names,
         	label_name = label_names,
         	num_epochs=1)
