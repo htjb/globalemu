@@ -1,8 +1,10 @@
 import numpy as np
 from sklearn.utils import shuffle
 import os
+import pandas as pd
 from globalemu.cmSim import calc_signal
 from globalemu.resample import sampling
+
 
 class process():
     def __init__(self, num, z, **kwargs):
@@ -17,8 +19,12 @@ class process():
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
 
-        full_train_data = np.loadtxt(self.data_location + 'train_data.txt')
-        full_train_labels = np.loadtxt(self.data_location + 'train_labels.txt')
+        full_train_data = pd.read_csv(
+            self.data_location + 'train_data.txt',
+            delim_whitespace=True, header=None).values
+        full_train_labels = pd.read_csv(
+            self.data_location + 'train_labels.txt',
+            delim_whitespace=True, header=None).values
 
         if self.xHI is False:
             np.save(
@@ -64,8 +70,7 @@ class process():
         train_data = np.array(log_td).T
 
         samples = sampling(
-            self.z, self.base_dir, self.xHI,
-            data_location=self.data_location).samples
+            self.z, self.base_dir, train_labels).samples
 
         resampled_labels = []
         for i in range(len(train_labels)):
@@ -85,9 +90,9 @@ class process():
 
         if self.xHI is False:
             labels_stds = train_labels.std()
-            norm_train_labels = []
-            for i in range(train_labels.shape[0]):
-                norm_train_labels.append(train_labels[i, :]/labels_stds)
+            norm_train_labels = [
+                train_labels[i, :]/labels_stds
+                for i in range(train_labels.shape[0])]
             norm_train_labels = np.array(norm_train_labels)
 
             norm_train_labels = norm_train_labels.flatten()
