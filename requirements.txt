@@ -1,2 +1,6 @@
 numpy
 tensorflow
+pandas
+tkinter
+matplotlib
+Pillow
