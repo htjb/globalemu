@@ -13,8 +13,8 @@ parser.add_argument('--xHI', type=bool, const=True, default=False, nargs='?',
     help='a boolean indicating if the network is for neutral fraction history.')
 args = parser.parse_args()
 xHI = args.xHI
-if xHI is False: base_dir = 'hpc_T_release/'
-else: base_dir = 'hpc_xHI_release/'
+if xHI is False: base_dir = 'T_release/'
+else: base_dir = 'xHI_release/'
 
 window = Tk()
 window.geometry("800x600")
