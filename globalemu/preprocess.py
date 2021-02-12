@@ -19,6 +19,8 @@ class process():
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
 
+        np.savetxt(base_dir + 'z.txt', self.z)
+
         full_train_data = pd.read_csv(
             self.data_location + 'train_data.txt',
             delim_whitespace=True, header=None).values

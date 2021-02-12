@@ -17,11 +17,9 @@ class evaluate():
         if self.xHI is False:
             self.AFB = np.loadtxt(self.base_dir + 'AFB.txt')
             self.label_stds = np.load(self.base_dir + 'labels_stds.npy')
-            self.z = kwargs.pop('z', np.linspace(5, 50, 451))
-        else:
-            self.z = kwargs.pop('z', np.hstack([np.arange(5, 15.1, 0.1),
-                np.arange(16, 31, 1)]))
 
+        self.original_z = np.loadtxt(self.base_dir + 'z.txt')
+        self.z = kwargs.pop('z', self.original_z)
         self.data_mins = np.loadtxt(self.base_dir + 'data_mins.txt')
         self.data_maxs = np.loadtxt(self.base_dir + 'data_maxs.txt')
         self.samples = np.loadtxt(self.base_dir + 'samples.txt')
@@ -70,6 +68,6 @@ class evaluate():
             else:
                 evaluation *= self.label_stds
 
-            evaluation += np.interp(self.z, np.linspace(5, 50, 451), self.AFB)
+            evaluation += np.interp(self.z, self.original_z, self.AFB)
 
         return evaluation, self.z
