@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.utils import shuffle
 import os
 import pandas as pd
 from globalemu.cmSim import calc_signal
@@ -19,7 +18,7 @@ class process():
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
 
-        np.savetxt(base_dir + 'z.txt', self.z)
+        np.savetxt(self.base_dir + 'z.txt', self.z)
 
         full_train_data = pd.read_csv(
             self.data_location + 'train_data.txt',
@@ -55,10 +54,11 @@ class process():
                 if np.any(ind == i):
                     train_data.append(full_train_data[i, :])
                     if self.xHI is False:
-                        train_labels.append(full_train_labels[i]- res.deltaT)
+                        train_labels.append(full_train_labels[i] - res.deltaT)
                     else:
                         train_labels.append(full_train_labels[i])
-            train_data, train_labels = np.array(train_data), np.array(train_labels)
+            train_data, train_labels = np.array(train_data), \
+                np.array(train_labels)
 
         log_td = []
         for i in range(train_data.shape[1]):
@@ -76,7 +76,8 @@ class process():
 
         resampled_labels = []
         for i in range(len(train_labels)):
-            resampled_labels.append(np.interp(samples, self.z, train_labels[i]))
+            resampled_labels.append(
+                np.interp(samples, self.z, train_labels[i]))
         train_labels = np.array(resampled_labels)
 
         norm_s = (samples.copy() - samples.min())/(samples.max()-samples.min())
@@ -117,7 +118,8 @@ class process():
         train_data, train_label = flattened_train_data, norm_train_labels
         train_dataset = np.hstack([train_data, train_label[:, np.newaxis]])
 
-        np.savetxt(self.base_dir + 'train_dataset.csv', train_dataset, delimiter=',')
+        np.savetxt(
+            self.base_dir + 'train_dataset.csv', train_dataset, delimiter=',')
         np.savetxt(self.base_dir + 'train_data.txt', train_data)
         np.savetxt(self.base_dir + 'train_label.txt', train_label)
 

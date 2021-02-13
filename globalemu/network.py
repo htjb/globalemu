@@ -1,10 +1,11 @@
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
-from tensorflow.keras import backend as K
-import time, os
+import time
+import os
 from globalemu.models import network_models
 from globalemu.losses import loss_functions
+
 
 class nn():
     def __init__(self, **kwargs):
@@ -32,15 +33,14 @@ class nn():
         column_names = [
             'p' + str(i)
             for i in range(self.input_shape + self.output_shape)]
-        feature_names = column_names[:-1]
         label_names = column_names[-1]
 
         train_dataset = tf.data.experimental.make_csv_dataset(
-        	train_dataset_fp,
-        	self.batch_size,
-        	column_names = column_names,
-        	label_name = label_names,
-        	num_epochs=1)
+            train_dataset_fp,
+            self.batch_size,
+            column_names=column_names,
+            label_name=label_names,
+            num_epochs=1)
 
         def pack_features_vector(features, labels):
             features = tf.stack(list(features.values()), axis=1)
@@ -71,12 +71,14 @@ class nn():
         def grad(model, inputs, targets):
             with tf.GradientTape() as tape:
                 loss_value, rmse = loss(model, inputs, targets, training=True)
-            return loss_value, rmse, tape.gradient(loss_value, model.trainable_variables)
+            return loss_value, rmse, tape.gradient(
+                loss_value, model.trainable_variables)
 
         optimizer = keras.optimizers.Adam(learning_rate=self.lr)
 
         if self.resume is True:
-            train_loss_results = list(np.loadtxt(self.base_dir + 'loss_history.txt'))
+            train_loss_results = list(
+                np.loadtxt(self.base_dir + 'loss_history.txt'))
         else:
             train_loss_results = []
         train_rmse_results = []
@@ -88,7 +90,8 @@ class nn():
 
             for x, y in train_dataset:
                 loss_values, rmse, grads = grad(model, x, y)
-                optimizer.apply_gradients(zip(grads, model.trainable_variables))
+                optimizer.apply_gradients(
+                    zip(grads, model.trainable_variables))
                 epoch_loss_avg.update_state(loss_values)
                 epoch_rmse_avg.update_state(rmse)
 
@@ -97,9 +100,10 @@ class nn():
             e = time.time()
 
             print(
-                'Epoch: {:03d}, Loss: {:.5f}, RMSE: {:.5f}, Time: {:.3f}'.format(epoch,
-                epoch_loss_avg.result(),
-                epoch_rmse_avg.result(), e-s))
+                'Epoch: {:03d}, Loss: {:.5f}, RMSE: {:.5f}, Time: {:.3f}'
+                .format(
+                    epoch, epoch_loss_avg.result(),
+                    epoch_rmse_avg.result(), e-s))
 
             if self.early_stop is True:
                 if len(train_loss_results) > 10:
@@ -111,7 +115,8 @@ class nn():
                         break
             if epoch % 10 == 0:
                 model.save(self.base_dir + 'model.h5')
-                np.savetxt(self.base_dir + 'loss_history.txt', train_loss_results)
+                np.savetxt(
+                    self.base_dir + 'loss_history.txt', train_loss_results)
 
         model.save(self.base_dir + 'model.h5')
         np.savetxt(self.base_dir + 'loss_history.txt', train_loss_results)

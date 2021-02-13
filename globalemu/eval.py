@@ -1,9 +1,9 @@
 import tensorflow as tf
 import numpy as np
 from tensorflow import keras
-from globalemu.cmSim import calc_signal
 from tensorflow.keras import backend as K
-import gc, os
+import gc
+
 
 class evaluate():
     def __init__(self, parameters, **kwargs):
@@ -32,7 +32,8 @@ class evaluate():
             model = keras.models.load_model(
                 self.base_dir + 'model.h5',
                 compile=False)
-        else: model = self.model
+        else:
+            model = self.model
 
         params = []
         for i in range(len(self.params)):
@@ -40,15 +41,20 @@ class evaluate():
                 if self.params[i] == 0:
                     self.params[i] = 1e-6
                 params.append(np.log10(self.params[i]))
-            else: params.append(self.params[i])
+            else:
+                params.append(self.params[i])
 
         normalised_params = [
-            (params[i] - self.data_mins[i])/(self.data_maxs[i] - self.data_mins[i])
+            (params[i] - self.data_mins[i]) /
+            (self.data_maxs[i] - self.data_mins[i])
             for i in range(len(params))]
-        norm_z = (self.z - self.samples.min())/(self.samples.max()-self.samples.min())
+        norm_z = (self.z - self.samples.min()) / \
+            (self.samples.max()-self.samples.min())
 
         if isinstance(norm_z, np.ndarray):
-            x = [np.hstack([normalised_params, norm_z[j]]) for j in range(len(norm_z))]
+            x = [
+                np.hstack([normalised_params, norm_z[j]])
+                for j in range(len(norm_z))]
             tensor = tf.convert_to_tensor(x, dtype=tf.float32)
             result = model(tensor, training=False).numpy()
             evaluation = result.T[0]

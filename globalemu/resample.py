@@ -1,5 +1,5 @@
 import numpy as np
-from globalemu.cmSim import calc_signal
+
 
 class sampling():
     def __init__(self, z, base_dir, train_labels):

@@ -1,6 +1,6 @@
 import requests
 import os
-import numpy as np
+
 
 class download():
     def __init__(self, xHI):
@@ -15,7 +15,8 @@ class download():
 
         os.mkdir(base_dir)
 
-        files = ['model.h5', 'data_mins.txt', 'data_maxs.txt', 'samples.txt',
+        files = [
+            'model.h5', 'data_mins.txt', 'data_maxs.txt', 'samples.txt',
             'AFB_norm_factor.npy', 'labels_stds.npy', 'AFB.txt']
 
         if self.xHI is False:
