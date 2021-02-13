@@ -5,16 +5,9 @@ GlobalEmu: Robust Global 21-cm Signal Emulation
 TO DO:
 ------
 
-* Paper: Need to run 'release' versions of trained networks. Probably on 21cmGEM
-  train data without any effort to make the data 'uniform' as not needed
-  to illustrate network works. *Make sure to reorder xHI network inputs appropriately
-  and fix gui'*
-* Sort GUI tex labels
-* Tests: Some can't be run until the repo is public because of download
-  requirements but I have tested the relevant code briefly already.
+* Paper
+* Tests
 * setup.py: May need some edits
-* Travis and Circle ci
-* Code cov once tests are sorted
 * Finish README
 * Documentation
 * Example Jupyter notebooks
