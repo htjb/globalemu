@@ -16,8 +16,8 @@ def test_process_nn():
     os.rename(loc + 'T21_train_21cmGEM.txt', loc + 'train_labels.txt')
     z = np.arange(5, 50.1, 0.1)
     process(10, z, data_location='data_download/')
-    nn(451, [8], 'tanh', 5, 1e-3)
+    nn(batch_size=451, layer_sizes=[8], epochs=5)
     # results of below will not make sense as it is being run on the
     # global signal data but it will test the code (xHI data not public)
     process(10, z, data_location='data_download/', xHI=True)
-    nn(451, [8], 'tanh', 5, 1e-3, xHI=True)
+    nn(batchsize=451, layer_sizes=[8], epochs=5, xHI=True)
