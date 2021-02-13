@@ -1,5 +1,5 @@
 numpy
-tensorflow-cpu
+tensorflow
 pandas
 matplotlib
 Pillow
