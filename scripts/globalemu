@@ -7,18 +7,26 @@ from globalemu.eval import evaluate
 import numpy as np
 import argparse
 
-parser = argparse.ArgumentParser(
-    description='Interactive exploration of the Global 21-cm Signal')
-parser.add_argument('--xHI', type=bool, const=True, default=False, nargs='?',
-    help='a boolean indicating if the network is for neutral fraction history.')
-args = parser.parse_args()
-xHI = args.xHI
-if xHI is False: base_dir = 'T_release/'
-else: base_dir = 'xHI_release/'
 
-window = Tk()
-window.geometry("800x600")
-window.configure(background='white')
+def variable(name, lower, upper, position_x, position_y,
+             initial, img_x_resize, img_y_resize, tickinterval,
+             resolution=0.1):
+    buffer = BytesIO()
+    math_to_image(name, buffer, dpi=200, format='png')
+    buffer.seek(0)
+
+    img_var = ImageTk.PhotoImage(Image.open(buffer).resize(
+        (img_x_resize, img_y_resize)))
+    entry = Scale(
+                window, from_=lower, to=upper,
+                orient=HORIZONTAL, length=325,
+                resolution=resolution,
+                tickinterval=tickinterval,
+                background='white', command=signal)
+    entry.place(x=position_x, y=position_y)
+    entry.set(initial)
+    return entry, img_var
+
 
 def init_signal(mode='null'):
     params = [1e-3, 46.5, 1e-2, 0.0775, 1.25, 1.5, 30]
@@ -42,9 +50,10 @@ def init_signal(mode='null'):
     if mode == 'reset':
         new_img = ImageTk.PhotoImage(Image.open("img/img.png"))
         panel.configure(image=new_img)
-        panel.image=new_img
+        panel.image = new_img
 
-def signal():
+
+def signal(_):
     f_star = 10**float(f_star_entry.get())
     Vc = float(Vc_entry.get())
     f_x = 10**float(f_x_entry.get())
@@ -56,26 +65,23 @@ def signal():
     if xHI is True:
         idx = [0, 1, 2, 5, 3, 4, 6]
         params = [params[i] for i in idx]
-    old_sig = np.loadtxt('img/prev_sig.txt')
     res = evaluate(params, base_dir=base_dir, xHI=xHI)
-    np.savetxt('img/prev_sig.txt', res.signal)
     plt.figure(figsize=(4, 3))
-    plt.plot(res.z, res.signal, c='k', label='New Signal')
-    plt.plot(res.z, old_sig, c='k', alpha=0.5, ls='--', label='Previous')
+    plt.plot(res.z, res.signal, c='k')
     plt.xlabel('z')
     if xHI is False:
         plt.ylabel(r'$\delta T$ [mK]')
         plt.ylim([-250, 30])
     else:
         plt.ylabel(r'$x_{HI}$')
-        #plt.ylim([0, 1])
-    plt.legend(loc=4)
+        plt.xlim([0, 1])
     plt.tight_layout()
     plt.savefig('img/img.png', dpi=100)
     plt.close()
     new_img = ImageTk.PhotoImage(Image.open("img/img.png"))
     panel.configure(image=new_img)
-    panel.image=new_img
+    panel.image = new_img
+
 
 def reset():
     init_signal('reset')
@@ -87,113 +93,74 @@ def reset():
     nu_min_entry.set(1.5)
     rmfp_entry.set(30)
 
-window.title('21cm Emulator GUI')
+
+parser = argparse.ArgumentParser(
+    description='Interactive exploration of the Global 21-cm Signal')
+parser.add_argument(
+    '--xHI', type=bool, const=True, default=False, nargs='?',
+    help='a boolean indicating if the network is for' +
+    'neutral fraction history.')
+args = parser.parse_args()
+xHI = args.xHI
+if xHI is False:
+    base_dir = 'T_release/'
+else:
+    base_dir = 'xHI_release/'
+
+window = Tk()
+window.geometry("800x600")
+window.configure(background='white')
+
+window.title('GlobalEmu GUI')
 init_signal()
 
 img = ImageTk.PhotoImage(Image.open("img/img.png"))
 panel = Label(window, image=img)
 panel.place(x=20, y=10)
 
-text = Label(window,
-    text='Slide the sliders to\nset the values of\nthe astrophysical parameters' +
-    ' and\nthen hit generate\nto see the new signal.', bg='white', font='sans')
+text = Label(
+    window,
+    text='Slide the sliders to\nset the values of' +
+    '\nthe astrophysical parameters' +
+    ' and\nto see how the signal changes.', bg='white', font='sans')
 text.place(x=460, y=10)
 
-buffer = BytesIO()
-math_to_image('$\log(f_*)$', buffer, dpi=200, format='png')
-buffer.seek(0)
-
-fstar_img = ImageTk.PhotoImage(Image.open(buffer).resize((50, 15)))
-f_star_entry = Scale(window, from_=-6, to=-0.3,
-    orient=HORIZONTAL, length=325, resolution=0.1,
-    tickinterval=1, background='white')
-f_star_entry.place(x=10, y=340)
-f_star_entry.set(np.log10(1e-3))
-label = Label(window, image=fstar_img)
+f_star_entry, fstar_label = variable(
+    r'$\log(f_*)$', -6, -0.3, 10, 340, -3, 50, 15, 1)
+label = Label(window, image=fstar_label)
 label.place(x=345, y=360)
 
-buffer = BytesIO()
-math_to_image('$\log(V_c)$', buffer, dpi=200, format='png')
-buffer.seek(0)
-
-Vc_img = ImageTk.PhotoImage(Image.open(buffer).resize((50, 15)))
-Vc_entry = Scale(window, from_=16.5, to=76.5,
-    orient=HORIZONTAL, length=325, resolution=0.1,
-    tickinterval=5, background='white')
-Vc_entry.place(x=405, y=340)
-Vc_entry.set(46.5)
-label = Label(window, image=Vc_img)
+Vc_entry, Vc_label = variable(
+    r'$\log(V_c)$', 16.5, 76.5, 405, 340, 46.5, 50, 15, 5)
+label = Label(window, image=Vc_label)
 label.place(x=740, y=360)
 
-buffer = BytesIO()
-math_to_image('$\log(f_x)$', buffer, dpi=200, format='png')
-buffer.seek(0)
-
-fx_img = ImageTk.PhotoImage(Image.open(buffer).resize((50, 15)))
-f_x_entry = Scale(window, from_=-6, to=2,
-    orient=HORIZONTAL, length=325, resolution=0.1,
-    tickinterval=1, background='white')
-f_x_entry.place(x=10, y=400)
-f_x_entry.set(np.log10(1e-2))
-label = Label(window, image=fx_img)
+f_x_entry, f_x_label = variable(
+    r'$\log(f_x)$', -6, 2, 10, 400, -2, 50, 15, 1)
+label = Label(window, image=f_x_label)
 label.place(x=345, y=410)
 
-buffer = BytesIO()
-math_to_image(r'$\tau$', buffer, dpi=200, format='png')
-buffer.seek(0)
-
-tau_img = ImageTk.PhotoImage(Image.open(buffer).resize((15, 15)))
-tau_entry = Scale(window, from_=0.055, to=0.1,
-    orient=HORIZONTAL, length=325, resolution=0.001,
-    tickinterval=0.01, background='white')
-tau_entry.place(x=405, y=400)
-tau_entry.set(0.0775)
-label = Label(window, image=tau_img)
+tau_entry, tau_label = variable(
+    r'$\tau$', 0.055, 0.1, 405, 400, 0.0775, 15, 15, 0.01, resolution=0.001)
+label = Label(window, image=tau_label)
 label.place(x=740, y=410)
 
-buffer = BytesIO()
-math_to_image(r'$\alpha$', buffer, dpi=200, format='png')
-buffer.seek(0)
-
-alpha_img = ImageTk.PhotoImage(Image.open(buffer).resize((15, 15)))
-alpha_entry = Scale(window, from_=1, to=1.5,
-    orient=HORIZONTAL, length=325, resolution=0.01,
-    tickinterval=0.1, background='white')
-alpha_entry.place(x=10, y=460)
-alpha_entry.set(1.25)
-label = Label(window, image=alpha_img)
+alpha_entry, alpha_label = variable(
+    r'$\alpha$', 1, 1.5, 10, 460, 1.25, 15, 15, 0.1, resolution=0.01)
+label = Label(window, image=alpha_label)
 label.place(x=345, y=470)
 
-buffer = BytesIO()
-math_to_image(r'$\nu_\mathrm{min}$', buffer, dpi=200, format='png')
-buffer.seek(0)
-
-numin_img = ImageTk.PhotoImage(Image.open(buffer).resize((50, 15)))
-nu_min_entry = Scale(window, from_=0.1, to=3,
-    orient=HORIZONTAL, length=325, resolution=0.1,
-    tickinterval=0.5, background='white')
-nu_min_entry.place(x=405, y=460)
-nu_min_entry.set(1.5)
-label = Label(window, image=numin_img)
+nu_min_entry, numin_label = variable(
+    r'$\nu_\mathrm{min}$', 0.1, 3, 405, 460, 1.5, 50, 15, 0.5)
+label = Label(window, image=numin_label)
 label.place(x=740, y=470)
 
-buffer = BytesIO()
-math_to_image('$R_\mathrm{mfp}$', buffer, dpi=200, format='png')
-buffer.seek(0)
-
-rmfp_img = ImageTk.PhotoImage(Image.open(buffer).resize((40, 15)))
-rmfp_entry = Scale(window, from_=10, to=50,
-    orient=HORIZONTAL, length=325, resolution=1,
-    tickinterval=10, background='white')
-rmfp_entry.place(x=10, y=520)
-rmfp_entry.set(30)
-label = Label(window, image=rmfp_img)
+rmfp_entry, rmfp_label = variable(
+    r'$R_\mathrm{mfp}$', 10, 50, 10, 520, 30, 40, 15, 10, resolution=1)
+label = Label(window, image=rmfp_label)
 label.place(x=345, y=530)
 
-btn = Button(window, text='Generate', command=signal)
-btn.place(x=550, y=150)
-
 btn = Button(window, text='Reset', command=reset)
-btn.place(x=560, y=200)
+btn.place(x=550, y=150)
 
 window.mainloop()
