@@ -1,5 +1,5 @@
 ===============================================
-GlobalEmu: Robust Global 21-cm Signal Emulation
+globalemu: Robust Global 21-cm Signal Emulation
 ===============================================
 
 TO DO:
