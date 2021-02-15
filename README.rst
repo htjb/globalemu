@@ -15,14 +15,14 @@ TO DO:
 Introduction
 ------------
 
-:GlobalEmu: Robust Global 21-cm Signal Emulation
+:globalemu: Robust Global 21-cm Signal Emulation
 :Author: Harry Thomas Jones Bevins
 :Version: 1.0.0
 :Homepage: https://github.com/htjb/globalemu
 :Documentation: https://globalemu.readthedocs.io/
 
-.. image:: https://github.com/htjb/GlobalEmu/workflows/CI/badge.svg?event=push
-  :target: https://github.com/htjb/GlobalEmu/actions?query=workflow%3ACI
+.. image:: https://github.com/htjb/globalemu/workflows/CI/badge.svg?event=push
+  :target: https://github.com/htjb/globalemu/actions?query=workflow%3ACI
   :alt: github CI
 
 Installation

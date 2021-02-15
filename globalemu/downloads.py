@@ -22,11 +22,11 @@ class download():
         if self.xHI is False:
             base_url = \
                 'https://raw.githubusercontent.com/' + \
-                'htjb/GlobalEmu/master/T_release/'
+                'htjb/globalemu/master/T_release/'
         else:
             base_url = \
                 'https://raw.githubusercontent.com/' + \
-                'htjb/GlobalEmu/master/xHI_release/'
+                'htjb/globalemu/master/xHI_release/'
 
         for i in range(len(files)):
             if i > 3 and self.xHI is True:
@@ -41,7 +41,7 @@ class download():
 
         base_url = \
             'https://raw.githubusercontent.com/' + \
-            'htjb/GlobalEmu/master/'
+            'htjb/globalemu/master/'
 
         r = requests.get(base_url + files)
         open(files, 'wb').write(r.content)
