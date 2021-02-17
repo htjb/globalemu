@@ -43,8 +43,7 @@ class nn():
             num_epochs=1)
 
         def pack_features_vector(features, labels):
-            features = tf.stack(list(features.values()), axis=1)
-            return features, labels
+            return tf.stack(list(features.values()), axis=1), labels
 
         train_dataset = train_dataset.map(pack_features_vector)
 
