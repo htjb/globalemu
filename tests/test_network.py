@@ -3,6 +3,7 @@ from globalemu.preprocess import process
 from globalemu.network import nn
 import requests, zipfile, io
 import os
+import pytest
 
 def test_process_nn():
     r = requests.get('https://people.ast.cam.ac.uk/~afialkov/21cmGEM_data.zip')
@@ -25,3 +26,9 @@ def test_process_nn():
 
     # test eary_stop code
     nn(batch_size=451, layer_sizes=[], epochs=20, early_stop=True)
+
+    with pytest.raises(KeyError):
+        process(10, z, datalocation='data_download/')
+        
+    with pytest.raises(KeyError):
+        nn(batch_size=451, layersizes=[8], epochs=10)
