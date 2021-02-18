@@ -10,7 +10,7 @@ class evaluate():
 
         for key, values in kwargs.items():
             if key not in set(
-                    ['xHI', 'base_dir', 'model', 'logs', 'gc']):
+                    ['xHI', 'base_dir', 'model', 'logs', 'gc', 'z']):
                 raise KeyError("Unexpected keyward argument in evaluate()")
 
         self.params = parameters

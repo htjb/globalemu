@@ -21,7 +21,7 @@ def test_process_nn():
     # results of below will not make sense as it is being run on the
     # global signal data but it will test the code (xHI data not public)
     process(10, z, data_location='data_download/', xHI=True)
-    nn(batchsize=451, layer_sizes=[8], epochs=5, xHI=True)
+    nn(batch_size=451, layer_sizes=[8], epochs=5, xHI=True)
 
     # test eary_stop code
-    nn(batchsize=451, layer_sizes=[], epochs=20, early_stop=True)
+    nn(batch_size=451, layer_sizes=[], epochs=20, early_stop=True)
