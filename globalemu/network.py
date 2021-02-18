@@ -120,7 +120,7 @@ class nn():
                         print('Early Stop')
                         model.save(self.base_dir + 'model.h5')
                         break
-            if epoch % 10 == 0:
+            if (epoch + 1) % 10 == 0:
                 model.save(self.base_dir + 'model.h5')
                 np.savetxt(
                     self.base_dir + 'loss_history.txt', train_loss_results)
