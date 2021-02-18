@@ -7,6 +7,12 @@ import gc
 
 class evaluate():
     def __init__(self, parameters, **kwargs):
+
+        for key, values in kwargs.items():
+            if key not in set(
+                    ['xHI', 'base_dir', 'model', 'logs', 'gc']):
+                raise KeyError("Unexpected keyward argument in evaluate()")
+
         self.params = parameters
         self.xHI = kwargs.pop('xHI', False)
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')

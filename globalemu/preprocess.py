@@ -8,6 +8,12 @@ from globalemu.resample import sampling
 class process():
     def __init__(self, num, z, **kwargs):
         print('Preprocessing started...')
+
+        for key, values in kwargs.items():
+            if key not in set(
+                    ['base_dir', 'data_location', 'xHI', 'logs']):
+                raise KeyError("Unexpected keyward argument in process()")
+
         self.num = num
         self.z = z
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')

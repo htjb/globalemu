@@ -10,6 +10,14 @@ from globalemu.losses import loss_functions
 class nn():
     def __init__(self, **kwargs):
 
+        for key, values in kwargs.items():
+            if key not in set(
+                    ['batch_size', 'activation', 'epochs',
+                        'lr', 'dropout', 'input_shape',
+                        'output_shape', 'layer_sizes', 'base_dir',
+                        'early_stop', 'xHI', 'resume']):
+                raise KeyError("Unexpected keyward argument in nn()")
+
         self.batch_size = kwargs.pop('batch_size', 100)
         self.activation = kwargs.pop('activation', 'tanh')
         self.epochs = kwargs.pop('epochs', 10)
