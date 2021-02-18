@@ -37,11 +37,9 @@ class download():
         return base_dir
 
     def kappa(self):
-        files = ['kappa_HH.txt']
-
         base_url = \
             'https://raw.githubusercontent.com/' + \
-            'htjb/globalemu/master/'
+            'htjb/globalemu/master/kappa_HH.txt'
 
-        r = requests.get(base_url + files)
-        open(files, 'wb').write(r.content)
+        r = requests.get(base_url)
+        open('kappa_HH.txt', 'wb').write(r.content)
