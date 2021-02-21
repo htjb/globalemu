@@ -7,9 +7,9 @@ import pytest
 
 def test_process_nn():
     r = requests.get('https://people.ast.cam.ac.uk/~afialkov/21cmGEM_data.zip')
-    z = zipfile.ZipFile(io.BytesIO(r.content))
+    zip = zipfile.ZipFile(io.BytesIO(r.content))
     loc = 'data_download/'
-    z.extractall('data_download/')
+    zip.extractall('data_download/')
     os.rename(loc + 'Par_test_21cmGEM.txt', loc + 'test_data.txt')
     os.rename(loc + 'Par_train_21cmGEM.txt', loc + 'train_data.txt')
     os.rename(loc + 'T21_test_21cmGEM.txt', loc + 'test_labels.txt')
@@ -29,6 +29,6 @@ def test_process_nn():
 
     with pytest.raises(KeyError):
         process(10, z, datalocation='data_download/')
-        
+
     with pytest.raises(KeyError):
         nn(batch_size=451, layersizes=[8], epochs=10)
