@@ -16,9 +16,10 @@ class sampling():
         difference = [
             difference[i]/np.sum(difference) for i in range(len(difference))]
 
-        cdf = np.cumsum(difference)
+        self.cdf = np.cumsum(difference)
 
         x = np.linspace(0, 1, len(self.z))
 
-        self.samples = np.interp(x, cdf, self.z)
+        self.samples = np.interp(x, self.cdf, self.z)
         np.savetxt(self.base_dir + 'samples.txt', self.samples)
+        np.savetxt(self.base_dir + 'cdf.txt', self.cdf)

@@ -77,8 +77,10 @@ class process():
                 log_td.append(train_data[:, i])
         train_data = np.array(log_td).T
 
-        samples = sampling(
-            self.z, self.base_dir, train_labels).samples
+        sampling_call = sampling(
+            self.z, self.base_dir, train_labels)
+        samples = sampling_call.samples
+        cdf = sampling_call.cdf
 
         resampled_labels = []
         for i in range(len(train_labels)):
@@ -86,7 +88,7 @@ class process():
                 np.interp(samples, self.z, train_labels[i]))
         train_labels = np.array(resampled_labels)
 
-        norm_s = (samples.copy() - samples.min())/(samples.max()-samples.min())
+        norm_s = np.interp(samples, self.z, cdf)
 
         data_mins = train_data.min(axis=0)
         data_maxs = train_data.max(axis=0)

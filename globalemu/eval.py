@@ -28,7 +28,7 @@ class evaluate():
         self.z = kwargs.pop('z', self.original_z)
         self.data_mins = np.loadtxt(self.base_dir + 'data_mins.txt')
         self.data_maxs = np.loadtxt(self.base_dir + 'data_maxs.txt')
-        self.samples = np.loadtxt(self.base_dir + 'samples.txt')
+        self.cdf = np.loadtxt(self.base_dir + 'cdf.txt')
 
         self.signal, self.z_out = self.result()
 
@@ -54,8 +54,8 @@ class evaluate():
             (params[i] - self.data_mins[i]) /
             (self.data_maxs[i] - self.data_mins[i])
             for i in range(len(params))]
-        norm_z = (self.z - self.samples.min()) / \
-            (self.samples.max()-self.samples.min())
+
+        norm_z = np.interp(self.z, self.original_z, self.cdf)
 
         if isinstance(norm_z, np.ndarray):
             x = [
