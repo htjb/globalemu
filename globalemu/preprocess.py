@@ -1,3 +1,16 @@
+"""
+
+``process()`` is used to preprocess the data in the provided directory
+using the techniques outlined in the ``globalemu`` paper. For ``process()``
+to work it requires the testing and training data to be saved in the
+``data_location`` directory in a specific manner. The "labels" or temperatures
+(network outputs) should be saved
+as "test_labels.txt"/"train_labels.txt" and the "data" or
+astrophysical parameters (network inputs excluding redshift) as
+"test_data.txt"/"train_data.txt".
+
+"""
+
 import numpy as np
 import os
 import pandas as pd
@@ -6,7 +19,37 @@ from globalemu.resample import sampling
 
 
 class process():
+
+    r"""
+
+    **Parameters:**
+
+        num: **int**
+            | The number of models that will be used to train globalemu. If
+                you wish to use the full training data set then set
+                ``num = 'full'``.
+
+        z: **np.array**
+            | The redshift range that corresponds to the models in the saved
+                "test_labels.txt" and "train_labels.txt" e.g. for the
+                ``21cmGEM`` data this would be :code:`np.arange(5, 50.1, 0.1)`.
+
+    **kwargs:**
+
+        base_dir: **string / default: 'model_dir/'**
+            | The ``base_dir`` is where the preprocessed data and later the
+                trained models will be placed. This should be thought of as the
+                working directory as it will be needed when training a model
+                and making evaluations of trained models.
+
+        data_location: **string / default: 'data/'**
+            | As discussed above the ``data_loaction`` is where the data to be
+                processed is to be found. It must be accurately provided for
+                the code to work and must end in a '/'.
+    """
+
     def __init__(self, num, z, **kwargs):
+
         print('Preprocessing started...')
 
         for key, values in kwargs.items():
