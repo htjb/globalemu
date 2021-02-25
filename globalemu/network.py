@@ -1,3 +1,11 @@
+"""
+``nn()`` is used to train an instance of ``globalemu`` on the preprocessed
+data in ``base_dir``. All of the parameters for ``nn()`` are kwargs and
+a number of them can be left at their default values however you will
+need to set the ``base_dir`` and possibly ``epochs`` and ``xHI`` (see below and
+the tutorial for details).
+"""
+
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
@@ -8,6 +16,94 @@ from globalemu.losses import loss_functions
 
 
 class nn():
+    r"""
+
+    **kwargs:**
+
+        batch_size: **int / default: 100**
+            | The batch size used by ``tensorflow`` when performing training.
+                Corresponds to the number of samples propagated before the
+                networks hyperparameters are updated. Keep the value ~100 as
+                this will help with memory management and training speed.
+
+        epochs: **int / default: 10**
+            | The number of epochs to train the network on. An epoch
+                corresponds to training on x batches where x is sufficiently
+                large for every sample to have influenced an update of the
+                network hyperparameters.
+
+        activation: **string / default: 'tanh'**
+            | The type of activation function used in the neural networks
+                hidden layers. The activation function effects the way that the
+                network learns and updates its hyperparameters. The defualt
+                is a commonly used activation for regression neural networks.
+
+        lr: **float / default: 0.001**
+            | The learning rate acts as a "step size" in the optimization and
+                its value can effect the quality of the emulation. Typical
+                values fall in the range 0.001-0.1.
+
+        dropout: **float / default: 0**
+            | The dropout for the neural network training. ``globalemu`` is
+                designed so that you shouldn't need dropout to prevent
+                overfitting but we leave it as an option.
+
+        input_shape: **int / default: 8**
+            | The number of input parameters (astrophysical parameters
+                plus redshift) for the neural network. The default accounts
+                for 7 astrophysical
+                parameters and a single redshift input.
+
+        output_shape: **int / default: 1**
+            | The number of ouputs (temperature) from the neural network.
+                This shouldn't need changing.
+
+        layer_sizes: **list / default: [input_shape, input_shape]**
+            | The number of hidden layers and the number of nodes in each
+                layer. For example ``layer_sizes=[8, 8]`` will create
+                two hidden layers both with 8 nodes (this is the default).
+
+        base_dir: **string / default: 'model_dir/'**
+            | This should be the same as the ``base_dir`` used when
+                preprocessing. It contains the data that the network will
+                work with and is the directory in which the trained model will
+                be saved in.
+
+        early_stop: **Bool / default: False**
+            | If ``early_stop`` is set too ``True`` then the network will stop
+                learning if the loss has not changed up to an accuracy given
+                by ``early_stop_lim`` within the last ten epochs.
+
+        early_stop_lim: **float / default: 1e-4**
+            | The precision with which to assess the change in loss over the
+                last ten epochs when ``early_stop=True``. The value of this
+                parameter is strongly dependent on the magnitude of the
+                evaluated loss at each epoch and the default may be to high or
+                too low for the desired outcome. For example if our loss value
+                is initially 0.01 and decreases with each epoch then a
+                ``epoch_stop_lim`` of 0.1 will cause training to stop after
+                10 epochs and give poor results.
+
+        xHI: **Bool / default: False**
+            | If True then ``globalemu`` will act as if it is training a
+                neutral fraction history emulator.
+
+        resume: **Bool / default: False**
+            | If set to ``True`` then ``globalemu`` will look in the
+                ``base_dir`` for a trained model and ``loss_history.txt``
+                file (which contains the loss recorded at each epoch) and
+                load these in to continue training. If ``resume`` is ``True``
+                then you need to make sure all of the kwargs are set the
+                with the same values that they had in the initial training
+                for a consistent run.
+                There will be a human readable file in ``base_dir`` called
+                "kwargs.txt" detailing
+                the values of the kwargs that were provided for the
+                initial training run. Anything missing from this file will
+                of had its default value. This file will not be overwritten
+                if ``resume=True``.
+
+    """
     def __init__(self, **kwargs):
 
         for key, values in kwargs.items():
@@ -15,8 +111,17 @@ class nn():
                     ['batch_size', 'activation', 'epochs',
                         'lr', 'dropout', 'input_shape',
                         'output_shape', 'layer_sizes', 'base_dir',
-                        'early_stop', 'xHI', 'resume']):
+                        'early_stop', 'early_stop_lim', 'xHI', 'resume']):
                 raise KeyError("Unexpected keyward argument in nn()")
+
+        self.resume = kwargs.pop('resume', False)
+        self.base_dir = kwargs.pop('base_dir', 'model_dir/')
+
+        if self.resume is not True:
+            with open(self.base_dir + 'kwargs.txt','w') as f:
+                for key, values in kwargs.items():
+                    f.write(str(key) + ': ' + str(values) + '\n')
+                f.close()
 
         self.batch_size = kwargs.pop('batch_size', 100)
         self.activation = kwargs.pop('activation', 'tanh')
@@ -27,10 +132,9 @@ class nn():
         self.output_shape = kwargs.pop('output_shape', 1)
         self.layer_sizes = kwargs.pop(
             'layer_sizes', [self.input_shape, self.input_shape])
-        self.base_dir = kwargs.pop('base_dir', 'model_dir/')
+        self.early_stop_lim = kwargs.pop('early_stop_lim', 1e-4)
         self.early_stop = kwargs.pop('early_stop', False)
         self.xHI = kwargs.pop('xHI', False)
-        self.resume = kwargs.pop('resume', False)
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
@@ -116,7 +220,7 @@ class nn():
                 if len(train_loss_results) > 10:
                     if np.isclose(
                             train_loss_results[-10], train_loss_results[-1],
-                            1e-4, 1e-4):
+                            self.early_stop_lim, self.early_stop_lim):
                         print('Early Stop')
                         model.save(self.base_dir + 'model.h5')
                         break

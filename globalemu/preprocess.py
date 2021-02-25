@@ -46,6 +46,18 @@ class process():
             | As discussed above the ``data_loaction`` is where the data to be
                 processed is to be found. It must be accurately provided for
                 the code to work and must end in a '/'.
+
+        xHI: **Bool / default: False**
+            | If True then ``globalemu`` will act as if it is training a
+                neutral fraction history emulator.
+
+        logs: **list / default: [0, 1, 2]**
+            | The indices corresponding to the astrophysical parameters in
+                "train_data.txt" that need to be logged. The default assumes
+                that the first three columns in "train_data.txt" are
+                :math:`{f_*}` (star formation efficiency),
+                :math:`{V_c}` (minimum virial circular velocity) and
+                :math:`{f_x}` (X-ray efficieny).
     """
 
     def __init__(self, num, z, **kwargs):
