@@ -1,16 +1,6 @@
-===============================================
-globalemu: Robust Global 21-cm Signal Emulation
-===============================================
-
-TO DO:
-------
-
-* Paper
-* Tests
-* setup.py: May need some edits
-* Finish README
-* Documentation
-* Example Jupyter notebooks
+========================================================
+globalemu: Robust and fast Global 21-cm Signal Emulation
+========================================================
 
 Introduction
 ------------
@@ -28,8 +18,33 @@ Introduction
 Installation
 ------------
 
+The software can be pip installed from the PYPI repository via,
+
+.. code:: bash
+
+  pip install globalemu
+
+or alternativaly it can be installed from the git repository via.
+
+.. code:: bash
+
+  git clone https://github.com/htjb/globalemu.git # or the equivalent using ssh keys
+  cd globalemu
+  python setup.py install --user
+
 Emulating the Global 21-cm Signal
 ---------------------------------
+
+``globalemu`` is a fast and robust approach for emulating the Global or
+sky averaged 21-cm signal and the associated neutral fraction history.
+In the cited MNRAS paper below we show that it is
+a factor of 20 faster and more than 2 times as accurate as the previous state
+of the art
+`21cmGEM <https://academic.oup.com/mnras/article/495/4/4845/5850763>`__. The
+code is also flexible enough for it to be retrained on detailed simulations
+containing the most up to date physics. We release two trained networks, one
+for the Global signal and one for the neutral fraction history, details of
+which can be found in the MNRAS paper below.
 
 You can download trained networks with the following code after pip installing
 or installing via the github repository:
@@ -62,23 +77,110 @@ The code can also be used to train a network on your own Global 21-cm signal
 or neutral fraction simulations using the built in globalemu pre-processing
 techniques. There is some flexibility on the required astrophysical input
 parameters but the models are required to subscribe to the astrophysics free
-baseline calculation detailed in the GlobalEmu paper (see below for a reference).
+baseline calculation detailed in the ``globalemu`` paper (see below for a reference).
 More details about training your own network can be found in the documentation.
 
 
-GlobalEmu GUI
+``globalemu`` GUI
+-----------------
+
+``globalemu`` also features a GUI that can be invoked from the command line
+and used to explore how the structure of the Global 21-cm signal varies with
+the values of the astrophysical inputs. The GUI currently relies on the
+released emulator models for the Global signal and neutral fraction
+history. It can be invoked from the terminal via,
+
+.. code:: bash
+
+  globalemu
+
+An image of the GUI is shown below.
+
+.. image:: https://github.com/htjb/globalemu/raw/master/docs/images/gui.png
+  :width: 400
+  :align: center
+  :alt: graphical user interface
+
+The GUI can also be used to investigate the physics of the neutral fraction
+history by adding the flag ``--xHI`` to the terminal call,
+
+.. code:: bash
+
+  globalemu --xHI
+
+Documentation
 -------------
+
+The documentation is available at: https://globalemu.readthedocs.io/
+
+It can be compiled locally after downloading the repo and installing
+the relevant packages (see below) via,
+
+.. code:: bash
+
+  cd docs
+  sphinx-build source html-build
+
+You can find a tutorial notebook via the following link: ``binder notebook link``
 
 Licence and Citation
 --------------------
 
+The software is free to use on the MIT open source license. If you use the
+software for academic puposes then we request that you cite the
+``globalemu`` papers below.
+
+MNRAS pre-print (referred to in the documentation as the ``globalemu`` paper),
+
+  Plain text citation
+
+Below is the bibtex,
+
+.. code:: bibtex
+
+  bibtext reference
+
+JOSS paper,
+
+  Plain text reference
+
+.. code:: bibtex
+
+    bibtext reference
+
 Requirements
 ------------
+
+To run the code you will need to following additional packages:
+
+- `numpy <https://pypi.org/project/numpy/>`__
+- `tensorflow <https://pypi.org/project/tensorflow/>`__
+- `pandas <https://pypi.org/project/pandas/>`__
+- `matplotlib <https://pypi.org/project/matplotlib/>`__
+- `Pillow <https://pypi.org/project/Pillow/>`__
+
+When installing via pip or from source via setup.py the above packages will
+be installed if absent.
+
+To compile the documentation locally you will need:
+
+- `sphinx <https://pypi.org/project/Sphinx/>`__
+- `numpydoc <https://pypi.org/project/numpydoc/>`__
+
+To run the test suit you will need:
+
+- `pytest <https://docs.pytest.org/en/stable/>`__
 
 Contributing
 ------------
 
+Contributions to ``globalemu`` are very much welcome and can be made via,
+
+- Opening an issue to report a bug/propose a new feature.
+- Making a pull request. Please consider opening an issue first to discuss
+  any proposals and ensure the PR will be accepted.
+
 21cmGEM Data
 ------------
 
-The training data is available `here <https://people.ast.cam.ac.uk/~afialkov/>`__
+The training data is available `here <http://doi.org/10.5281/zenodo.4541500>`__
