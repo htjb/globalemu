@@ -14,6 +14,8 @@ Introduction
 .. image:: https://github.com/htjb/globalemu/workflows/CI/badge.svg?event=push
   :target: https://github.com/htjb/globalemu/actions?query=workflow%3ACI
   :alt: github CI
+.. image:: https//img.shields.io/badge/license-MIT-blue.svg
+  :alt: MIT License
 
 Installation
 ------------
@@ -49,7 +51,7 @@ which can be found in the MNRAS paper below.
 You can download trained networks with the following code after pip installing
 or installing via the github repository:
 
-.. code::
+.. code:: python
 
   from globalemu.downloads import download
 
@@ -61,7 +63,7 @@ which will produce two files in your working directory 'T_release/' and
 pre and post processing files. You can then go on to evaluate each network for
 a set of parameters by running:
 
-.. code::
+.. code:: python
 
   from globalemu.eval import evaluate
 
@@ -143,6 +145,8 @@ Below is the bibtex,
 JOSS paper,
 
   Plain text reference
+
+and the corresponding bibtex,
 
 .. code:: bibtex
 
