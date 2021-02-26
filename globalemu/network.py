@@ -1,9 +1,11 @@
 """
+
 ``nn()`` is used to train an instance of ``globalemu`` on the preprocessed
 data in ``base_dir``. All of the parameters for ``nn()`` are kwargs and
 a number of them can be left at their default values however you will
 need to set the ``base_dir`` and possibly ``epochs`` and ``xHI`` (see below and
 the tutorial for details).
+
 """
 
 import tensorflow as tf
@@ -16,6 +18,7 @@ from globalemu.losses import loss_functions
 
 
 class nn():
+    
     r"""
 
     **kwargs:**
