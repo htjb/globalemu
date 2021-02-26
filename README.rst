@@ -2,6 +2,13 @@
 globalemu: Robust and fast Global 21-cm Signal Emulation
 ========================================================
 
+TO DO:
+------
+
+- Add proper references into readme
+- Add plots into tutorial
+- fix notebook links in tutorial and readme
+
 Introduction
 ------------
 
