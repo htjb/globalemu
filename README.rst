@@ -14,7 +14,7 @@ Introduction
 .. image:: https://github.com/htjb/globalemu/workflows/CI/badge.svg?event=push
   :target: https://github.com/htjb/globalemu/actions?query=workflow%3ACI
   :alt: github CI
-.. image:: https//img.shields.io/badge/license-MIT-blue.svg
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
   :alt: MIT License
 
 Installation
