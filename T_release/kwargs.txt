@@ -1,0 +1,4 @@
+batch_size: 451
+layer_sizes: [16, 16, 16, 16]
+epochs: 300
+lr: 0.001
