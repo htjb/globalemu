@@ -15,7 +15,7 @@ def test_existing_dir():
     #if os.path.exists('xHI_release/'):
     #    shutil.rmtree('xHI_release/')
 
-    #download(False).model()
+    #download().model()
     #download(True).model()
 
     res = evaluate(params, z=z, base_dir='T_release/')

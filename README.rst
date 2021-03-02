@@ -62,8 +62,8 @@ or installing via the github repository:
 
   from globalemu.downloads import download
 
-  download(False).model() # Redshift-Temperature Network
-  download(True).model() # Redshift-Neutral Fraction Network
+  download().model() # Redshift-Temperature Network
+  download(xHI=True).model() # Redshift-Neutral Fraction Network
 
 which will produce two files in your working directory 'T_release/' and
 'xHI_release/'. Each file has the respective network model in and related

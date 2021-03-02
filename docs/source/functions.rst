@@ -11,13 +11,19 @@ globalemu.preprocess.process()
     :members: process
 
 globalemu.network.nn()
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: globalemu.network
     :members: nn
 
 globalemu.eval.evaluate()
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: globalemu.eval
     :members: evaluate
+
+globalemu.downloads.download()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: globalemu.downloads
+    :members: download

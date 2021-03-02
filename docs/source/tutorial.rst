@@ -155,3 +155,20 @@ similar to the true signal.
 
 .. image::
   :alt: other graph from notebook
+
+Downloading Trained Models
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The released trained models can be directly downloaded from the github
+pages or a built in helper function can be used to download the models.
+The function can be called like so
+
+.. code:: python
+
+  from globalemu.downloads import download
+
+  download().model() # Redshift-Temperature Network
+  download(xHI=True).model() # Redshift-Neutral Fraction Network
+
+which will download the released models into the present working directory
+and the files ``T_release/`` and ``xHI_release``.

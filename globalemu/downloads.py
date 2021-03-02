@@ -1,9 +1,26 @@
+"""
+``download()`` can be used to download the released trained models
+for both the global signal and neutral fraction history emulators.
+"""
+
 import requests
 import os
 
 
 class download():
-    def __init__(self, xHI):
+
+    r"""
+
+    **Parameters:**
+
+        xHI: **Bool / default: False**
+            | Setting this equal to ``True`` will cause the method ``model()``
+                to download the released neutal fraction history model rather
+                than the released global signal network.
+
+    """
+
+    def __init__(self, xHI=False):
         self.xHI = xHI
 
     def model(self):
