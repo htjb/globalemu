@@ -24,7 +24,7 @@ def test_process_nn():
     process(10, z, data_location='data_download/', xHI=True)
     nn(batch_size=451, layer_sizes=[8], epochs=5, xHI=True)
 
-    # test eary_stop code
+    # test early_stop code
     nn(batch_size=451, layer_sizes=[], epochs=20, early_stop=True)
 
     with pytest.raises(KeyError):
