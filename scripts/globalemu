@@ -35,15 +35,13 @@ def init_signal(mode='null'):
         params = [params[i] for i in idx]
     plt.figure(figsize=(4, 3))
     res = evaluate(params, base_dir=base_dir, xHI=xHI)
-    np.savetxt('img/prev_sig.txt', res.signal)
-    plt.plot(res.z, res.signal, c='k', label='Signal')
+    plt.plot(res.z, res.signal, c='k')
     plt.xlabel('z')
     if xHI is False:
         plt.ylabel(r'$\delta T$ [mK]')
         plt.ylim([-250, 30])
     else:
         plt.ylabel(r'$x_{HI}$')
-    plt.legend(loc=4)
     plt.tight_layout()
     plt.savefig('img/img.png', dpi=100)
     plt.close()
