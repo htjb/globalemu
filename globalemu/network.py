@@ -109,7 +109,7 @@ class nn():
     """
     def __init__(self, **kwargs):
 
-        tf.set_random_seed(1234)
+        tf.random.set_seed(1234)
 
         for key, values in kwargs.items():
             if key not in set(
