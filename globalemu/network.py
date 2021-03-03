@@ -150,23 +150,24 @@ class nn():
         self.xHI = kwargs.pop('xHI', False)
 
         boolean_kwargs = [self.resume, self.early_stop, self.xHI]
+        boolean_strings = ['resume', 'early_stop', 'xHI']
         for i in range(len(boolean_kwargs)):
             if type(boolean_kwargs[i]) is not bool:
-                f = str(boolean_kwargs).split('.')[1]
-                raise TypeError("'" + f + "' must be a bool.")
+                raise TypeError("'" + boolean_strings[i] + "' must be a bool.")
 
         int_kwargs = [self.batch_size, self.epochs, self.input_shape,
                       self.output_shape]
+        int_strings = ['batch_size', 'epochs', 'input_shape',
+                       'output_shape']
         for i in range(len(int_kwargs)):
             if type(int_kwargs[i]) is not int:
-                f = str(int_kwargs).split('.')[1]
-                raise TypeError("'" + f + "' must be an integer.")
+                raise TypeError("'" + int_strings[i] + "' must be a int.")
 
-        float_kwargs = [self.lr, self.early_stop_lim]
+        float_kwargs = [self.lr, self.early_stop_lim, self.drop_val]
+        float_strings = ['lr', 'early_stop_lim', 'dropout']
         for i in range(len(float_kwargs)):
-            if type(float_kwargs[i]) is not int:
-                f = str(float_kwargs).split('.')[1]
-                raise TypeError("'" + f + "' must be an float.")
+            if type(float_kwargs[i]) not in set([float, int]):
+                raise TypeError("'" + float_strings[i] + "' must be a float.")
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)

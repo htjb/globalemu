@@ -24,3 +24,17 @@ def test_existing_dir():
 
     with pytest.raises(KeyError):
         res = evaluate(params, z=z, basedir='T_release/')
+
+    with pytest.raises(TypeError):
+        res = evaluate(10, z=z, base_dir='T_release/')
+    with pytest.raises(TypeError):
+        res = evaluate(params, z=z, base_dir=100)
+    with pytest.raises(TypeError):
+        res = evaluate(params, z=z, base_dir='T_release/', logs=10)
+    with pytest.raises(TypeError):
+        res = evaluate(params, z='foo', base_dir='T_release/')
+    with pytest.raises(TypeError):
+        res = evaluate(params, z=z, base_dir='T_release/',
+                       gc='false')
+    with pytest.raises(TypeError):
+        res = evaluate(params, z=z, base_dir='T_release/', xHI='bar')

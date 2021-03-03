@@ -81,12 +81,13 @@ class process():
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
         self.data_location = kwargs.pop('data_location', 'data/')
 
-        for file in set([self.base_dir, self.data_location]):
-            f = str(file).split('.')[1]
-            if type(file) is not str:
-                raise TypeError("'" + f + "' must be a sting.")
-            elif file.endswith('/') is False:
-                raise KeyError("'" + f + "' must end with '/'.")
+        file_kwargs = [self.base_dir, self.data_location]
+        file_strings = ['base_dir', 'data_location']
+        for i in range(len(file_kwargs)):
+            if type(file_kwargs[i]) is not str:
+                raise TypeError("'" + file_strings[i] + "' must be a sting.")
+            elif file_kwargs[i].endswith('/') is False:
+                raise KeyError("'" + file_strings[i] + "' must end with '/'.")
 
         self.xHI = kwargs.pop('xHI', False)
         if type(self.xHI) is not bool:

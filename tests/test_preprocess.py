@@ -34,3 +34,16 @@ def test_process_nn():
                    0, rtol=1e-1, atol=1e-1))
             assert(np.isclose(full_train_data[:, i].max(),
                    1, rtol=1e-1, atol=1e-1))
+
+    with pytest.raises(TypeError):
+        process(10.2, z, data_location='data_download/')
+    with pytest.raises(TypeError):
+        process(10, 10, data_location='data_download/')
+    with pytest.raises(KeyError):
+        process(10, z, data_location='data_download')
+    with pytest.raises(TypeError):
+        process(10, z, data_location='data_download/', base_dir=10)
+    with pytest.raises(TypeError):
+        process(10, z, data_location='data_download/', xHI=10)
+    with pytest.raises(TypeError):
+        process(10, z, data_location='data_download/', logs=True)

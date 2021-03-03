@@ -32,3 +32,32 @@ def test_process_nn():
 
     with pytest.raises(KeyError):
         nn(batch_size=451, layersizes=[8], epochs=10)
+
+    with pytest.raises(TypeError):
+        res = nn(batch_size='foo')
+    with pytest.raises(TypeError):
+        res = nn(activation=10)
+    with pytest.raises(TypeError):
+        res = nn(epochs=False)
+    with pytest.raises(TypeError):
+        res = nn(lr='bar')
+    with pytest.raises(TypeError):
+        res = nn(dropout=True)
+    with pytest.raises(TypeError):
+        res = nn(input_shape='foo')
+    with pytest.raises(TypeError):
+        res = nn(output_shape='foobar')
+    with pytest.raises(TypeError):
+        res = nn(layer_sizes=10)
+    with pytest.raises(TypeError):
+        res = nn(base_dir=50)
+    with pytest.raises(KeyError):
+        res = nn(base_dir='dir')
+    with pytest.raises(TypeError):
+        res = nn(early_stop='foo')
+    with pytest.raises(TypeError):
+        res = nn(early_stop_lim=False)
+    with pytest.raises(TypeError):
+        res = nn(xHI='false')
+    with pytest.raises(TypeError):
+        res = nn(resume=10)

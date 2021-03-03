@@ -104,10 +104,10 @@ class evaluate():
         self.garbage_collection = kwargs.pop('gc', False)
 
         boolean_kwargs = [self.garbage_collection, self.xHI]
+        boolean_strings = ['gc', 'xHI']
         for i in range(len(boolean_kwargs)):
             if type(boolean_kwargs[i]) is not bool:
-                f = str(boolean_kwargs).split('.')[1]
-                raise TypeError("'" + f + "' must be a bool.")
+                raise TypeError("'" + boolean_strings[i] + "' must be a bool.")
 
         if self.xHI is False:
             self.AFB = np.loadtxt(self.base_dir + 'AFB.txt')
@@ -116,8 +116,8 @@ class evaluate():
         self.original_z = np.loadtxt(self.base_dir + 'z.txt')
 
         self.z = kwargs.pop('z', self.original_z)
-        if type(self.z) not in set([np.ndarray, list]):
-            raise TypeError("'z' should be a numpy array or list.")
+        if type(self.z) not in set([np.ndarray, list, int]):
+            raise TypeError("'z' should be a numpy array, list or int.")
 
         self.data_mins = np.loadtxt(self.base_dir + 'data_mins.txt')
         self.data_maxs = np.loadtxt(self.base_dir + 'data_maxs.txt')
