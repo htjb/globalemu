@@ -175,8 +175,10 @@ class nn():
                         self.random_seed]
         float_strings = ['lr', 'early_stop_lim', 'dropout', 'random_seed']
         for i in range(len(float_kwargs)):
-            if type(float_kwargs[i]) not in set([float, int]):
-                raise TypeError("'" + float_strings[i] + "' must be a float.")
+            if float_kwargs[i] is not None:
+                if type(float_kwargs[i]) not in set([float, int]):
+                    raise TypeError("'" + float_strings[i] +
+                                    "' must be a float.")
 
         if self.random_seed is not None:
             tf.random.set_seed(self.random_seed)
