@@ -93,7 +93,7 @@ class evaluate():
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
         if type(self.base_dir) is not str:
             raise TypeError("'base_dir' must be a sting.")
-        elif file.endswith('/') is False:
+        elif self.base_dir.endswith('/') is False:
             raise KeyError("'base_dir' must end with '/'.")
 
         self.model = kwargs.pop('model', None)
@@ -105,7 +105,7 @@ class evaluate():
 
         boolean_kwargs = [self.garbage_collection, self.xHI]
         for i in range(len(boolean_kwargs)):
-            if type(boolean_kwargs[i]]) is not bool:
+            if type(boolean_kwargs[i]) is not bool:
                 f = str(boolean_kwargs).split('.')[1]
                 raise TypeError("'" + f + "' must be a bool.")
 
