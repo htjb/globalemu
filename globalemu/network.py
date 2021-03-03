@@ -106,17 +106,24 @@ class nn():
                 of had its default value. This file will not be overwritten
                 if ``resume=True``.
 
+        random_seed: **int or float / default: None**
+            | This kwarg sets the random seed used by tensorflow with the
+                function ``tf.random.set_seed(random_seed)``. It should
+                be used if you want to have reproducible results but note
+                that it may cause an 'out of memory' error if training on
+                large amounts of data
+                (see https://github.com/tensorflow/tensorflow/issues/37252).
+
     """
     def __init__(self, **kwargs):
-
-        tf.random.set_seed(1234)
 
         for key, values in kwargs.items():
             if key not in set(
                     ['batch_size', 'activation', 'epochs',
                         'lr', 'dropout', 'input_shape',
                         'output_shape', 'layer_sizes', 'base_dir',
-                        'early_stop', 'early_stop_lim', 'xHI', 'resume']):
+                        'early_stop', 'early_stop_lim', 'xHI', 'resume',
+                        'random_seed']):
                 raise KeyError("Unexpected keyward argument in nn()")
 
         self.resume = kwargs.pop('resume', False)
@@ -148,6 +155,7 @@ class nn():
         self.early_stop_lim = kwargs.pop('early_stop_lim', 1e-4)
         self.early_stop = kwargs.pop('early_stop', False)
         self.xHI = kwargs.pop('xHI', False)
+        self.random_seed = kwargs.pop('random_seed', None)
 
         boolean_kwargs = [self.resume, self.early_stop, self.xHI]
         boolean_strings = ['resume', 'early_stop', 'xHI']
@@ -163,11 +171,15 @@ class nn():
             if type(int_kwargs[i]) is not int:
                 raise TypeError("'" + int_strings[i] + "' must be a int.")
 
-        float_kwargs = [self.lr, self.early_stop_lim, self.drop_val]
-        float_strings = ['lr', 'early_stop_lim', 'dropout']
+        float_kwargs = [self.lr, self.early_stop_lim, self.drop_val,
+                        self.random_seed]
+        float_strings = ['lr', 'early_stop_lim', 'dropout', 'random_seed']
         for i in range(len(float_kwargs)):
             if type(float_kwargs[i]) not in set([float, int]):
                 raise TypeError("'" + float_strings[i] + "' must be a float.")
+
+        if self.random_seed is not None:
+            tf.random.set_seed(self.random_seed)
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
