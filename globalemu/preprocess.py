@@ -71,7 +71,7 @@ class process():
 
         self.num = num
         if type(self.num) is not int:
-            if self.num is not 'full':
+            if self.num != 'full':
                 raise TypeError("'num' must be an integer or 'full'.")
 
         self.z = z
@@ -84,9 +84,9 @@ class process():
         for file in set([self.base_dir, self.data_location]):
             f = str(file).split('.')[1]
             if type(file) is not str:
-                raise TypeError("'" f + "' must be a sting.")
+                raise TypeError("'" + f + "' must be a sting.")
             elif file.endswith('/') is False:
-                raise KeyError("'" f + "' must end with '/'.")
+                raise KeyError("'" + f + "' must end with '/'.")
 
         self.xHI = kwargs.pop('xHI', False)
         if type(self.xHI) is not bool:

@@ -28,7 +28,7 @@ class evaluate():
                 trained parameter space. For the 21cmGEM data the order
                 of the astrophysical parameters is given by:
                 :math:`{f_*, V_c, f_x, \tau, \alpha, \nu_\mathrm{min}}` and
-                :math: `{R_\mathrm{mfp}}` (see the ``globalemu`` paper and
+                :math:`{R_\mathrm{mfp}}` (see the ``globalemu`` paper and
                 references therein for a description of the parameters).
 
     **kwargs:**
@@ -87,7 +87,7 @@ class evaluate():
         self.params = parameters
         if type(self.params) not in set([np.ndarray, list]):
             raise TypeError("'params' must be a list or np.array.")
-            
+
         self.xHI = kwargs.pop('xHI', False)
 
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
