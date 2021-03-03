@@ -70,11 +70,31 @@ class process():
                 raise KeyError("Unexpected keyward argument in process()")
 
         self.num = num
+        if type(self.num) is not int:
+            if self.num is not 'full':
+                raise TypeError("'num' must be an integer or 'full'.")
+
         self.z = z
+        if type(self.z) not in set([np.ndarray, list]):
+            raise TypeError("'z' should be a numpy array or list.")
+
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
         self.data_location = kwargs.pop('data_location', 'data/')
+
+        for file in set([self.base_dir, self.data_location]):
+            f = str(file).split('.')[1]
+            if type(file) is not str:
+                raise TypeError("'" f + "' must be a sting.")
+            elif file.endswith('/') is False:
+                raise KeyError("'" f + "' must end with '/'.")
+
         self.xHI = kwargs.pop('xHI', False)
+        if type(self.xHI) is not bool:
+            raise TypeError("'xHI' must be a bool.")
+
         self.logs = kwargs.pop('logs', [0, 1, 2])
+        if type(self.logs) is not list:
+            raise TypeError("'logs' must be a list.")
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)

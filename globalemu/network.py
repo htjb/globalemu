@@ -121,6 +121,10 @@ class nn():
 
         self.resume = kwargs.pop('resume', False)
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
+        if type(self.base_dir) is not str:
+            raise TypeError("'base_dir' must be a sting.")
+        elif file.endswith('/') is False:
+            raise KeyError("'base_dir' must end with '/'.")
 
         if self.resume is not True:
             with open(self.base_dir + 'kwargs.txt','w') as f:
@@ -130,6 +134,8 @@ class nn():
 
         self.batch_size = kwargs.pop('batch_size', 100)
         self.activation = kwargs.pop('activation', 'tanh')
+        if type(self.activation) is not str:
+            raise TypeError("'activation' must be a string.")
         self.epochs = kwargs.pop('epochs', 10)
         self.lr = kwargs.pop('lr', 1e-3)
         self.drop_val = kwargs.pop('dropout', 0)
@@ -137,9 +143,30 @@ class nn():
         self.output_shape = kwargs.pop('output_shape', 1)
         self.layer_sizes = kwargs.pop(
             'layer_sizes', [self.input_shape, self.input_shape])
+        if type(self.layer_sizes) is not list:
+            raise TypeError("'layer_sizes' must be a list.")
         self.early_stop_lim = kwargs.pop('early_stop_lim', 1e-4)
         self.early_stop = kwargs.pop('early_stop', False)
         self.xHI = kwargs.pop('xHI', False)
+
+        boolean_kwargs = [self.resume, self.early_stop, self.xHI]
+        for i in range(len(boolean_kwargs)):
+            if type(boolean_kwargs[i]]) is not bool:
+                f = str(boolean_kwargs).split('.')[1]
+                raise TypeError("'" + f + "' must be a bool.")
+
+        int_kwargs = [self.batch_size, self.epochs, self.input_shape,
+            self.output_shape]
+        for i in range(len(int_kwargs)):
+            if type(int_kwargs[i]) is not int:
+                f = str(int_kwargs).split('.')[1]
+                raise TypeError("'" + f + "' must be an integer.")
+
+        float_kwargs = [self.lr, self.early_stop_lim]
+        for i in range(len(float_kwargs)):
+            if type(float_kwargs[i]) is not int:
+                f = str(float_kwargs).split('.')[1]
+                raise TypeError("'" + f + "' must be an float.")
 
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)

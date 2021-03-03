@@ -22,6 +22,8 @@ class download():
 
     def __init__(self, xHI=False):
         self.xHI = xHI
+        if type(self.xHI) is not bool:
+            raise TypeError("'xHI' must be a bool.")
 
     def model(self):
 
