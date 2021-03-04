@@ -103,7 +103,9 @@ signal and the corresponding neutral fraction history. However, the we note that
 ``globalemu`` is a detailed framework that makes emulating the Global 21-cm signal
 easy to do and consequently a user can retrain the emulator on new sets of
 simulations with updated astrophysics such as the addition of Lyman-$\alpha$
-heating [@Reis2021] or an increased radio background [@Reis2020].
+heating [@Reis2021] or an increased radio background [@Reis2020]. ``globalemu``
+will be used extensively by the Radio Experiment for the Analysis of
+Cosmic Hydrogen [@Acedo2019] for physical signal modelling.
 
 Documentation for ``globalemu`` is available at [ReadTheDocs](). The code is
 pip installable ([PyPI]()) and available on [Github](). Continuous integration
