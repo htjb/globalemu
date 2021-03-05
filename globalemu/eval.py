@@ -116,8 +116,8 @@ class evaluate():
         self.original_z = np.loadtxt(self.base_dir + 'z.txt')
 
         self.z = kwargs.pop('z', self.original_z)
-        if type(self.z) not in set([np.ndarray, list, int]):
-            raise TypeError("'z' should be a numpy array, list or int.")
+        if type(self.z) not in set([np.ndarray, list, int, float]):
+            raise TypeError("'z' should be a numpy array, list, float or int.")
 
         self.data_mins = np.loadtxt(self.base_dir + 'data_mins.txt')
         self.data_maxs = np.loadtxt(self.base_dir + 'data_maxs.txt')
