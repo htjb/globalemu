@@ -72,7 +72,7 @@ def signal(_):
         plt.ylim([-250, 30])
     else:
         plt.ylabel(r'$x_{HI}$')
-        plt.xlim([0, 1])
+        plt.ylim([0, 1])
     plt.tight_layout()
     plt.savefig('img/img.png', dpi=100)
     plt.close()
@@ -106,7 +106,7 @@ else:
     base_dir = 'xHI_release/'
 
 window = Tk()
-window.geometry("800x600")
+window.geometry("800x450")
 window.configure(background='white')
 
 window.title('GlobalEmu GUI')
@@ -114,51 +114,44 @@ init_signal()
 
 img = ImageTk.PhotoImage(Image.open("img/img.png"))
 panel = Label(window, image=img)
-panel.place(x=20, y=10)
-
-text = Label(
-    window,
-    text='Slide the sliders to\nset the values of' +
-    '\nthe astrophysical parameters' +
-    ' and\nto see how the signal changes.', bg='white', font='sans')
-text.place(x=460, y=10)
+panel.place(x=10, y=10)
 
 f_star_entry, fstar_label = variable(
-    r'$\log(f_*)$', -6, -0.3, 10, 340, -3, 50, 15, 1)
+    r'$\log(f_*)$', -6, -0.3, 410, 10, -3, 50, 15, 1)
 label = Label(window, image=fstar_label)
-label.place(x=345, y=360)
+label.place(x=740, y=10)
 
 Vc_entry, Vc_label = variable(
-    r'$\log(V_c)$', 16.5, 76.5, 405, 340, 46.5, 50, 15, 5)
+    r'$\log(V_c)$', 16.5, 76.5, 410, 70, 46.5, 50, 15, 5)
 label = Label(window, image=Vc_label)
-label.place(x=740, y=360)
+label.place(x=740, y=70)
 
 f_x_entry, f_x_label = variable(
-    r'$\log(f_x)$', -6, 2, 10, 400, -2, 50, 15, 1)
+    r'$\log(f_x)$', -6, 2, 410, 130, -2, 50, 15, 1)
 label = Label(window, image=f_x_label)
-label.place(x=345, y=410)
+label.place(x=740, y=130)
 
 tau_entry, tau_label = variable(
-    r'$\tau$', 0.055, 0.1, 405, 400, 0.0775, 15, 15, 0.01, resolution=0.001)
+    r'$\tau$', 0.055, 0.1, 410, 190, 0.0775, 15, 15, 0.01, resolution=0.001)
 label = Label(window, image=tau_label)
-label.place(x=740, y=410)
+label.place(x=740, y=190)
 
 alpha_entry, alpha_label = variable(
-    r'$\alpha$', 1, 1.5, 10, 460, 1.25, 15, 15, 0.1, resolution=0.01)
+    r'$\alpha$', 1, 1.5, 410, 250, 1.25, 15, 15, 0.1, resolution=0.01)
 label = Label(window, image=alpha_label)
-label.place(x=345, y=470)
+label.place(x=740, y=250)
 
 nu_min_entry, numin_label = variable(
-    r'$\nu_\mathrm{min}$', 0.1, 3, 405, 460, 1.5, 50, 15, 0.5)
+    r'$\nu_\mathrm{min}$', 0.1, 3, 410, 310, 1.5, 50, 15, 0.5)
 label = Label(window, image=numin_label)
-label.place(x=740, y=470)
+label.place(x=740, y=310)
 
 rmfp_entry, rmfp_label = variable(
-    r'$R_\mathrm{mfp}$', 10, 50, 10, 520, 30, 40, 15, 10, resolution=1)
+    r'$R_\mathrm{mfp}$', 10, 50, 410, 370, 30, 40, 15, 10, resolution=1)
 label = Label(window, image=rmfp_label)
-label.place(x=345, y=530)
+label.place(x=740, y=370)
 
 btn = Button(window, text='Reset', command=reset)
-btn.place(x=550, y=150)
+btn.place(x=180, y=360)
 
 window.mainloop()
