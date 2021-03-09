@@ -1,0 +1,4 @@
+batch_size: 116
+layer_sizes: [16, 16, 16]
+epochs: 500
+xHI: True
