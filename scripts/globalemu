@@ -6,6 +6,7 @@ from PIL import ImageTk, Image
 from globalemu.eval import evaluate
 import numpy as np
 import argparse
+import os
 
 
 def variable(name, lower, upper, position_x, position_y,
@@ -110,6 +111,10 @@ window.geometry("800x450")
 window.configure(background='white')
 
 window.title('GlobalEmu GUI')
+
+if not os.path.exists('img/'):
+    os.mkdir('img/')
+
 init_signal()
 
 img = ImageTk.PhotoImage(Image.open("img/img.png"))
