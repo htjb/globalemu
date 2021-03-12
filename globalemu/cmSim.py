@@ -40,7 +40,7 @@ class calc_signal:
         try:
             t, kappa10_HH_data = np.loadtxt('kappa_HH.txt', unpack=True)
         except FileNotFoundError:
-            download('dummy').kappa()
+            download().kappa()
             t, kappa10_HH_data = np.loadtxt('kappa_HH.txt', unpack=True)
 
         kappa10_HH = np.interp(T_K, t, kappa10_HH_data)
