@@ -196,4 +196,4 @@ Contributions to ``globalemu`` are very much welcome and can be made via,
 21cmGEM Data
 ------------
 
-The 21cmGEM training data is available `here <http://doi.org/10.5281/zenodo.4541500>`__
+The 21cmGEM training data is available `here <http://doi.org/10.5281/zenodo.4541500>`__.

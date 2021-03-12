@@ -12,7 +12,7 @@ work for training and evaluating models is identical you just need to pass
 the kwarg ``xHI=True`` to all of the ``globalemu`` functions.
 
 The tutorial can also be found as a Jupyter notebook
-`here<https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__.
+`here <https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__.
 
 Training an instance of ``globalemu``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
