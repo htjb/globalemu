@@ -159,8 +159,8 @@ similar to the true signal.
   plt.ylabel(r'$\delta T$ [mK]')
   plt.xlabel(r'$z$')
 
-  .. image:: https://github.com/htjb/globalemu/raw/master/docs/images/tutorial_plot2.png
-    :alt: See `notebook <https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__. for plot
+.. image:: https://github.com/htjb/globalemu/raw/master/docs/images/tutorial_plot2.png
+  :alt: See `notebook <https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__. for plot
 
 Downloading Trained Models
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
