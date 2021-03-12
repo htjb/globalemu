@@ -107,10 +107,13 @@ heating [@Reis2021] or an increased radio background [@Reis2020]. ``globalemu``
 will be used extensively by the Radio Experiment for the Analysis of
 Cosmic Hydrogen [@Acedo2019] for physical signal modelling.
 
-Documentation for ``globalemu`` is available at [ReadTheDocs](). The code is
-pip installable ([PyPI]()) and available on [Github](). Continuous integration
-is performed with [Github Actions]() and the corresponding coverage is
-reported by [CodeCov]().
+Documentation for ``globalemu`` is available at
+[ReadTheDocs](https://globalemu.readthedocs.io/). The code is
+pip installable ([PyPI](https://pypi.org/project/globalemu/)) and available
+on [Github](https://github.com/htjb/globalemu/). Continuous integration
+is performed with [Github Actions](https://github.com/htjb/globalemu/actions)
+and the corresponding coverage is
+reported by [CodeCov](https://app.codecov.io/gh/htjb/globalemu).
 
 # Acknowledgements
 
