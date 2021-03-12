@@ -83,6 +83,11 @@ a set of parameters by running:
   params = [1e-3, 46.5, 1e-2, 0.0775, 1.25, 1.5, 30]
 
   res = evaluate(params, base_dir='T_release/') # Redshift-Temperature Network
+
+  # note the parameter order is different for the neutral fraction emulator
+  # [fstar, vc, fx, nu_min, tau, alpha, R_mfp]
+  params = [1e-3, 46.5, 1e-2, 1.5, 0.0775, 1.25, 30]
+
   res = evaluate(params, base_dir='xHI_release/', xHI=True) # Redshift-Neutral Fraction Network
 
 Results are accessed via 'res.z' and 'res.signal'.
