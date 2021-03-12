@@ -10,13 +10,13 @@ z = np.arange(10, 20, 100)
 
 
 def test_existing_dir():
-    #if os.path.exists('T_release/'):
-    #    shutil.rmtree('T_release/')
-    #if os.path.exists('xHI_release/'):
-    #    shutil.rmtree('xHI_release/')
+    if os.path.exists('T_release/'):
+        shutil.rmtree('T_release/')
+    if os.path.exists('xHI_release/'):
+        shutil.rmtree('xHI_release/')
 
-    #download().model()
-    #download(True).model()
+    download().model()
+    download(xHI=True).model()
 
     res = evaluate(params, z=z, base_dir='T_release/')
     res = evaluate(params, z=z, base_dir='xHI_release/', xHI=True)
