@@ -26,7 +26,7 @@ Introduction
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
  :target: https://pypi.org/project/globalemu/
  :alt: MIT License
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4601577.svg
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4601661.svg
  :target: https://doi.org/10.5281/zenodo.4601577
 
 Installation
