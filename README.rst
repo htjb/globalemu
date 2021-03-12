@@ -2,13 +2,6 @@
 globalemu: Robust and fast Global 21-cm Signal Emulation
 ========================================================
 
-TO DO:
-------
-
-- Add proper references into readme
-- Add plots into tutorial
-- fix notebook links in tutorial and readme
-
 Introduction
 ------------
 
@@ -27,13 +20,14 @@ Introduction
 Installation
 ------------
 
-The software can be pip installed from the PYPI repository via,
+The software can be pip installed from the PYPI repository via (note this currently
+is not set up but will be shortly!),
 
 .. code:: bash
 
   pip install globalemu
 
-or alternativaly it can be installed from the git repository via.
+or alternatively it can be installed from the git repository via.
 
 .. code:: bash
 
@@ -47,7 +41,7 @@ Emulating the Global 21-cm Signal
 ``globalemu`` is a fast and robust approach for emulating the Global or
 sky averaged 21-cm signal and the associated neutral fraction history.
 In the cited MNRAS paper below we show that it is
-a factor of 20 faster and more than 2 times as accurate as the previous state
+a factor of approximately 60 faster and 2 times as accurate as the previous state
 of the art
 `21cmGEM <https://academic.oup.com/mnras/article/495/4/4845/5850763>`__. The
 code is also flexible enough for it to be retrained on detailed simulations
@@ -141,23 +135,23 @@ software for academic puposes then we request that you cite the
 
 MNRAS pre-print (referred to in the documentation as the ``globalemu`` paper),
 
-  Plain text citation
+  In prep.
 
 Below is the bibtex,
 
 .. code:: bibtex
 
-  bibtext reference
+  In prep.
 
 JOSS paper,
 
-  Plain text reference
+  In prep.
 
 and the corresponding bibtex,
 
 .. code:: bibtex
 
-    bibtext reference
+    In prep.
 
 Requirements
 ------------
