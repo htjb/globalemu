@@ -27,7 +27,7 @@ Introduction
  :target: https://pypi.org/project/globalemu/
  :alt: MIT License
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4601661.svg
- :target: https://doi.org/10.5281/zenodo.4601577
+ :target: https://doi.org/10.5281/zenodo.4601661
 
 Installation
 ------------
