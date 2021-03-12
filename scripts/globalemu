@@ -9,7 +9,7 @@ import argparse
 import os
 
 
-def variable(name, lower, upper, position_x, position_y,
+def slider_var(name, lower, upper, position_x, position_y,
              initial, img_x_resize, img_y_resize, tickinterval,
              resolution=0.1):
     buffer = BytesIO()
@@ -121,37 +121,37 @@ img = ImageTk.PhotoImage(Image.open("img/img.png"))
 panel = Label(window, image=img)
 panel.place(x=10, y=10)
 
-f_star_entry, fstar_label = variable(
+f_star_entry, fstar_label = slider_var(
     r'$\log(f_*)$', -6, -0.3, 410, 10, -3, 50, 15, 1)
 label = Label(window, image=fstar_label)
 label.place(x=740, y=10)
 
-Vc_entry, Vc_label = variable(
+Vc_entry, Vc_label = slider_var(
     r'$\log(V_c)$', 16.5, 76.5, 410, 70, 46.5, 50, 15, 5)
 label = Label(window, image=Vc_label)
 label.place(x=740, y=70)
 
-f_x_entry, f_x_label = variable(
+f_x_entry, f_x_label = slider_var(
     r'$\log(f_x)$', -6, 2, 410, 130, -2, 50, 15, 1)
 label = Label(window, image=f_x_label)
 label.place(x=740, y=130)
 
-tau_entry, tau_label = variable(
+tau_entry, tau_label = slider_var(
     r'$\tau$', 0.055, 0.1, 410, 190, 0.0775, 15, 15, 0.01, resolution=0.001)
 label = Label(window, image=tau_label)
 label.place(x=740, y=190)
 
-alpha_entry, alpha_label = variable(
+alpha_entry, alpha_label = slider_var(
     r'$\alpha$', 1, 1.5, 410, 250, 1.25, 15, 15, 0.1, resolution=0.01)
 label = Label(window, image=alpha_label)
 label.place(x=740, y=250)
 
-nu_min_entry, numin_label = variable(
+nu_min_entry, numin_label = slider_var(
     r'$\nu_\mathrm{min}$', 0.1, 3, 410, 310, 1.5, 50, 15, 0.5)
 label = Label(window, image=numin_label)
 label.place(x=740, y=310)
 
-rmfp_entry, rmfp_label = variable(
+rmfp_entry, rmfp_label = slider_var(
     r'$R_\mathrm{mfp}$', 10, 50, 410, 370, 30, 40, 15, 10, resolution=1)
 label = Label(window, image=rmfp_label)
 label.place(x=740, y=370)
