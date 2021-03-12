@@ -131,7 +131,8 @@ the relevant packages (see below) via,
   cd docs
   sphinx-build source html-build
 
-You can find a tutorial notebook via the following link: ``binder notebook link``
+You can find a tutorial notebook
+`here <https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__.
 
 Licence and Citation
 --------------------
