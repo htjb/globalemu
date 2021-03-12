@@ -103,6 +103,11 @@ Evaluating an instance of ``globalemu``
 We can go ahead and evaluate the model using the testing data that we
 downloaded earlier.
 
+.. :code:: python
+
+  test_data = np.loadtxt(data_dir + 'test_data.txt')
+  test_labels = np.loadtxt(data_dir + 'test_labels.txt')
+
 With the data loaded we will look at how the model performs when predicting
 the first signal in the data set. We do this with the ``evaluate()`` function
 in ``globalemu.eval`` which takes in a set of parameters and returns a signal.
@@ -130,8 +135,8 @@ signal at the original redshifts that were used for training.
   plt.ylabel(r'$\delta T$ [mK]')
   plt.xlabel(r'$z$')
 
-.. image::
-  :alt: graph from notebook
+.. image:: https://github.com/htjb/globalemu/raw/master/docs/images/tutorial_plot1.png
+  :alt: See `notebook <https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__. for plot
 
 The emulation is pretty poor for several reasons; we didn't run the training
 for long enough (only 20 epochs), the network size is small and we used very
@@ -154,8 +159,8 @@ similar to the true signal.
   plt.ylabel(r'$\delta T$ [mK]')
   plt.xlabel(r'$z$')
 
-.. image::
-  :alt: other graph from notebook
+  .. image:: https://github.com/htjb/globalemu/raw/master/docs/images/tutorial_plot2.png
+    :alt: See `notebook <https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__. for plot
 
 Downloading Trained Models
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
