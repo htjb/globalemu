@@ -103,7 +103,7 @@ Evaluating an instance of ``globalemu``
 We can go ahead and evaluate the model using the testing data that we
 downloaded earlier.
 
-.. :code:: python
+.. code:: python
 
   test_data = np.loadtxt(data_dir + 'test_data.txt')
   test_labels = np.loadtxt(data_dir + 'test_labels.txt')
