@@ -27,8 +27,7 @@ Introduction
 Installation
 ------------
 
-The software can be pip installed from the PYPI repository via (note this currently
-is not set up but will be shortly!),
+The software can be pip installed from the PYPI repository via,
 
 .. code:: bash
 
