@@ -12,12 +12,17 @@ Introduction
 :Documentation: https://globalemu.readthedocs.io/
 
 .. image:: https://github.com/htjb/globalemu/workflows/CI/badge.svg?event=push
-  :target: https://github.com/htjb/globalemu/actions?query=workflow%3ACI
-  :alt: github CI
+ :target: https://github.com/htjb/globalemu/actions?query=workflow%3ACI
+ :alt: github CI
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
-  :alt: MIT License
+ :alt: MIT License
 .. image:: https://mybinder.org/badge_logo.svg
  :target: https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F
+.. image:: https://readthedocs.org/projects/globalemu/badge/?version=latest
+ :target: https://globalemu.readthedocs.io/en/latest/?badge=latest
+ :alt: Documentation Status
+.. image:: https://codecov.io/gh/htjb/globalemu/branch/master/graph/badge.svg?token=4KLLNT45TQ
+ :target: https://codecov.io/gh/htjb/globalemu
 
 Installation
 ------------
