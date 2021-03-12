@@ -16,7 +16,7 @@ setup(
     author_email='htjb2@cam.ac.uk',
     url='https://github.com/htjb/globalemu',
     packages=find_packages(),
-    install_requires=open('requirements.txt').read().splitline(),
+    install_requires=open('requirements.txt').read().splitlines(),
     license='MIT',
     scripts=['scripts/globalemu'],
     extras_require={
