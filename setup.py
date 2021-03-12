@@ -10,13 +10,13 @@ def readme(short=False):
 setup(
     name='globalemu',
     version='1.0.0',
-    description='globalemu: Robust and fast Global 21-cm Signal Emulation',
+    description='globalemu: Robust and Fast Global 21-cm Signal Emulation',
     long_description=readme(),
     author='Harry T. J. Bevins',
     author_email='htjb2@cam.ac.uk',
     url='https://github.com/htjb/globalemu',
     packages=find_packages(),
-    install_requires=['numpy', 'tensorflow', 'pandas', 'matplotlib', 'Pillow'],
+    install_requires=open('requirements.txt').read().splitline(),
     license='MIT',
     scripts=['scripts/globalemu'],
     extras_require={
