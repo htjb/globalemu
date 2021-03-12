@@ -36,7 +36,7 @@ class download():
 
         files = [
             'model.h5', 'data_mins.txt', 'data_maxs.txt', 'samples.txt',
-            'cdf.txt', 'z.txt',
+            'cdf.txt', 'z.txt', 'kwargs.txt',
             'AFB_norm_factor.npy', 'labels_stds.npy', 'AFB.txt']
 
         if self.xHI is False:
@@ -49,7 +49,7 @@ class download():
                 'htjb/globalemu/master/xHI_release/'
 
         for i in range(len(files)):
-            if i > 5 and self.xHI is True:
+            if i > 6 and self.xHI is True:
                 break
             r = requests.get(base_url + files[i])
             open(base_dir + files[i], 'wb').write(r.content)
