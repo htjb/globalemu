@@ -169,43 +169,43 @@ For both models the input parameters and ranges are given below.
     - Input Order
     -
     -
-  * - :math:`$f_*$`
+  * - f\ :sub:`*`
     - Star Formation Efficiency
     - 1
     - 1
     - 0.0001
     - 0.5
-  * - :math:`$V_c$`
+  * - V\ :sub:`c`
     - Minimal Virial Circular Veloity
     - 2
     - 2
     - 4.2 km/s
     - 100 km/s
-  * - :math:`$f_x$`
+  * - f\ :sub:`x`
     - X-ray Efficiency
     - 3
     - 3
     - 0
     - 1000
-  * - :math:`$\tau$`
+  * - &Tau;
     - CMB Optical Depth
     - 4
     - 5
     - 0.04
     - 0.17
-  * - :math:`$\alpha$`
+  * - &alpha;
     - Power of X-ray SED slope
     - 5
     - 6
     - 1.0
     - 1.5
-  * - :math:`$\nu_\mathrm{min}$`
+  * - &nu;\ :sub:`min`
     - Low Energy Cut Off of X-ray SED
     - 6
     - 4
     - 0.1 keV
     - 3 keV
-  * - :math:`$R_\mathrm{mfp}$`
+  * - R\ :sub:`mfp`
     - Mean Free Path of Ionizing Photons
     - 7
     - 7
