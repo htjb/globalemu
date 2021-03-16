@@ -143,6 +143,75 @@ the relevant packages (see below) via,
 You can find a tutorial notebook
 `here <https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__.
 
+T_release/ and xHI_release/
+---------------------------
+
+The currently released global signal trained model, ``T_release/`` is trained
+on the same training data set as 21cmGEM which is available
+`here <http://doi.org/10.5281/zenodo.4541500>`__. The data used to train the
+neutral fraction history network, ``xHI_release/`` is not publicly available
+but comes from the same large scale simulations used to model the global signal.
+
+For both models the input parameters and ranges are given below.
+
+.. list-table::
+  :header-rows: 2
+
+  * - Parameter
+    - Description
+    - ``T_release/``
+    - ``xHI_release/``
+    - Min
+    - Max
+  * -
+    -
+    - Input Order
+    - Input Order
+    -
+    -
+  * - :math:`f_*`
+    - Star Formation Efficiency
+    - 1
+    - 1
+    - 0.0001
+    - 0.5
+  * - :math:`V_c`
+    - Minimal Virial Circular Veloity
+    - 2
+    - 2
+    - 4.2 km/s
+    - 100 km/s
+  * - :math:`f_x`
+    - X-ray Efficiency
+    - 3
+    - 3
+    - 0
+    - 1000
+  * - :math:`\tau`
+    - CMB Optical Depth
+    - 4
+    - 5
+    - 0.04
+    - 0.17
+  * - :math:`\alpha`
+    - Power of X-ray SED slope
+    - 5
+    - 6
+    - 1.0
+    - 1.5
+  * - :math:`\nu_\mathrm{min}`
+    - Low Energy Cut Off of X-ray SED
+    - 6
+    - 4
+    - 0.1 keV
+    - 3 keV
+  * - :math:`R_\mathrm{mfp}`
+    - Mean Free Path of Ionizing Photons
+    - 7
+    - 7
+    - 10.0 Mpc
+    - 50.0 Mpc
+
 Licence and Citation
 --------------------
 
@@ -201,8 +270,3 @@ Contributions to ``globalemu`` are very much welcome and can be made via,
 - Opening an issue to report a bug/propose a new feature.
 - Making a pull request. Please consider opening an issue first to discuss
   any proposals and ensure the PR will be accepted.
-
-21cmGEM Data
-------------
-
-The 21cmGEM training data is available `here <http://doi.org/10.5281/zenodo.4541500>`__.
