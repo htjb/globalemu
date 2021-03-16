@@ -123,22 +123,22 @@ panel = Label(window, image=img)
 panel.place(x=10, y=10)
 
 f_star_entry, fstar_label = slider_var(
-    r'$\log(f_*)$', -6, -0.3, 410, 10, -3, 50, 15, 1)
+    r'$\log(f_*)$', -4, -0.3, 410, 10, -3, 50, 15, 1)
 label = Label(window, image=fstar_label)
 label.place(x=740, y=10)
 
 Vc_entry, Vc_label = slider_var(
-    r'$\log(V_c)$', 16.5, 76.5, 410, 70, 46.5, 50, 15, 5)
+    r'$\log(V_c)$', 4.2, 100, 410, 70, 46.5, 50, 15, 20)
 label = Label(window, image=Vc_label)
 label.place(x=740, y=70)
 
 f_x_entry, f_x_label = slider_var(
-    r'$\log(f_x)$', -6, 2, 410, 130, -2, 50, 15, 1)
+    r'$\log(f_x)$', -4, 3, 410, 130, -2, 50, 15, 1)
 label = Label(window, image=f_x_label)
 label.place(x=740, y=130)
 
 tau_entry, tau_label = slider_var(
-    r'$\tau$', 0.055, 0.1, 410, 190, 0.0775, 15, 15, 0.01, resolution=0.001)
+    r'$\tau$', 0.04, 0.1, 410, 190, 0.0775, 15, 15, 0.01, resolution=0.001)
 label = Label(window, image=tau_label)
 label.place(x=740, y=190)
 
