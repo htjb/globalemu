@@ -187,19 +187,19 @@ For both models the input parameters and ranges are given below.
     - 3
     - 0
     - 1000
-  * - &Tau;
+  * - tau
     - CMB Optical Depth
     - 4
     - 5
     - 0.04
     - 0.17
-  * - &alpha;
+  * - alpha
     - Power of X-ray SED slope
     - 5
     - 6
     - 1.0
     - 1.5
-  * - &nu;\ :sub:`min`
+  * - nu :sub:`min`
     - Low Energy Cut Off of X-ray SED
     - 6
     - 4
