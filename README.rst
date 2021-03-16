@@ -239,6 +239,13 @@ and the corresponding bibtex,
 
     In prep.
 
+Poster Presentation
+-------------------
+
+A poster presentation of ``globalemu`` has recently been presented at
+the `2021 Virtual SKA Science Conference <https://skao.eventsair.com/science21/>`__
+and a PDF copy can be viewed `here <https://htjb.github.io/static/globalemu.pdf>`__.
+
 Requirements
 ------------
 
