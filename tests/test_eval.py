@@ -18,23 +18,27 @@ def test_existing_dir():
     download().model()
     download(xHI=True).model()
 
-    res = evaluate(params, z=z, base_dir='T_release/')
-    res = evaluate(params, z=z, base_dir='xHI_release/', xHI=True)
-    res = evaluate(params, z=10, base_dir='T_release/')
+    predictor = evaluate(z=z, base_dir='T_release/')
+    res = predictor(params)
+    predictor = evaluate(z=10, base_dir='T_release/')
+    res = predictor(params)
+    predictor = evaluate(z=z, base_dir='xHI_release/', xHI=True)
+    res = predictor(params)
 
     with pytest.raises(KeyError):
-        res = evaluate(params, z=z, basedir='T_release/')
+        res = evaluate(z=z, basedir='T_release/')
 
     with pytest.raises(TypeError):
-        res = evaluate(10, z=z, base_dir='T_release/')
+        predictor = evaluate(z=z, base_dir='T_release/')
+        res = predictor(10)
     with pytest.raises(TypeError):
-        res = evaluate(params, z=z, base_dir=100)
+        predictor = evaluate(z=z, base_dir=100)
     with pytest.raises(TypeError):
-        res = evaluate(params, z=z, base_dir='T_release/', logs=10)
+        predictor = evaluate(z=z, base_dir='T_release/', logs=10)
     with pytest.raises(TypeError):
-        res = evaluate(params, z='foo', base_dir='T_release/')
+        predictor = evaluate(z='foo', base_dir='T_release/')
     with pytest.raises(TypeError):
-        res = evaluate(params, z=z, base_dir='T_release/',
+        predictor = evaluate(z=z, base_dir='T_release/',
                        gc='false')
     with pytest.raises(TypeError):
-        res = evaluate(params, z=z, base_dir='T_release/', xHI='bar')
+        predictor = evaluate(z=z, base_dir='T_release/', xHI='bar')

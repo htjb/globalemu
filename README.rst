@@ -7,7 +7,7 @@ Introduction
 
 :globalemu: Robust Global 21-cm Signal Emulation
 :Author: Harry Thomas Jones Bevins
-:Version: 1.0.1
+:Version: 1.1.0
 :Homepage: https://github.com/htjb/globalemu
 :Documentation: https://globalemu.readthedocs.io/
 
@@ -52,8 +52,8 @@ Emulating the Global 21-cm Signal
 ``globalemu`` is a fast and robust approach for emulating the Global or
 sky averaged 21-cm signal and the associated neutral fraction history.
 In the cited MNRAS paper below we show that it is
-a factor of approximately 60 faster and 2 times as accurate as the previous state
-of the art
+a factor of approximately 330 times faster and 2 times as accurate
+as the previous state of the art
 `21cmGEM <https://academic.oup.com/mnras/article/495/4/4845/5850763>`__. The
 code is also flexible enough for it to be retrained on detailed simulations
 containing the most up to date physics. We release two trained networks, one
@@ -82,13 +82,15 @@ a set of parameters by running:
   # [fstar, vc, fx, tau, alpha, nu_min, R_mfp]
   params = [1e-3, 46.5, 1e-2, 0.0775, 1.25, 1.5, 30]
 
-  res = evaluate(params, base_dir='T_release/') # Redshift-Temperature Network
+  predictor = evaluate(base_dir='T_release/') # Redshift-Temperature Network
+  signal, z = predictor(params)
 
   # note the parameter order is different for the neutral fraction emulator
   # [fstar, vc, fx, nu_min, tau, alpha, R_mfp]
   params = [1e-3, 46.5, 1e-2, 1.5, 0.0775, 1.25, 30]
 
-  res = evaluate(params, base_dir='xHI_release/', xHI=True) # Redshift-Neutral Fraction Network
+  predictor = evaluate(base_dir='xHI_release/', xHI=True) # Redshift-Neutral Fraction Network
+  signal, z = predictor(params)
 
 Results are accessed via 'res.z' and 'res.signal'.
 
@@ -245,6 +247,9 @@ Poster Presentation
 A poster presentation of ``globalemu`` has recently been presented at
 the `2021 Virtual SKA Science Conference <https://skao.eventsair.com/science21/>`__
 and a PDF copy can be viewed `here <https://htjb.github.io/static/globalemu.pdf>`__.
+
+Note that the timings/accuracies reported on the poster were valid at the time
+of presenting. However, the emulator has since been made faster.
 
 Requirements
 ------------

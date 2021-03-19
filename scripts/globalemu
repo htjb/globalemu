@@ -36,8 +36,9 @@ def init_signal(mode='null'):
         idx = [0, 1, 2, 5, 3, 4, 6]
         params = [params[i] for i in idx]
     plt.figure(figsize=(4, 3))
-    res = evaluate(params, base_dir=base_dir, xHI=xHI)
-    plt.plot(res.z, res.signal, c='k')
+    predictor = evaluate(base_dir=base_dir, xHI=xHI)
+    signal, z = predictor(params)
+    plt.plot(z, signal, c='k')
     plt.xlabel('z')
     if xHI is False:
         plt.ylabel(r'$\delta T$ [mK]')
@@ -65,9 +66,10 @@ def signal(_):
     if xHI is True:
         idx = [0, 1, 2, 5, 3, 4, 6]
         params = [params[i] for i in idx]
-    res = evaluate(params, base_dir=base_dir, xHI=xHI)
+    predictor = evaluate(base_dir=base_dir, xHI=xHI)
+    signal, z = predictor(params)
     plt.figure(figsize=(4, 3))
-    plt.plot(res.z, res.signal, c='k')
+    plt.plot(z, signal, c='k')
     plt.xlabel('z')
     if xHI is False:
         plt.ylabel(r'$\delta T$ [mK]')

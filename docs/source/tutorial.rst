@@ -109,12 +109,11 @@ downloaded earlier.
   test_labels = np.loadtxt(data_dir + 'test_labels.txt')
 
 With the data loaded we will look at how the model performs when predicting
-the first signal in the data set. We do this with the ``evaluate()`` function
+the first signal in the data set. We do this with the ``evaluate()`` class
 in ``globalemu.eval`` which takes in a set of parameters and returns a signal.
-We also supply a ``base_dir`` which contains the pre-processed data,
-normalisation factors and trained model. For multiple calls it is quicker to
-pass the trained model directly and their exists a kwarg in order to do this
-however we leave this for now. You can also pass a redshift range with the
+The class must first, however, be initialised with a set of kwargs.
+We supply a ``base_dir`` which contains the pre-processed data,
+normalisation factors and trained model. You can also pass a redshift range with the
 ``z`` kwarg however if this isn't supplied than the function will return the
 signal at the original redshifts that were used for training.
 
@@ -125,12 +124,13 @@ signal at the original redshifts that were used for training.
   input_params = test_data[0, :]
   true_signal = test_labels[0, :]
 
-  res = evaluate(input_params, base_dir=base_dir)
+  predictor = evaluate(base_dir=base_dir)
+  signal, z = predictor(input_params)
 
   import matplotlib.pyplot as plt
 
   plt.plot(z, true_signal, label='True Signal')
-  plt.plot(res.z, res.signal, label='Emulation')
+  plt.plot(z, signal, label='Emulation')
   plt.legend()
   plt.ylabel(r'$\delta T$ [mK]')
   plt.xlabel(r'$z$')
@@ -149,12 +149,13 @@ similar to the true signal.
 
 .. code:: python
 
-  res = evaluate(input_params, base_dir='../T_release/')
+  predictor = evaluate(base_dir='../T_release/')
+  signal, z = predictor(input_params)
 
   import matplotlib.pyplot as plt
 
   plt.plot(z, true_signal, label='True Signal')
-  plt.plot(res.z, res.signal, label='Emulation')
+  plt.plot(z, signal, label='Emulation')
   plt.legend()
   plt.ylabel(r'$\delta T$ [mK]')
   plt.xlabel(r'$z$')
