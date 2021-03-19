@@ -18,99 +18,98 @@ import gc
 
 class evaluate():
 
+    r"""
+
+    The class can be initialised with the following kwargs and the
+    following code
+
+    .. code:: python
+
+        predictor = evaluate(**kwargs)
+
+    **kwargs:**
+
+        xHI: **Bool / default: False**
+            | If True then ``globalemu`` will act as if it is evaluating a
+                neutral fraction history emulator.
+
+        base_dir: **string / default: 'model_dir/'**
+            | The ``base_dir`` is where the trained model is saved.
+
+        model: **tensorflow model / default: None**
+            | If making multiple calls to the function it is advisable to
+                load the trained model in the script making the calls and
+                then to pass it to ``evaluate()``. This prevents the model
+                being loaded upon each call and leads to a significant
+                increase speed. You can load a model via,
+
+                .. code:: python
+
+                    from tensorflow import keras
+
+                    model = keras.models.load_model(
+                        base_dir + 'model.h5',
+                        compile=False)
+
+        logs: **list / default: [0, 1, 2]**
+            | The indices corresponding to the astrophysical
+                parameters that
+                were logged during training. The default assumes
+                that the first three columns in "train_data.txt" are
+                :math:`{f_*}` (star formation efficiency),
+                :math:`{V_c}` (minimum virial circular velocity) and
+                :math:`{f_x}` (X-ray efficieny).
+
+        gc: **Bool / default: False**
+            | Multiple calls to the function can cause runaway memory
+                related issues (it is worth testing this
+                behaviour before scheduling
+                hpc jobs) and these memory issues can be somewhat eleviated
+                by setting ``gc=True``. This performs a garbage collection
+                after every function call. It is an optional argumen set to
+                ``False`` by default because it can increase the time taken
+                to perform the emulation.
+
+        z: **list or np.array / default: Original redshift array**
+            | The redshift values at which you want to emulate the 21-cm
+                signal. The default is given by the redshift range that the
+                network was originally trained on (found in ``base_dir``).
+
+    Once the class has been initialised you can then make evaluations
+    of the emulator by passing the parameters like so
+
+    .. code:: python
+
+        signal, z = predictor(parameters)
+
+    **Parameters:**
+
+        parameters: **list or np.array**
+            | The combination of astrophysical parameters that you want to
+                emulate a global signal for. They must be in the same order
+                as was used when training and they must fall with in the
+                trained parameter space. For the 21cmGEM data the order
+                of the astrophysical parameters is given by:
+                :math:`{f_*, V_c, f_x, \tau, \alpha, \nu_\mathrm{min}}` and
+                :math:`{R_\mathrm{mfp}}` (see the ``globalemu`` paper and
+                references therein for a description of the parameters).
+
+    **Return:**
+
+        signal: **array or float**
+            | The emulated signal. If a single redshift is passed to the
+                emulator then the returned signal will be a single float
+                otherwise the result will be an array.
+
+        z: **array or float**
+            | The redshift values corresponding to the returned signal. If
+                z was not specified on input then the returned signal and
+                redshifts will correspond to the redshifts that the network
+                was originally trained on.
+
+    """
+
     def __init__(self, **kwargs):
-
-        r"""
-
-        The class can be initialised with the following kwargs and the
-        following code
-
-        .. code:: python
-
-            predictor = evaluate(**kwargs)
-
-        **kwargs:**
-
-            xHI: **Bool / default: False**
-                | If True then ``globalemu`` will act as if it is evaluating a
-                    neutral fraction history emulator.
-
-            base_dir: **string / default: 'model_dir/'**
-                | The ``base_dir`` is where the trained model is saved.
-
-            model: **tensorflow model / default: None**
-                | If making multiple calls to the function it is advisable to
-                    load the trained model in the script making the calls and
-                    then to pass it to ``evaluate()``. This prevents the model
-                    being loaded upon each call and leads to a significant
-                    increase speed. You can load a model via,
-
-                    .. code:: python
-
-                        from tensorflow import keras
-
-                        model = keras.models.load_model(
-                            base_dir + 'model.h5',
-                            compile=False)
-
-            logs: **list / default: [0, 1, 2]**
-                | The indices corresponding to the astrophysical
-                    parameters that
-                    were logged during training. The default assumes
-                    that the first three columns in "train_data.txt" are
-                    :math:`{f_*}` (star formation efficiency),
-                    :math:`{V_c}` (minimum virial circular velocity) and
-                    :math:`{f_x}` (X-ray efficieny).
-
-            gc: **Bool / default: False**
-                | Multiple calls to the function can cause runaway memory
-                    related issues (it is worth testing this
-                    behaviour before scheduling
-                    hpc jobs) and these memory issues can be somewhat eleviated
-                    by setting ``gc=True``. This performs a garbage collection
-                    after every function call. It is an optional argumen set to
-                    ``False`` by default because it can increase the time taken
-                    to perform the emulation.
-
-            z: **list or np.array / default: Original redshift array**
-                | The redshift values at which you want to emulate the 21-cm
-                    signal. The default is given by the redshift range that the
-                    network was originally trained on (found in ``base_dir``).
-
-        Once the class has been initialised you can then make evaluations
-        of the emulator by passing the parameters like so
-
-        .. code:: python
-
-            signal, z = predictor(parameters)
-
-        **Parameters:**
-
-            parameters: **list or np.array**
-                | The combination of astrophysical parameters that you want to
-                    emulate a global signal for. They must be in the same order
-                    as was used when training and they must fall with in the
-                    trained parameter space. For the 21cmGEM data the order
-                    of the astrophysical parameters is given by:
-                    :math:`{f_*, V_c, f_x, \tau, \alpha, \nu_\mathrm{min}}` and
-                    :math:`{R_\mathrm{mfp}}` (see the ``globalemu`` paper and
-                    references therein for a description of the parameters).
-
-        **Return:**
-
-            signal: **array or float**
-                | The emulated signal. If a single redshift is passed to the
-                    emulator then the returned signal will be a single float
-                    otherwise the result will be an array.
-
-            z: **array or float**
-                | The redshift values corresponding to the returned signal. If
-                    z was not specified on input then the returned signal and
-                    redshifts will correspond to the redshifts that the network
-                    was originally trained on.
-
-
-        """
 
         for key, values in kwargs.items():
             if key not in set(
