@@ -67,7 +67,7 @@ class process():
         for key, values in kwargs.items():
             if key not in set(
                     ['base_dir', 'data_location', 'xHI', 'logs']):
-                raise KeyError("Unexpected keyward argument in process()")
+                raise KeyError("Unexpected keyword argument in process()")
 
         self.num = num
         if type(self.num) is not int:

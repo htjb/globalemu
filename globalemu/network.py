@@ -124,7 +124,7 @@ class nn():
                         'output_shape', 'layer_sizes', 'base_dir',
                         'early_stop', 'early_stop_lim', 'xHI', 'resume',
                         'random_seed']):
-                raise KeyError("Unexpected keyward argument in nn()")
+                raise KeyError("Unexpected keyword argument in nn()")
 
         self.resume = kwargs.pop('resume', False)
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')

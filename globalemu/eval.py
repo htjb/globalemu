@@ -114,7 +114,7 @@ class evaluate():
         for key, values in kwargs.items():
             if key not in set(
                     ['xHI', 'base_dir', 'model', 'logs', 'gc', 'z']):
-                raise KeyError("Unexpected keyward argument in evaluate()")
+                raise KeyError("Unexpected keyword argument in evaluate()")
 
         self.xHI = kwargs.pop('xHI', False)
 

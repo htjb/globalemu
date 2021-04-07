@@ -9,7 +9,7 @@ def readme(short=False):
 
 setup(
     name='globalemu',
-    version='1.1.0',
+    version='1.1.1',
     description='globalemu: Robust and Fast Global 21-cm Signal Emulation',
     long_description=readme(),
     author='Harry T. J. Bevins',
