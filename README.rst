@@ -52,7 +52,7 @@ Emulating the Global 21-cm Signal
 ``globalemu`` is a fast and robust approach for emulating the Global or
 sky averaged 21-cm signal and the associated neutral fraction history.
 In the cited MNRAS paper below we show that it is
-a factor of approximately 330 times faster and 2 times as accurate
+a factor of approximately 102 times faster and 2 times as accurate
 as the previous state of the art
 `21cmGEM <https://academic.oup.com/mnras/article/495/4/4845/5850763>`__. The
 code is also flexible enough for it to be retrained on detailed simulations
