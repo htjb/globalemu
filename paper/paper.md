@@ -20,7 +20,7 @@ bibliography: paper.bib
 # Summary
 
 ``globalemu`` is a robust framework for emulating the sky-averaged
-or Global 21-cm signal from the Cosmic Dawn and Epoch of Reionisation. While
+or Global 21-cm signal from the Cosmic Dawn and Epoch of Reionization. While
 a detection of this signal has not yet been confirmed the physics of the signal
 is broadly understood within a theoretical framework. Detailed simulations of
 the signal exist and are continually being updated as our understanding of the
