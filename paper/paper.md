@@ -27,7 +27,7 @@ the signal exist and are continually being updated as our understanding of the
 physics improves [@Visbal2012, @Fialkov2014, @Cohen2017, @Reis2021]. Each
 simulation takes a few hours to perform on a desktop [@Monsalve2019] and
 consequently the use of neural networks to emulate the signal has been pursued.
-``globalemu`` is capable of emulating a high resolution Global signal in 1.3 ms
+``globalemu`` is a framework capable of emulating a high resolution Global signal in 1.3 ms
 which is a factor of approximately 102 improvement on the previous
 state of the art [@Cohen2020]. It is
 designed to be a flexible emulator that can be easily retrained by a user on
@@ -42,8 +42,8 @@ Efforts are currently underway to confirm this detection
 and there are concerns about the data analysis in the
 EDGES experiment [@Hills2018; @Singh2019; @Sims2020; @Bevins2021].
 
-The EDGES collaboration modelled the absorption feature in the data with a
-flattened gaussian profile characterised by an amplitude, width, flattening
+The EDGES collaboration modelled the absorption feature in their data with a
+flattened Gaussian profile characterised by an amplitude, width, flattening
 factor and central frequency. This type of non-physical signal modelling is
 common in the data analysis for experiments attempting to detect the Global
 21-cm signal. However, the models tell us very little about the physics of the
@@ -62,7 +62,7 @@ nested sampling algorithms [@Anstey2020; @Liu2020; @Chatterjee2021].
 As a result it has been proposed and demonstrated that we can use neural networks
 to emulate the physical signal models in a fraction of a second given enough
 available training data. The previous state of the art, ``21cmGEM`` [@Cohen2020],
-can emulate a high resolution signal, 451 redshift data points, in 133 ms
+can emulate a high resolution signal, 451 redshift data points, in 133 ms [@Bevins2021b]
 given a set of seven astrophysical parameters that detail the physics of the
 first galaxies and stars to form in the universe.
 
@@ -71,11 +71,9 @@ the parameter space that can result in a loss of information, and several neural
 produce an accurate emulation of the Global 21-cm signal. In contrast ``globalemu``
 uses the novel approach of having redshift as an input to the neural network,
 alongside the characteristic astrophysical parameters, and estimating a
-corresponding temperature. Whilst this means multiple calls to ``globalemu``
-need to be made to estimate the signal temperature as a function of redshift
-we find that this is not an issue.
+corresponding temperature.
 
-``globalemu`` therefore has typically around seven inputs and one output in
+``globalemu`` therefore typically has around seven inputs and one output in
 comparison to ``21cmGEM`` which has seven to twelve inputs, one to
 seven outputs, multiple networks (5 or 6) and a decision tree for classification.
 This combined with the fact that ``globalemu`` has a detailed physically motivated
@@ -94,7 +92,7 @@ network. The novel network design allows for a typically smaller
 network architecture and a correspondingly quicker emulation.
 Figure taken from @Bevins2021b.](network_design.png)
 
-We demonstrate in @Bevins2021b that ``globalemu`` can emulate the
+It is demonstrated in @Bevins2021b that ``globalemu`` can emulate the
 Global signal in 1.3 ms, a factor of 102 improvement on ``21cmGEM``, and that
 it is approximately twice as accurate as ``21cmGEM`` when emulating the same
 set of signals.
