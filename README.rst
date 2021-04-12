@@ -223,13 +223,25 @@ software for academic puposes then we request that you cite the
 
 MNRAS pre-print (referred to in the documentation as the ``globalemu`` paper),
 
-  In prep.
+  Bevins, H., W. J. Handley, A. Fialkov, E. D. L. Acedo and K. Javid.
+  “GLOBALEMU: A novel and robust approach for emulating the sky-averaged 21-cm
+  signal from the cosmic dawn and epoch of reionisation.” (2021). arXiv:2104.04336
 
 Below is the bibtex,
 
 .. code:: bibtex
 
-  In prep.
+  @article{Bevins2021,
+    title = {{GLOBALEMU}: {A} novel and robust approach for emulating the sky-averaged 21-cm signal from the cosmic dawn and epoch of reionisation},
+    url = {http://arxiv.org/abs/2104.04336},
+    urldate = {2021-04-12},
+    journal = {arXiv:2104.04336 [astro-ph]},
+    author = {Bevins, H. T. J. and Handley, W. J. and Fialkov, A. and Acedo, E. de Lera and Javid, K.},
+    month = apr,
+    year = {2021},
+    note = {arXiv: 2104.04336}
+  }
+
 
 JOSS paper,
 
