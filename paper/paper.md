@@ -40,7 +40,7 @@ A detection of an absorption trough at $78$ MHz was recently made by the
 Experiment to Detect the Global Epoch of Reionization Signature (EDGES) [@Bowman2018].
 Efforts are currently underway to confirm this detection
 and there are concerns about the data analysis in the
-EDGES experiment [@Hills2018, @Singh2019, @Sims2020, @Bevins2021].
+EDGES experiment [@Hills2018; @Singh2019; @Sims2020; @Bevins2021].
 
 The EDGES collaboration modelled the absorption feature in the data with a
 flattened gaussian profile characterised by an amplitude, width, flattening
@@ -52,12 +52,12 @@ early universe.
 A better approach is to use physical modelling of the signal where the signals
 structure is determined by a set of characteristic astrophysical parameters
 such as the star formation efficiency of early galaxies. Detailed physical
-simulations of the global signal exist [@Visbal2012, @Fialkov2014, @Cohen2017, @Reis2021]
+simulations of the global signal exist [@Visbal2012; @Fialkov2014; @Cohen2017; @Reis2021]
 and are commonly used to explore the parameter space. However, to produce
 one signal from the above simulations between $z = 6 - 50$ with $\delta z = 1$
 takes several hours on a desktop computer [@Monsalve2019]. This is impractical
 when attempting to fit physical signal models, particularly when using
-nested sampling algorithms [@Anstey2020, @Liu2020, @Chatterjee2021].
+nested sampling algorithms [@Anstey2020; @Liu2020; @Chatterjee2021].
 
 As a result it has been proposed and demonstrated that we can use neural networks
 to emulate the physical signal models in a fraction of a second given enough
