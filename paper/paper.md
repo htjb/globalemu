@@ -1,5 +1,5 @@
 ---
-title: 'globalemu: robust and fast emulation of the sky-averaged 21-signal from
+title: 'globalemu: A flexible and fast framework for emulating the sky-averaged 21-signal from
   the cosmic dawn and epoch of reionization'
 tags:
   - Python
@@ -19,16 +19,17 @@ bibliography: paper.bib
 
 # Summary
 
-``globalemu`` is a robust framework for training and emulating the sky-averaged
-or Global 21-cm signal from the Cosmic Dawn and Epoch of Recombination. While
+``globalemu`` is a robust framework for emulating the sky-averaged
+or Global 21-cm signal from the Cosmic Dawn and Epoch of Reionisation. While
 a detection of this signal has not yet been confirmed the physics of the signal
 is broadly understood within a theoretical framework. Detailed simulations of
 the signal exist and are continually being updated as our understanding of the
 physics improves [@Visbal2012, @Fialkov2014, @Cohen2017, @Reis2021]. Each
 simulation takes a few hours to perform on a desktop [@Monsalve2019] and
 consequently the use of neural networks to emulate the signal has been pursued.
-``globalemu`` is capable of emulating a high resolution Global signal in 8 ms
-which is a factor of 20 improvement on the previous state of the art [@Cohen2020]. It is
+``globalemu`` is capable of emulating a high resolution Global signal in 1.3 ms
+which is a factor of approximately 102 improvement on the previous
+state of the art [@Cohen2020]. It is
 designed to be a flexible emulator that can be easily retrained by a user on
 the latest set of simulations containing the most up to date understanding
 of the physics.
@@ -37,8 +38,8 @@ of the physics.
 
 A detection of an absorption trough at $78$ MHz was recently made by the
 Experiment to Detect the Global Epoch of Reionization Signature (EDGES) [@Bowman2018].
-Efforts are currently underway to determine whether this signal is indeed the
-Global 21-cm signal and there are concerns about the data analysis in the
+Efforts are currently underway to confirm this detection
+and there are concerns about the data analysis in the
 EDGES experiment [@Hills2018, @Singh2019, @Sims2020, @Bevins2021].
 
 The EDGES collaboration modelled the absorption feature in the data with a
@@ -61,11 +62,11 @@ nested sampling algorithms [@Anstey2020, @Liu2020, @Chatterjee2021].
 As a result it has been proposed and demonstrated that we can use neural networks
 to emulate the physical signal models in a fraction of a second given enough
 available training data. The previous state of the art, ``21cmGEM`` [@Cohen2020],
-can emulate a high resolution signal, 451 redshift data points, in 160 ms
+can emulate a high resolution signal, 451 redshift data points, in 133 ms
 given a set of seven astrophysical parameters that detail the physics of the
 first galaxies and stars to form in the universe.
 
-``21cmGEM`` relies on Principle Component Analysis, a potentially compression of
+``21cmGEM`` relies on Principle Component Analysis, a compression of
 the parameter space that can result in a loss of information, and several neural networks to
 produce an accurate emulation of the Global 21-cm signal. In contrast ``globalemu``
 uses the novel approach of having redshift as an input to the neural network,
@@ -75,31 +76,31 @@ need to be made to estimate the signal temperature as a function of redshift
 we find that this is not an issue.
 
 ``globalemu`` therefore has typically around seven inputs and one output in
-comparison to seven inputs and $\gtrsim 10$ outputs and multiple networks for
-emulators like ``21cmGEM``.
+comparison to ``21cmGEM`` which has seven to twelve inputs, one to
+seven outputs, multiple networks (5 or 6) and a decision tree for classification.
 This combined with the fact that ``globalemu`` has a detailed physically motivated
-pre-processing (see Bevins et al. (in prep.)) of the data means that we can
+pre-processing (see @Bevins2021b) of the data means that we can
 emulate the Global signal with one small scale neural network to a high degree of
 accuracy.
 
-![**Left Panel:** The structure of a traditional Global 21-cm
-signal emulator. We illustrate the input astrophysical parameters with those
-corresponding to the data used to train ``21cmGEM`` [@Cohen2020]. We can see that
-there are multiple outputs and consequently a large number of hidden layers and
-nodes are typically needed for accurate emulaton. **Right Panel:** The structure
-of ``globalemu`` with one additional input and only a single output from the
-network. Whilst a vectorised call needs to be made to emulate a signal at
-multiple redshifts, the novel network design allows for a typically smaller
-network architecture and a correspondingly quicker emulation than the
-alternative approach. Figuere taken from Bevins et al. (in prep.).](network_design.png)
+![**Left Panel:** The structure of one of five or six regression neural networks
+used in ``21cmGEM`` to emulate the Global signal. ``21cmGEM`` uses twelve astrophysical
+parameters and these are labelled at the input nodes [for details see @Cohen2020].
+We can see that there are multiple outputs and each network has one hidden layer with
+40 nodes. **Right Panel:** In comparison, the structure
+of ``globalemu`` which we have illustrated with seven astrophysical parameters and
+redshift as input and a single output from the
+network. The novel network design allows for a typically smaller
+network architecture and a correspondingly quicker emulation.
+Figure taken from @Bevins2021b.](network_design.png)
 
-We demonstrate in Bevins et al. (in prep.) that ``globalemu`` can emulate the
-Global signal in 8 ms, a factor of 20 improvement on ``21cmGEM``, and that
+We demonstrate in @Bevins2021b that ``globalemu`` can emulate the
+Global signal in 1.3 ms, a factor of 102 improvement on ``21cmGEM``, and that
 it is approximately twice as accurate as ``21cmGEM`` when emulating the same
 set of signals.
 
 We release with ``globalemu`` trained neural networks for both the Global 21-cm
-signal and the corresponding neutral fraction history. However, the we note that
+signal and the corresponding neutral fraction history. However, we note that
 ``globalemu`` is a detailed framework that makes emulating the Global 21-cm signal
 easy to do and consequently a user can retrain the emulator on new sets of
 simulations with updated astrophysics such as the addition of Lyman-$\alpha$
