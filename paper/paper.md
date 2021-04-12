@@ -40,7 +40,7 @@ A detection of an absorption trough at $78$ MHz was recently made by the
 Experiment to Detect the Global Epoch of Reionization Signature (EDGES) [@Bowman2018].
 Efforts are currently underway to confirm this detection
 and there are concerns about the data analysis in the
-EDGES experiment [@Hills2018; @Singh2019; @Sims2020; @Bevins].
+EDGES experiment [@Hills2018; @Singh2019; @Sims2020; @Bevins2021].
 
 The EDGES collaboration modelled the absorption feature in the data with a
 flattened gaussian profile characterised by an amplitude, width, flattening
