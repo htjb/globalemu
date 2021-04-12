@@ -1,5 +1,5 @@
 ---
-title: 'globalemu: A flexible and fast framework for emulating the sky-averaged 21-signal from
+title: 'globalemu: A flexible and fast framework for emulating the sky-averaged 21-cm signal from
   the cosmic dawn and epoch of reionization'
 tags:
   - Python
@@ -12,7 +12,7 @@ authors:
 affiliations:
  - name: Astrophysics Group, Cavendish Laboratory, J.J.Thomson Avenue, Cambridge, CB3 0HE, United Kingdom
    index: 1
-date: 31 July 2020
+date: 12 April 2021
 bibliography: paper.bib
 
 ---
