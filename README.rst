@@ -222,7 +222,7 @@ Licence and Citation
 
 The software is free to use on the MIT open source license. If you use the
 software for academic puposes then we request that you cite the
-``globalemu`` papers below.
+``globalemu`` paper below.
 
 MNRAS pre-print (referred to in the documentation as the ``globalemu`` paper),
 
@@ -244,17 +244,6 @@ Below is the bibtex,
     year = {2021},
     note = {arXiv: 2104.04336}
   }
-
-
-JOSS paper,
-
-  In prep.
-
-and the corresponding bibtex,
-
-.. code:: bibtex
-
-    In prep.
 
 Poster Presentation
 -------------------
