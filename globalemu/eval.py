@@ -93,13 +93,20 @@ class evaluate():
                 :math:`{f_*, V_c, f_x, \tau, \alpha, \nu_\mathrm{min}}` and
                 :math:`{R_\mathrm{mfp}}` (see the ``globalemu`` paper and
                 references therein for a description of the parameters).
+                You can pass a single set of parameters or a 2D array of
+                different parameters to evaluate. For example if I wanted to
+                evaluate 100 sets of 7 parameters my input array should have
+                shape=(100, 7).
 
     **Return:**
 
         signal: **array or float**
             | The emulated signal. If a single redshift is passed to the
                 emulator then the returned signal will be a single float
-                otherwise the result will be an array.
+                otherwise the result will be an array. If more than
+                one set of parameters are input then the output signal will
+                be an array of signals. e.g. 100 input sets of parameters
+                gives signal.shape=(100, len(z)).
 
         z: **array or float**
             | The redshift values corresponding to the returned signal. If
@@ -160,28 +167,59 @@ class evaluate():
         if type(parameters) not in set([np.ndarray, list]):
             raise TypeError("'params' must be a list or np.array.")
 
-        params = []
-        for i in range(len(parameters)):
-            if i in set(self.logs):
-                if parameters[i] == 0:
-                    parameters[i] = 1e-6
-                params.append(np.log10(parameters[i]))
-            else:
-                params.append(parameters[i])
-
-        normalised_params = [
-            (params[i] - self.data_mins[i]) /
-            (self.data_maxs[i] - self.data_mins[i])
-            for i in range(len(params))]
+        if len(parameters.shape) == 1:
+            params = []
+            for i in range(len(parameters)):
+                if i in set(self.logs):
+                    if parameters[i] == 0:
+                        parameters[i] = 1e-6
+                    params.append(np.log10(parameters[i]))
+                else:
+                    params.append(parameters[i])
+            normalised_params = np.array([
+                (params[i] - self.data_mins[i]) /
+                (self.data_maxs[i] - self.data_mins[i])
+                for i in range(len(params))])
+        else:
+            print('here')
+            params = []
+            for i in range(len(parameters)):
+                params_set = []
+                for j in range(len(parameters[i])):
+                    if j in set(self.logs):
+                        if parameters[i, j] == 0:
+                            parameters[i, j] = 1e-6
+                        params_set.append(np.log10(parameters[i, j]))
+                    else:
+                        params_set.append(parameters[i, j])
+                params.append(params_set)
+            params = np.array(params)
+            normalised_params = np.array([
+                (params[:, i] - self.data_mins[i]) /
+                (self.data_maxs[i] - self.data_mins[i])
+                for i in range(params.shape[1])]).T
 
         norm_z = np.interp(self.z, self.original_z, self.cdf)
-
         if isinstance(norm_z, np.ndarray):
-            x = np.tile(normalised_params, (len(norm_z), 1))
-            x = np.hstack([x, norm_z[:, np.newaxis]])
+            if len(normalised_params.shape) == 1:
+                x = np.tile(normalised_params, (len(norm_z), 1))
+                x = np.hstack([x, norm_z[:, np.newaxis]])
+            else:
+                x = np.hstack([
+                               np.vstack([np.tile(normalised_params[i],
+                                         (len(norm_z), 1))
+                                         for i in
+                                         range(len(normalised_params))]),
+                               np.vstack([norm_z[:, np.newaxis]] *
+                                         normalised_params.shape[0])])
             tensor = tf.convert_to_tensor(x, dtype=tf.float32)
             result = self.model(tensor, training=False).numpy()
-            evaluation = result.T[0]
+            if len(normalised_params.shape) != 1:
+                evaluation = np.array([
+                    result[i:i + len(self.z)]
+                    for i in range(0, len(result), len(self.z))])[:, :, 0]
+            else:
+                evaluation = result.T[0]
             if self.garbage_collection is True:
                 K.clear_session()
                 gc.collect()
