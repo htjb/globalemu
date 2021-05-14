@@ -3,6 +3,27 @@ from globalemu.downloads import download
 
 
 class calc_signal:
+
+    r"""
+
+    The code calculates the astrophysics free baseline (AFB) for the
+    global 21-cm
+    signal during the training of the emulator. For details on the
+    mathematics see the globalemu MNRAS preprint at
+    https://arxiv.org/abs/2104.04336.
+
+    The AFB is saved in the base_dir for later use when evaluating the
+    network.
+
+    **Parameters:**
+
+        z: **list or np.array**
+            | The array of redshift values to calculate the AFB at.
+
+        base_dir: **string**
+            | The location of the trained model.
+    """
+
     def __init__(self, z, base_dir):
 
         self.z = z
