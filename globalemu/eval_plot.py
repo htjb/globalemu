@@ -8,9 +8,9 @@ found in the `MNRAS preprint <https://arxiv.org/abs/2104.04336)>`__.
 """
 
 import numpy as np
-from globalemu.eval import evaluate
 from globalemu.losses import loss_functions
 import matplotlib.pyplot as plt
+
 
 class signal_plot():
 
@@ -74,7 +74,7 @@ class signal_plot():
     """
 
     def __init__(self, parameters, labels, loss_type,
-                    predictor, **kwargs):
+                 predictor, **kwargs):
 
         self.rtol = kwargs.pop('rtol', 1e-2)
         self.atol = kwargs.pop('atol', 1e-2)
@@ -83,7 +83,7 @@ class signal_plot():
 
         float_kwargs = [self.rtol, self.atol, self.figsizex, self.figsizey]
         float_kwarg_str = ['rtol', 'atol', 'figsizex', 'figsizey']
-        for i in range(float_kwargs):
+        for i in range(len(float_kwargs)):
             if type(float_kwargs[i]) not in set([float, int]):
                 raise TypeError("'" + float_kwarg_str[i] +
                                 "' must be an integer or a float.")
@@ -100,7 +100,7 @@ class signal_plot():
 
         self.loss_type = loss_type
 
-        if type(loss_type) not str:
+        if type(loss_type) is not str:
             if not callable(loss_type):
                 raise TypeError("'loss_type' must be a string from the " +
                                 "predefined set (see documentaiton) or a " +
@@ -119,7 +119,7 @@ class signal_plot():
         loss = []
         for i in range(len(signal)):
             if type(self.loss_type) is not str:
-                loss.append(loss_type(self.labels[i], signal[i]))
+                loss.append(self.loss_type(self.labels[i], signal[i]))
             else:
                 lf = loss_functions(self.labels[i], signal[i])
                 if self.loss_type == 'rmse':
@@ -158,14 +158,14 @@ class signal_plot():
                                  figsize=(self.figsizex, self.figsizey),
                                  sharex=True)
         axes[0].plot(z, mean_label, label='True Signal')
-        axes[0].plot(z, mean_pred, label= 'Loss = {:.3f}'.format(
+        axes[0].plot(z, mean_pred, label='Loss = {:.3f}'.format(
             loss[
                  np.where(np.isclose(loss, loss.mean(),
                           rtol=self.rtol, atol=self.atol))[0][0]]))
         axes[1].plot(z, limit_label, label='True Signal')
-        axes[1].plot(z, limit_pred, label= 'Loss = {:.3f}'.format(limit95))
+        axes[1].plot(z, limit_pred, label='Loss = {:.3f}'.format(limit95))
         axes[2].plot(z, worst_label, label='True Signal')
-        axes[2].plot(z, worst_pred, label= 'Loss = {:.3f}'.format(loss.max()))
+        axes[2].plot(z, worst_pred, label='Loss = {:.3f}'.format(loss.max()))
         axes[0].legend(title='Mean:')
         axes[1].legend(title='95%:')
         axes[2].legend(title='Worst:')
