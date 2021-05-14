@@ -22,6 +22,12 @@ globalemu.eval.evaluate()
 .. automodule:: globalemu.eval
     :members: evaluate
 
+globalemu.eval_plot.signal_plot()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: globalemu.eval_plot
+    :members: signal_plot
+
 globalemu.downloads.download()
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

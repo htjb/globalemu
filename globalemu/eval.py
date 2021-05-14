@@ -181,7 +181,6 @@ class evaluate():
                 (self.data_maxs[i] - self.data_mins[i])
                 for i in range(len(params))])
         else:
-            print('here')
             params = []
             for i in range(len(parameters)):
                 params_set = []
