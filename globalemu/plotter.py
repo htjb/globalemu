@@ -71,6 +71,13 @@ class signal_plot():
 
     **Return:**
 
+        fig: **matplotlib figure object**
+            | The graph containing the plotted signals.
+
+        axes: **matplotlib axes collection**
+            | The associated axes of the returned figure containing the
+                plotted signals.
+
     """
 
     def __init__(self, parameters, labels, loss_type,
