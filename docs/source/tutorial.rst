@@ -200,8 +200,8 @@ of a set of signals given their corresponding parameters.
 
   predictor = evaluate(base_dir='../T_release/')
 
-  parameters = np.loadtxt('download_data/test_data.txt')
-  labels = np.loadtxt('download_data/test_labels.txt')
+  parameters = np.loadtxt('downloaded_data/test_data.txt')
+  labels = np.loadtxt('downloaded_data/test_labels.txt')
 
   plotter = signal_plot(parameters, labels, 'rmse', predictor, 'T_release/',
       loss_label='RMSE = {:.4f} [mK]')
