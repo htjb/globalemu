@@ -132,16 +132,16 @@ class signal_plot():
         self.loss_type = loss_type
         self.base_dir = base_dir
 
-        if type(loss_type) is not str:
-            if not callable(loss_type):
+        if self.loss_type not in set(['rmse', 'mse', 'GEMLoss']):
+            if not callable(self.loss_type):
                 raise TypeError("'loss_type' must be a string from the " +
                                 "predefined set (see documentaiton) or a " +
                                 "user defined function.")
 
-        if type(base_dir) is not str:
+        if type(self.base_dir) is not str:
             raise TypeError("'base_dir' must be a string.")
         elif self.base_dir.endswith('/') is False:
-            raise KeyError("'base_dir' must end with '/'.")
+            raise TypeError("'base_dir' must end with '/'.")
 
         self.predictor = predictor
 

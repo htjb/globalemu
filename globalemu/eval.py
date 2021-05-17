@@ -166,6 +166,8 @@ class evaluate():
 
         if type(parameters) not in set([np.ndarray, list]):
             raise TypeError("'params' must be a list or np.array.")
+        if type(parameters) is list:
+            parameters = np.array(parameters)
 
         if len(parameters.shape) == 1:
             params = []
