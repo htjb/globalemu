@@ -203,7 +203,7 @@ of a set of signals given their corresponding parameters.
   parameters = np.loadtxt('downloaded_data/test_data.txt')
   labels = np.loadtxt('downloaded_data/test_labels.txt')
 
-  plotter = signal_plot(parameters, labels, 'rmse', predictor, 'T_release/',
+  plotter = signal_plot(parameters, labels, 'rmse', predictor, '../T_release/',
       loss_label='RMSE = {:.4f} [mK]')
 
 This particular example uses the ``'rmse'`` loss function that is built into
