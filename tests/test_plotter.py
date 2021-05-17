@@ -99,5 +99,11 @@ def test_existing_dir():
 
     assert(os.path.exists('T_release/eval_plot.pdf') is True)
 
+    signal_plot(parameters, labels, 'mse',
+                predictor, 'T_release/')
+
+    signal_plot(parameters, labels, 'GEMLoss',
+                predictor, 'T_release/')
+
     if os.path.exists('21cmGEM_data/'):
         shutil.rmtree('21cmGEM_data/')

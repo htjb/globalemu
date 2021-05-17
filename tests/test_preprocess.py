@@ -63,5 +63,7 @@ def test_process_nn():
     with pytest.raises(TypeError):
         process(10, z, data_location='21cmGEM_data/', logs=True)
 
-    if os.path.exists('21cmGEM_data/'):
-        shutil.rmtree('21cmGEM_data/')
+    dir = ['21cmGEM_data/', 'model_dir/']
+    for i in range(len(dir)):
+        if os.path.exists(dir[i]):
+            shutil.rmtree(dir[i])
