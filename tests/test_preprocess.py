@@ -4,19 +4,32 @@ import requests, zipfile, io
 import os
 import pytest
 import pandas as pd
+import shutil
+
+def download_21cmGEM_data():
+    data_dir = '21cmGEM_data/'
+    if not os.path.exists(data_dir):
+      os.mkdir(data_dir)
+
+    files = ['Par_test_21cmGEM.txt',
+             'Par_train_21cmGEM.txt',
+             'T21_test_21cmGEM.txt',
+             'T21_train_21cmGEM.txt']
+    saves = ['test_data.txt',
+             'train_data.txt',
+             'test_labels.txt',
+             'train_labels.txt']
+
+    for i in range(len(files)):
+      url = 'https://zenodo.org/record/4541500/files/' + files[i]
+      with open(data_dir + saves[i], 'wb') as f:
+          f.write(requests.get(url).content)
 
 def test_process_nn():
-    r = requests.get('https://people.ast.cam.ac.uk/~afialkov/21cmGEM_data.zip')
-    z = zipfile.ZipFile(io.BytesIO(r.content))
-    loc = 'data_download/'
-    z.extractall('data_download/')
-    os.rename(loc + 'Par_test_21cmGEM.txt', loc + 'test_data.txt')
-    os.rename(loc + 'Par_train_21cmGEM.txt', loc + 'train_data.txt')
-    os.rename(loc + 'T21_test_21cmGEM.txt', loc + 'test_labels.txt')
-    os.rename(loc + 'T21_train_21cmGEM.txt', loc + 'train_labels.txt')
+    download_21cmGEM_data()
     z = np.arange(5, 50.1, 0.1)
 
-    process(10, z, data_location='data_download/')
+    process(10, z, data_location='21cmGEM_data/')
 
     files = ['AFB_norm_factor.npy', 'AFB.txt', 'cdf.txt', 'data_maxs.txt',
              'data_mins.txt', 'indices.txt', 'labels_stds.npy', 'samples.txt',
@@ -36,14 +49,17 @@ def test_process_nn():
                    1, rtol=1e-1, atol=1e-1))
 
     with pytest.raises(TypeError):
-        process(10.2, z, data_location='data_download/')
+        process(10.2, z, data_location='21cmGEM_data/')
     with pytest.raises(TypeError):
-        process(10, 10, data_location='data_download/')
+        process(10, 10, data_location='21cmGEM_data/')
     with pytest.raises(KeyError):
         process(10, z, data_location='data_download')
     with pytest.raises(TypeError):
-        process(10, z, data_location='data_download/', base_dir=10)
+        process(10, z, data_location='21cmGEM_data/', base_dir=10)
     with pytest.raises(TypeError):
-        process(10, z, data_location='data_download/', xHI=10)
+        process(10, z, data_location='21cmGEM_data/', xHI=10)
     with pytest.raises(TypeError):
-        process(10, z, data_location='data_download/', logs=True)
+        process(10, z, data_location='21cmGEM_data/', logs=True)
+
+    if os.path.exists('21cmGEM_data/'):
+        shutil.rmtree('21cmGEM_data/')
