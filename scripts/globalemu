@@ -13,6 +13,7 @@ import os
 def slider_var(name, lower, upper, position_x, position_y,
              initial, img_x_resize, img_y_resize, tickinterval,
              resolution=0.1):
+    """Creates the GUI sliders and associated labels"""
     buffer = BytesIO()
     math_to_image(name, buffer, dpi=200, format='png')
     buffer.seek(0)
@@ -31,6 +32,7 @@ def slider_var(name, lower, upper, position_x, position_y,
 
 
 def init_signal(mode='null'):
+    """Creates the initial signal that is displayed on opening"""
     params = [1e-3, 46.5, 1e-2, 0.0775, 1.25, 1.5, 30]
     if xHI is True:
         idx = [0, 1, 2, 5, 3, 4, 6]
@@ -55,6 +57,7 @@ def init_signal(mode='null'):
 
 
 def signal(_):
+    """Creates the new signals when the user moves the sliders."""
     f_star = 10**float(f_star_entry.get())
     Vc = float(Vc_entry.get())
     f_x = 10**float(f_x_entry.get())
@@ -86,6 +89,7 @@ def signal(_):
 
 
 def reset():
+    """Resets the GUI when the reset button is pressed."""
     init_signal('reset')
     f_star_entry.set(np.log10(1e-3))
     Vc_entry.set(46.5)

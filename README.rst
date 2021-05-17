@@ -7,7 +7,7 @@ Introduction
 
 :globalemu: Robust Global 21-cm Signal Emulation
 :Author: Harry Thomas Jones Bevins
-:Version: 1.1.1
+:Version: 1.2.0
 :Homepage: https://github.com/htjb/globalemu
 :Documentation: https://globalemu.readthedocs.io/
 
@@ -224,7 +224,8 @@ The software is free to use on the MIT open source license. If you use the
 software for academic puposes then we request that you cite the
 ``globalemu`` paper below.
 
-MNRAS pre-print (referred to in the documentation as the ``globalemu`` paper),
+`MNRAS pre-print <https://arxiv.org/abs/2104.04336>`__
+(referred to in the documentation as the ``globalemu`` paper),
 
   Bevins, H., W. J. Handley, A. Fialkov, E. D. L. Acedo and K. Javid.
   “GLOBALEMU: A novel and robust approach for emulating the sky-averaged 21-cm
