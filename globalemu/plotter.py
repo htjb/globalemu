@@ -3,7 +3,8 @@
 This function can be used to assess the accuracy of emulation of a test data
 set given a trained model and produces a figure showing the
 mean, 95th percentile and worst emulations. Examples of these figures can be
-found in the `MNRAS preprint <https://arxiv.org/abs/2104.04336)>`__.
+found in the `MNRAS preprint <https://arxiv.org/abs/2104.04336)>`__. The
+figure will be saved in the provided ``'base_dir/'``.
 
 """
 
@@ -76,21 +77,6 @@ class signal_plot():
                 decimal place we can set ``loss_label= 'Loss = {:.4f}'``.
                 Equally if we wanted to change the name of the loss and add in
                 units we can have ``loss_label= 'RMSE = {:.3f} mK'``.
-
-    Once the class has been initialised you can then call the plotter like so
-
-    .. code:: python
-
-        fig, axes = plotter()
-
-    **Return:**
-
-        fig: **matplotlib figure object**
-            | The graph containing the plotted signals.
-
-        axes: **matplotlib axes collection**
-            | The associated axes of the returned figure containing the
-                plotted signals.
 
     """
 

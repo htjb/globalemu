@@ -213,7 +213,7 @@ provided ``base_dir``, in this case ``'T_release/'`` and looks like the
 below figure.
 
 .. image:: https://github.com/htjb/globalemu/raw/master/docs/images/tutorial_plot4.png
-  :width: 200
+  :width: 500
   :alt: See `notebook <https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__. for plot
 
 Downloading Trained Models
