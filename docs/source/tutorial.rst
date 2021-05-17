@@ -152,8 +152,6 @@ similar to the true signal.
   predictor = evaluate(base_dir='../T_release/')
   signal, z = predictor(input_params)
 
-  import matplotlib.pyplot as plt
-
   plt.plot(z, true_signal, label='True Signal')
   plt.plot(z, signal, label='Emulation')
   plt.legend()
@@ -161,6 +159,61 @@ similar to the true signal.
   plt.xlabel(r'$z$')
 
 .. image:: https://github.com/htjb/globalemu/raw/master/docs/images/tutorial_plot2.png
+  :alt: See `notebook <https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__. for plot
+
+In addition to evaluating one model at a time a user can also evaluate a
+set of parameters using the emulator.
+
+.. code:: python
+
+  input_params = test_data[:5, :]
+  true_signal = test_labels[:5, :]
+
+  signal, z = predictor(input_params)
+
+  for i in range(len(true_signal)):
+      if i==0:
+          plt.plot(z, true_signal[i, :], c='k', ls='--', label='True Signal')
+          plt.plot(z, signal[i, :], c='r', label='Emulation')
+      else:
+          plt.plot(z, true_signal[i, :], c='k')
+          plt.plot(z, signal[i, :], c='r')
+  plt.legend()
+  plt.ylabel(r'$\delta T$ [mK]')
+  plt.xlabel(r'$z$')
+
+.. image:: https://github.com/htjb/globalemu/raw/master/docs/images/tutorial_plot3.png
+  :alt: See `notebook <https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__. for plot
+
+Further Evaluation
+~~~~~~~~~~~~~~~~~~
+
+The function ``globalemu.plotter.signal_plot()`` can also be used to assess the
+quality of emulation. This function is designed to plot the mean, 95th
+percentile and worse emulations, based on a given loss function,
+of a set of signals given their corresponding parameters.
+
+.. code:: python
+
+  from globalemu.eval import evaluate
+  from globalemu.plotter import signal_plot
+
+  predictor = evaluate(base_dir='../T_release/')
+
+  parameters = np.loadtxt('download_data/test_data.txt')
+  labels = np.loadtxt('download_data/test_labels.txt')
+
+  plotter = signal_plot(parameters, labels, 'rmse', predictor, 'T_release/',
+      loss_label='RMSE = {:.4f} [mK]')
+
+This particular example uses the ``'rmse'`` loss function that is built into
+the emulator but an alternative function can be provided by the user (see
+documentation for details). The graph that is produced gets saved in the
+provided ``base_dir``, in this case ``'T_release/'`` and looks like the
+below figure.
+
+.. image:: https://github.com/htjb/globalemu/raw/master/docs/images/tutorial_plot4.png
+  :width: 200
   :alt: See `notebook <https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__. for plot
 
 Downloading Trained Models
