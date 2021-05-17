@@ -26,8 +26,8 @@ Introduction
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
  :target: https://pypi.org/project/globalemu/
  :alt: MIT License
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4668555.svg
- :target: https://doi.org/10.5281/zenodo.4668555
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4767759.svg
+  :target: https://doi.org/10.5281/zenodo.4767759
 .. image:: https://img.shields.io/badge/ascl-2104.028-blue.svg?colorB=262255
  :target: https://ascl.net/2104.028
  :alt: ascl:2104.028
