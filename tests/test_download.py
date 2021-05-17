@@ -1,7 +1,7 @@
-import numpy as np
 from globalemu.downloads import download
 import os
 import pytest
+
 
 def test_existing_dir():
     if os.path.exists('kappa_HH.txt'):

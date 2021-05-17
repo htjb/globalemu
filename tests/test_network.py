@@ -1,9 +1,12 @@
 import numpy as np
 from globalemu.preprocess import process
 from globalemu.network import nn
-import requests, zipfile, io
+import requests
+import zipfile
+import io
 import os
 import pytest
+
 
 def test_process_nn():
     r = requests.get('https://people.ast.cam.ac.uk/~afialkov/21cmGEM_data.zip')
@@ -34,30 +37,30 @@ def test_process_nn():
         nn(batch_size=451, layersizes=[8], epochs=10)
 
     with pytest.raises(TypeError):
-        res = nn(batch_size='foo')
+        nn(batch_size='foo')
     with pytest.raises(TypeError):
-        res = nn(activation=10)
+        nn(activation=10)
     with pytest.raises(TypeError):
-        res = nn(epochs=False)
+        nn(epochs=False)
     with pytest.raises(TypeError):
-        res = nn(lr='bar')
+        nn(lr='bar')
     with pytest.raises(TypeError):
-        res = nn(dropout=True)
+        nn(dropout=True)
     with pytest.raises(TypeError):
-        res = nn(input_shape='foo')
+        nn(input_shape='foo')
     with pytest.raises(TypeError):
-        res = nn(output_shape='foobar')
+        nn(output_shape='foobar')
     with pytest.raises(TypeError):
-        res = nn(layer_sizes=10)
+        nn(layer_sizes=10)
     with pytest.raises(TypeError):
-        res = nn(base_dir=50)
+        nn(base_dir=50)
     with pytest.raises(KeyError):
-        res = nn(base_dir='dir')
+        nn(base_dir='dir')
     with pytest.raises(TypeError):
-        res = nn(early_stop='foo')
+        nn(early_stop='foo')
     with pytest.raises(TypeError):
-        res = nn(early_stop_lim=False)
+        nn(early_stop_lim=False)
     with pytest.raises(TypeError):
-        res = nn(xHI='false')
+        nn(xHI='false')
     with pytest.raises(TypeError):
-        res = nn(resume=10)
+        nn(resume=10)

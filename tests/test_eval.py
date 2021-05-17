@@ -45,11 +45,11 @@ def test_existing_dir():
     signal, z = predictor(params)
 
     with pytest.raises(KeyError):
-        res = evaluate(z=originalz, basedir='T_release/')
+        evaluate(z=originalz, basedir='T_release/')
 
     with pytest.raises(TypeError):
         predictor = evaluate(z=originalz, base_dir='T_release/')
-        res = predictor(10)
+        predictor(10)
     with pytest.raises(TypeError):
         predictor = evaluate(z=originalz, base_dir=100)
     with pytest.raises(TypeError):
@@ -58,6 +58,6 @@ def test_existing_dir():
         predictor = evaluate(z='foo', base_dir='T_release/')
     with pytest.raises(TypeError):
         predictor = evaluate(z=originalz, base_dir='T_release/',
-                       gc='false')
+                             gc='false')
     with pytest.raises(TypeError):
         predictor = evaluate(z=originalz, base_dir='T_release/', xHI='bar')
