@@ -90,11 +90,9 @@ class config():
         if type(self.paramnames) is not list:
             raise TypeError("'paramnames' must be a list of strings.")
 
-        self.xHI = kwargs.pop('xHI', False)
         if type(self.xHI) is not bool:
             raise TypeError("'xHI' must be a bool.")
 
-        self.logs = kwargs.pop('logs', [0, 1, 2])
         if type(self.logs) is not list:
             raise TypeError("'logs' must be a list.")
 
