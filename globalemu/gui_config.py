@@ -16,7 +16,7 @@ GUI and once generated the gui can be run from the command line
 
 import numpy as np
 import pandas as pd
-import os
+
 
 class config():
 
@@ -97,6 +97,6 @@ class config():
                            [test_labels.max()] + ['']*(len(data_maxs)-1),
                            'logs': full_logs,
                            'xHI':
-                           [self.xHI] + ['']*(len(data_maxs)-1),})
+                           [self.xHI] + ['']*(len(data_maxs)-1)})
 
         df.to_csv(base_dir + 'gui_configuration.csv', index=False)
