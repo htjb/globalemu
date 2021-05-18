@@ -115,7 +115,7 @@ window.title('globalemu GUI')
 
 if os.path.exists('img/'):
     shutil.rmtree('img/')
-    os.mkdir('img/')
+os.mkdir('img/')
 
 center = []
 for i in range(len(config['names'])):
