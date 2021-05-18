@@ -63,19 +63,19 @@ class config():
                 :math:`{f_*}` (star formation efficiency),
                 :math:`{V_c}` (minimum virial circular velocity) and
                 :math:`{f_x}` (X-ray efficieny).
-                
+
     """
 
     def __init__(self, base_dir, paramnames, data_dir, **kwargs):
         self.base_dir = base_dir
         self.paramnames = paramnames
-        self.logs = kwarg.pop('logs', [0, 1, 2])
-        self.xHI = kwarg.pop('xHI', False)
+        self.logs = kwargs.pop('logs', [0, 1, 2])
+        self.xHI = kwargs.pop('xHI', False)
 
         test_data = np.loadtxt(data_dir + 'test_data.txt')
         test_labels = np.loadtxt(data_dir + 'test_labels.txt')
         for i in range(test_data.shape[1]):
-            if i in logs:
+            if i in self.logs:
                 test_data[:, i] = np.log10(test_data[:, i])
 
         data_mins = test_data.min(axis=0)

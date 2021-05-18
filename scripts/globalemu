@@ -90,8 +90,6 @@ logs = [int(x) for x in logs if x != '--']
 label_min = config['label_min'][0]
 label_max = config['label_max'][0]
 
-print(xHI, logs, label_max, label_min)
-
 predictor = evaluate(base_dir=base_dir, xHI=xHI, logs=logs)
 
 window = Tk()
