@@ -68,7 +68,7 @@ def test_config():
 
     with pytest.raises(KeyError):
         config('T_release', paramnames, '21cmGEM_data/')
-    with pytest.raises(KeyError):
+    with pytest.raises(TypeError):
         config(10, paramnames, '21cmGEM_data/')
     with pytest.raises(KeyError):
         config('T_release/', paramnames, '21cmGEM_data')
