@@ -5,10 +5,10 @@ from matplotlib.mathtext import math_to_image
 from io import BytesIO
 from PIL import ImageTk, Image
 import numpy as np
-import argparse
 import shutil
 import pandas as pd
 import os
+import sys
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from globalemu.eval import evaluate
 
@@ -80,20 +80,7 @@ def reset(parameters=None):
                 entries[i].set(center[i])
         signal('')
 
-
-parser = argparse.ArgumentParser(
-    description='Interactive exploration of the Global 21-cm Signal')
-parser.add_argument(
-    '-bd', type=str, required=True,
-    help='Base directory containing the trained model and correponding gui' +
-    ' configuration file.')
-parser.add_argument(
-    '-xHI', type=bool, const=True, default=False, nargs='?',
-    help='A boolean indicating if the network is for' +
-    'neutral fraction history.')
-args = parser.parse_args()
-#xHI = args.xHI
-base_dir = args.bd
+base_dir = sys.argv[1]
 
 config = pd.read_csv(base_dir + 'gui_configuration.csv')
 
