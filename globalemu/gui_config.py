@@ -8,7 +8,7 @@ testing and training data. Additional arguments are described below.
 A GUI config file is required to be able to visualise the signals with the
 GUI and once generated the gui can be run from the command line
 
-.. code: bash
+.. code:: bash
 
     globalemu /path/to/base_dir/containing/model/and/config/
 
@@ -67,10 +67,36 @@ class config():
     """
 
     def __init__(self, base_dir, paramnames, data_dir, **kwargs):
+
+        for key, values in kwargs.items():
+            if key not in set(
+                    ['xHI', 'logs']):
+                raise KeyError("Unexpected keyword argument in process()")
+
         self.base_dir = base_dir
         self.paramnames = paramnames
+        self.data_dir = data_dir
         self.logs = kwargs.pop('logs', [0, 1, 2])
         self.xHI = kwargs.pop('xHI', False)
+
+        file_kwargs = [self.base_dir, self.data_dir]
+        file_strings = ['base_dir', 'data_dir']
+        for i in range(len(file_kwargs)):
+            if type(file_kwargs[i]) is not str:
+                raise TypeError("'" + file_strings[i] + "' must be a sting.")
+            elif file_kwargs[i].endswith('/') is False:
+                raise KeyError("'" + file_strings[i] + "' must end with '/'.")
+
+        if type(self.paramnames) is not list:
+            raise TypeError("'paramnames' must be a list of strings.")
+
+        self.xHI = kwargs.pop('xHI', False)
+        if type(self.xHI) is not bool:
+            raise TypeError("'xHI' must be a bool.")
+
+        self.logs = kwargs.pop('logs', [0, 1, 2])
+        if type(self.logs) is not list:
+            raise TypeError("'logs' must be a list.")
 
         test_data = np.loadtxt(data_dir + 'test_data.txt')
         test_labels = np.loadtxt(data_dir + 'test_labels.txt')

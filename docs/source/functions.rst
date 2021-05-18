@@ -28,6 +28,12 @@ globalemu.plotter.signal_plot()
 .. automodule:: globalemu.plotter
     :members: signal_plot
 
+globalemu.gui_config.config()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: globalemu.gui_config
+    :members: config
+
 globalemu.downloads.download()
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
