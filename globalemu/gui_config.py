@@ -76,6 +76,9 @@ class config():
         test_labels = np.loadtxt(data_dir + 'test_labels.txt')
         for i in range(test_data.shape[1]):
             if i in self.logs:
+                for j in range(test_data.shape[0]):
+                    if test_data[j, i] == 0:
+                        test_data[j, i] = 1e-6
                 test_data[:, i] = np.log10(test_data[:, i])
 
         data_mins = test_data.min(axis=0)
