@@ -7,7 +7,7 @@ Introduction
 
 :globalemu: Robust Global 21-cm Signal Emulation
 :Author: Harry Thomas Jones Bevins
-:Version: 1.2.0
+:Version: 1.3.0
 :Homepage: https://github.com/htjb/globalemu
 :Documentation: https://globalemu.readthedocs.io/
 
@@ -98,7 +98,7 @@ a set of parameters by running:
 Results are accessed via 'res.z' and 'res.signal'.
 
 The code can also be used to train a network on your own Global 21-cm signal
-or neutral fraction simulations using the built in globalemu pre-processing
+or neutral fraction simulations using the built in ``globalemu`` pre-processing
 techniques. There is some flexibility on the required astrophysical input
 parameters but the models are required to subscribe to the astrophysics free
 baseline calculation detailed in the ``globalemu`` paper (see below for a reference).
@@ -110,13 +110,31 @@ More details about training your own network can be found in the documentation.
 
 ``globalemu`` also features a GUI that can be invoked from the command line
 and used to explore how the structure of the Global 21-cm signal varies with
-the values of the astrophysical inputs. The GUI currently relies on the
-released emulator models for the Global signal and neutral fraction
-history. It can be invoked from the terminal via,
+the values of the astrophysical inputs. The GUI needs a configuration file to
+run and this can be generated using a built in ``globalemu`` function.
+**GUI configuration files can be generated for any trained model.** For example,
+if we wanted to generate a configuration file for the released Global signal
+emulator we would run,
+
+.. code:: python
+
+  from globalemu.gui_config import config
+
+  paramnames = [r'$\log(f_*)$', r'$\log(V_c)$', r'$\log(f_X)$',
+                r'$\tau$', r'$\alpha$', r'$\nu_\mathrm{min}$',
+                r'$R_\mathrm{mfp}$']
+
+  config('T_release/', paramnames, 'data/')
+
+where the directory 'data/' contains the training and testing data (in this
+case that corresponding to
+`21cmGEM <https://zenodo.org/record/4541500#.YKOTiibTWWg>`__).
+
+The GUI can then be invoked from the terminal via,
 
 .. code:: bash
 
-  globalemu
+  globalemu /path/to/base_dir/T_release/etc/
 
 An image of the GUI is shown below.
 
@@ -126,11 +144,10 @@ An image of the GUI is shown below.
   :alt: graphical user interface
 
 The GUI can also be used to investigate the physics of the neutral fraction
-history by adding the flag ``--xHI`` to the terminal call,
+history by generating a configuration file for the released trained model and
+setting the kwarg ``xHI=True`` in gui_config.config().
 
-.. code:: bash
-
-  globalemu --xHI
+Configuration files for the released models are provided.
 
 Documentation
 -------------
@@ -245,16 +262,6 @@ Below is the bibtex,
     year = {2021},
     note = {arXiv: 2104.04336}
   }
-
-Poster Presentation
--------------------
-
-A poster presentation of ``globalemu`` has recently been presented at
-the `2021 Virtual SKA Science Conference <https://skao.eventsair.com/science21/>`__
-and a PDF copy can be viewed `here <https://htjb.github.io/static/globalemu.pdf>`__.
-
-Note that the timings/accuracies reported on the poster were valid at the time
-of presenting. However, the emulator has since been made faster.
 
 Requirements
 ------------
