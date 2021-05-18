@@ -4,16 +4,19 @@ import matplotlib.pyplot as plt
 from matplotlib.mathtext import math_to_image
 from io import BytesIO
 from PIL import ImageTk, Image
-from globalemu.eval import evaluate
 import numpy as np
 import argparse
+import shutil
+import pandas as pd
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+from globalemu.eval import evaluate
 
-
-def slider_var(name, lower, upper, position_x, position_y,
+def slider_var(name, lower, upper, position_y,
              initial, img_x_resize, img_y_resize, tickinterval,
              resolution=0.1):
     """Creates the GUI sliders and associated labels"""
+    position_x = 410
     buffer = BytesIO()
     math_to_image(name, buffer, dpi=200, format='png')
     buffer.seek(0)
@@ -30,140 +33,127 @@ def slider_var(name, lower, upper, position_x, position_y,
     entry.set(initial)
     return entry, img_var
 
-
-def init_signal(mode='null'):
-    """Creates the initial signal that is displayed on opening"""
-    params = [1e-3, 46.5, 1e-2, 0.0775, 1.25, 1.5, 30]
-    if xHI is True:
-        idx = [0, 1, 2, 5, 3, 4, 6]
-        params = [params[i] for i in idx]
-    plt.figure(figsize=(4, 3))
-    predictor = evaluate(base_dir=base_dir, xHI=xHI)
-    signal, z = predictor(params)
-    plt.plot(z, signal, c='k')
-    plt.xlabel('z')
-    if xHI is False:
-        plt.ylabel(r'$\delta T$ [mK]')
-        plt.ylim([-250, 30])
-    else:
-        plt.ylabel(r'$x_{HI}$')
-    plt.tight_layout()
-    plt.savefig('img/img.png', dpi=100)
-    plt.close()
-    if mode == 'reset':
-        new_img = ImageTk.PhotoImage(Image.open("img/img.png"))
-        panel.configure(image=new_img)
-        panel.image = new_img
-
-
-def signal(_):
+def signal(_, parameters=None):
     """Creates the new signals when the user moves the sliders."""
-    f_star = 10**float(f_star_entry.get())
-    Vc = float(Vc_entry.get())
-    f_x = 10**float(f_x_entry.get())
-    tau = float(tau_entry.get())
-    alpha = float(alpha_entry.get())
-    nu_min = float(nu_min_entry.get())
-    rmfp = float(rmfp_entry.get())
-    params = [f_star, Vc, f_x, tau, alpha, nu_min, rmfp]
-    if xHI is True:
-        idx = [0, 1, 2, 5, 3, 4, 6]
-        params = [params[i] for i in idx]
-    predictor = evaluate(base_dir=base_dir, xHI=xHI)
+    if parameters is not None:
+        params = []
+        for i in range(len(center)):
+            if i in set(logs):
+                params.append(10**parameters[i])
+            else:
+                params.append(parameters[i])
+    else:
+        params = []
+        for i in range(len(entries)):
+            if i in set(logs):
+                params.append(10**float(entries[i].get()))
+            else:
+                params.append(float(entries[i].get()))
     signal, z = predictor(params)
     plt.figure(figsize=(4, 3))
     plt.plot(z, signal, c='k')
     plt.xlabel('z')
     if xHI is False:
         plt.ylabel(r'$\delta T$ [mK]')
-        plt.ylim([-250, 30])
+        plt.ylim([label_min, label_max])
     else:
         plt.ylabel(r'$x_{HI}$')
         plt.ylim([0, 1])
     plt.tight_layout()
     plt.savefig('img/img.png', dpi=100)
     plt.close()
-    new_img = ImageTk.PhotoImage(Image.open("img/img.png"))
-    panel.configure(image=new_img)
-    panel.image = new_img
+    if parameters is None:
+        new_img = ImageTk.PhotoImage(Image.open("img/img.png"))
+        panel.configure(image=new_img)
+        panel.image = new_img
 
 
-def reset():
+def reset(parameters=None):
     """Resets the GUI when the reset button is pressed."""
-    init_signal('reset')
-    f_star_entry.set(np.log10(1e-3))
-    Vc_entry.set(46.5)
-    f_x_entry.set(np.log10(1e-2))
-    tau_entry.set(0.0775)
-    alpha_entry.set(1.25)
-    nu_min_entry.set(1.5)
-    rmfp_entry.set(30)
+    if parameters is not None:
+        signal('', parameters)
+    else:
+        for i in range(len(center)):
+            if i in set(logs):
+                entries[i].set(center[i])
+            else:
+                entries[i].set(center[i])
+        signal('')
 
 
 parser = argparse.ArgumentParser(
     description='Interactive exploration of the Global 21-cm Signal')
 parser.add_argument(
-    '--xHI', type=bool, const=True, default=False, nargs='?',
-    help='a boolean indicating if the network is for' +
+    '-bd', type=str, required=True,
+    help='Base directory containing the trained model and correponding gui' +
+    ' configuration file.')
+parser.add_argument(
+    '-xHI', type=bool, const=True, default=False, nargs='?',
+    help='A boolean indicating if the network is for' +
     'neutral fraction history.')
 args = parser.parse_args()
-xHI = args.xHI
-if xHI is False:
-    base_dir = 'T_release/'
-else:
-    base_dir = 'xHI_release/'
+#xHI = args.xHI
+base_dir = args.bd
+
+config = pd.read_csv(base_dir + 'gui_configuration.csv')
+
+xHI = config['xHI'][0]
+logs = config['logs'].tolist()
+logs = [int(x) for x in logs if x != '--']
+label_min = config['label_min'][0]
+label_max = config['label_max'][0]
+
+print(xHI, logs, label_max, label_min)
+
+predictor = evaluate(base_dir=base_dir, xHI=xHI, logs=logs)
 
 window = Tk()
 window.geometry("800x450")
 window.configure(background='white')
 
-window.title('GlobalEmu GUI')
+window.title('globalemu GUI')
 
-if not os.path.exists('img/'):
+if os.path.exists('img/'):
+    shutil.rmtree('img/')
     os.mkdir('img/')
 
-init_signal()
+center = []
+for i in range(len(config['names'])):
+    center.append(config['mins'][i] + (config['maxs'][i] - config['mins'][i])/2)
+center = np.array(center)
+
+reset(parameters=center)
 
 img = ImageTk.PhotoImage(Image.open("img/img.png"))
 panel = Label(window, image=img)
 panel.place(x=10, y=10)
 
-f_star_entry, fstar_label = slider_var(
-    r'$\log(f_*)$', -4, -0.3, 410, 10, -3, 50, 15, 1)
-label = Label(window, image=fstar_label)
-label.place(x=740, y=10)
+bad_characters = ['$', '\mathrm', '{', '}', '_', '^', '\\']
+common_greek = ['tau', 'alpha', 'nu', 'beta']
+entries, labels = [], []
+for i in range(len(config['names'])):
+    for j in range(len(bad_characters)):
+        if j == 0:
+            reduced_name = config['names'][i].replace(bad_characters[j], '')
+        else:
+            reduced_name = reduced_name.replace(bad_characters[j], '')
+    if reduced_name in set(common_greek):
+        reduced_name = 'o'
+    e, l = slider_var(config['names'][i], config['mins'][i],
+                      config['maxs'][i], 10+60*i,
+                      center[i],
+                      8*len(reduced_name), 15,
+                      (config['maxs'][i] - config['mins'][i])/5,
+                      resolution=(config['maxs'][i] - config['mins'][i])/100)
+    labels.append(l)
+    entries.append(e)
 
-Vc_entry, Vc_label = slider_var(
-    r'$\log(V_c)$', 4.2, 100, 410, 70, 46.5, 50, 15, 20)
-label = Label(window, image=Vc_label)
-label.place(x=740, y=70)
-
-f_x_entry, f_x_label = slider_var(
-    r'$\log(f_x)$', -4, 3, 410, 130, -2, 50, 15, 1)
-label = Label(window, image=f_x_label)
-label.place(x=740, y=130)
-
-tau_entry, tau_label = slider_var(
-    r'$\tau$', 0.04, 0.1, 410, 190, 0.0775, 15, 15, 0.01, resolution=0.001)
-label = Label(window, image=tau_label)
-label.place(x=740, y=190)
-
-alpha_entry, alpha_label = slider_var(
-    r'$\alpha$', 1, 1.5, 410, 250, 1.25, 15, 15, 0.1, resolution=0.01)
-label = Label(window, image=alpha_label)
-label.place(x=740, y=250)
-
-nu_min_entry, numin_label = slider_var(
-    r'$\nu_\mathrm{min}$', 0.1, 3, 410, 310, 1.5, 50, 15, 0.5)
-label = Label(window, image=numin_label)
-label.place(x=740, y=310)
-
-rmfp_entry, rmfp_label = slider_var(
-    r'$R_\mathrm{mfp}$', 10, 50, 410, 370, 30, 40, 15, 10, resolution=1)
-label = Label(window, image=rmfp_label)
-label.place(x=740, y=370)
+for i in range(len(labels)):
+    Label(window, image=labels[i]).place(x=740, y=10+i*60)
 
 btn = Button(window, text='Reset', command=reset)
 btn.place(x=180, y=360)
 
 window.mainloop()
+
+shutil.rmtree('img/')
