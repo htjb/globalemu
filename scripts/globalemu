@@ -55,10 +55,9 @@ def signal(_, parameters=None):
     plt.xlabel('z')
     if xHI is False:
         plt.ylabel(r'$\delta T$ [mK]')
-        plt.ylim([label_min, label_max])
     else:
         plt.ylabel(r'$x_{HI}$')
-        plt.ylim([0, 1])
+    plt.ylim([label_min, label_max])
     plt.tight_layout()
     plt.savefig('img/img.png', dpi=100)
     plt.close()
