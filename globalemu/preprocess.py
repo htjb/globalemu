@@ -51,6 +51,21 @@ class process():
             | If True then ``globalemu`` will act as if it is training a
                 neutral fraction history emulator.
 
+        AFB: **Bool / default: True**
+            | If True then ``globalemu`` will calculate an astrophysics free
+                baseline and subtract this from the training data signals.
+                The AFB is specific to the global 21-cm signal and as
+                ``globalemu`` is set up to emulate the global signal by
+                default this parameter is set to True. If xHI is True then
+                AFB is set to False by default.
+
+        std_division: **Bool / default: True**
+            | If True then ``globalemu`` will divide the training data by the
+                standard deviation across the training data. This is
+                recommended when building an emulator to emulate the global
+                signal and is set to True by default. If xHI is True then
+                std_division is set to False by default.
+
         logs: **list / default: [0, 1, 2]**
             | The indices corresponding to the astrophysical parameters in
                 "train_data.txt" that need to be logged. The default assumes
@@ -66,7 +81,8 @@ class process():
 
         for key, values in kwargs.items():
             if key not in set(
-                    ['base_dir', 'data_location', 'xHI', 'logs']):
+                    ['base_dir', 'data_location', 'xHI', 'logs', 'AFB',
+                    'std_division']):
                 raise KeyError("Unexpected keyword argument in process()")
 
         self.num = num
@@ -89,9 +105,15 @@ class process():
             elif file_kwargs[i].endswith('/') is False:
                 raise KeyError("'" + file_strings[i] + "' must end with '/'.")
 
+        self.specifics = {} ????
         self.xHI = kwargs.pop('xHI', False)
-        if type(self.xHI) is not bool:
-            raise TypeError("'xHI' must be a bool.")
+        self.AFB = kwargs.pop('AFB', True)
+        self.std_division = kwargs.pop('std_division', True)
+        bool_kwargs = [self.xHI, self.AFB, self.std_division]
+        bool_strings = ['xHI', 'AFB', 'std_division']
+        for i in range(len(bool_kwargs)):
+            if type(bool_kwargs[i]) is not bool:
+                raise TypeError(bool_strings[i] + " must be a bool.")
 
         self.logs = kwargs.pop('logs', [0, 1, 2])
         if type(self.logs) is not list:
@@ -117,7 +139,7 @@ class process():
 
         if self.num == 'full':
             train_data = full_train_data.copy()
-            if self.xHI is False:
+            if self.xHI is False or self.AFB is True:
                 train_labels = full_train_labels.copy() - res.deltaT
             else:
                 train_labels = full_train_labels.copy()
@@ -135,7 +157,7 @@ class process():
             for i in range(len(full_train_labels)):
                 if np.any(ind == i):
                     train_data.append(full_train_data[i, :])
-                    if self.xHI is False:
+                    if self.xHI is False or self.AFB is True:
                         train_labels.append(full_train_labels[i] - res.deltaT)
                     else:
                         train_labels.append(full_train_labels[i])
