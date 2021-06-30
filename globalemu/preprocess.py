@@ -14,6 +14,7 @@ astrophysical parameters (network inputs excluding redshift) as
 import numpy as np
 import os
 import pandas as pd
+import pickle
 from globalemu.cmSim import calc_signal
 from globalemu.resample import sampling
 
@@ -51,7 +52,7 @@ class process():
             | If True then ``globalemu`` will act as if it is training a
                 neutral fraction history emulator.
 
-        AFB: **Bool / default: True**
+        AFB: **Bool / default: None**
             | If True then ``globalemu`` will calculate an astrophysics free
                 baseline and subtract this from the training data signals.
                 The AFB is specific to the global 21-cm signal and as
@@ -59,12 +60,18 @@ class process():
                 default this parameter is set to True. If xHI is True then
                 AFB is set to False by default.
 
-        std_division: **Bool / default: True**
+        std_division: **Bool / default: None**
             | If True then ``globalemu`` will divide the training data by the
                 standard deviation across the training data. This is
                 recommended when building an emulator to emulate the global
                 signal and is set to True by default. If xHI is True then
                 std_division is set to False by default.
+
+        resampling: **Bool / default: None**
+            | Controls whether or not the signals will be resampled with
+                higher sampling at regions of large variation in the training
+                data set or not. Set to True by default as this is advised for
+                training both neutral fraction and global signal emulators.
 
         logs: **list / default: [0, 1, 2]**
             | The indices corresponding to the astrophysical parameters in
@@ -82,7 +89,7 @@ class process():
         for key, values in kwargs.items():
             if key not in set(
                     ['base_dir', 'data_location', 'xHI', 'logs', 'AFB',
-                    'std_division']):
+                    'std_division', 'resampling']):
                 raise KeyError("Unexpected keyword argument in process()")
 
         self.num = num
@@ -105,11 +112,22 @@ class process():
             elif file_kwargs[i].endswith('/') is False:
                 raise KeyError("'" + file_strings[i] + "' must end with '/'.")
 
-        self.specifics = {} ????
         self.xHI = kwargs.pop('xHI', False)
-        self.AFB = kwargs.pop('AFB', True)
-        self.std_division = kwargs.pop('std_division', True)
-        bool_kwargs = [self.xHI, self.AFB, self.std_division]
+        if self.xHI is False:
+            self.preprocess_settings = {'AFB': True, 'std_division': True,
+                                        'resampling': True}
+        else:
+            self.preprocess_settings = {'AFB': False, 'std_division': False,
+                                        'resampling': True}
+
+        preprocess_settings_keys = ['AFB', 'std_division', 'resampling']
+        for key in preprocess_settings_keys:
+            if key in kwargs:
+                self.preprocess_settings[key] = kwargs[key]
+
+        bool_kwargs = [self.xHI, self.preprocess_settings['AFB'],
+                       self.preprocess_settings['std_division'],
+                       self.preprocess_settings['resampling']]
         bool_strings = ['xHI', 'AFB', 'std_division']
         for i in range(len(bool_kwargs)):
             if type(bool_kwargs[i]) is not bool:
@@ -122,6 +140,10 @@ class process():
         if not os.path.exists(self.base_dir):
             os.mkdir(self.base_dir)
 
+        file = open(self.base_dir + "preprocess_settings.pkl", "wb")
+        pickle.dump(self.preprocess_settings, file)
+        file.close()
+
         np.savetxt(self.base_dir + 'z.txt', self.z)
 
         full_train_data = pd.read_csv(
@@ -131,7 +153,7 @@ class process():
             self.data_location + 'train_labels.txt',
             delim_whitespace=True, header=None).values
 
-        if self.xHI is False:
+        if self.preprocess_settings['AFB'] is True:
             np.save(
                 self.base_dir + 'AFB_norm_factor.npy',
                 full_train_labels[0, -1]*1e-3)
@@ -139,7 +161,7 @@ class process():
 
         if self.num == 'full':
             train_data = full_train_data.copy()
-            if self.xHI is False or self.AFB is True:
+            if self.preprocess_settings['AFB'] is True:
                 train_labels = full_train_labels.copy() - res.deltaT
             else:
                 train_labels = full_train_labels.copy()
@@ -157,7 +179,7 @@ class process():
             for i in range(len(full_train_labels)):
                 if np.any(ind == i):
                     train_data.append(full_train_data[i, :])
-                    if self.xHI is False or self.AFB is True:
+                    if self.preprocess_settings['AFB'] is True:
                         train_labels.append(full_train_labels[i] - res.deltaT)
                     else:
                         train_labels.append(full_train_labels[i])
@@ -175,18 +197,21 @@ class process():
                 log_td.append(train_data[:, i])
         train_data = np.array(log_td).T
 
-        sampling_call = sampling(
-            self.z, self.base_dir, train_labels)
-        samples = sampling_call.samples
-        cdf = sampling_call.cdf
+        if self.preprocess_settings['resampling'] is True:
+            sampling_call = sampling(
+                self.z, self.base_dir, train_labels)
+            samples = sampling_call.samples
+            cdf = sampling_call.cdf
 
-        resampled_labels = []
-        for i in range(len(train_labels)):
-            resampled_labels.append(
-                np.interp(samples, self.z, train_labels[i]))
-        train_labels = np.array(resampled_labels)
+            resampled_labels = []
+            for i in range(len(train_labels)):
+                resampled_labels.append(
+                    np.interp(samples, self.z, train_labels[i]))
+            train_labels = np.array(resampled_labels)
 
-        norm_s = np.interp(samples, self.z, cdf)
+            norm_s = np.interp(samples, self.z, cdf)
+        else:
+            norm_s = (self.z - self.z.min())/(self.z.max() - self.z.min())
 
         data_mins = train_data.min(axis=0)
         data_maxs = train_data.max(axis=0)
@@ -197,7 +222,7 @@ class process():
                 (train_data[:, i] - data_mins[i])/(data_maxs[i]-data_mins[i]))
         norm_train_data = np.array(norm_train_data).T
 
-        if self.xHI is False:
+        if self.preprocess_settings['std_division'] is True:
             labels_stds = train_labels.std()
             norm_train_labels = [
                 train_labels[i, :]/labels_stds

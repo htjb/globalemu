@@ -16,6 +16,7 @@ GUI and once generated the gui can be run from the command line
 
 import numpy as np
 import pandas as pd
+import pickle
 
 
 class config():
@@ -51,10 +52,6 @@ class config():
 
     **Kwargs:**
 
-        xHI: **Bool / default: False**
-            | If True then ``globalemu`` will act as if it is evaluating a
-                neutral fraction history emulator.
-
         logs: **list / default: [0, 1, 2]**
             | The indices corresponding to the astrophysical
                 parameters that
@@ -64,20 +61,23 @@ class config():
                 :math:`{V_c}` (minimum virial circular velocity) and
                 :math:`{f_x}` (X-ray efficieny).
 
+        ylabel: **string / default: 'y'**
+            | y-axis label for gui plot.
+
     """
 
     def __init__(self, base_dir, paramnames, data_dir, **kwargs):
 
         for key, values in kwargs.items():
             if key not in set(
-                    ['xHI', 'logs']):
+                    ['logs', 'ylabel']):
                 raise KeyError("Unexpected keyword argument in process()")
 
         self.base_dir = base_dir
         self.paramnames = paramnames
         self.data_dir = data_dir
         self.logs = kwargs.pop('logs', [0, 1, 2])
-        self.xHI = kwargs.pop('xHI', False)
+        self.ylabel = kwargs.pop('ylabel', 'y')
 
         file_kwargs = [self.base_dir, self.data_dir]
         file_strings = ['base_dir', 'data_dir']
@@ -87,11 +87,11 @@ class config():
             elif file_kwargs[i].endswith('/') is False:
                 raise KeyError("'" + file_strings[i] + "' must end with '/'.")
 
+        file = open(self.base_dir + "preprocess_settings.pkl", "rb")
+        self.preprocess_settings = pickle.load(file)
+
         if type(self.paramnames) is not list:
             raise TypeError("'paramnames' must be a list of strings.")
-
-        if type(self.xHI) is not bool:
-            raise TypeError("'xHI' must be a bool.")
 
         if type(self.logs) is not list:
             raise TypeError("'logs' must be a list.")
@@ -123,7 +123,6 @@ class config():
                            'label_max':
                            [test_labels.max()] + ['']*(len(data_maxs)-1),
                            'logs': full_logs,
-                           'xHI':
-                           [self.xHI] + ['']*(len(data_maxs)-1)})
+                           'ylabel': self.ylabel})
 
         df.to_csv(base_dir + 'gui_configuration.csv', index=False)
