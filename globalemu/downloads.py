@@ -43,11 +43,11 @@ class download():
         if self.xHI is False:
             base_url = \
                 'https://raw.githubusercontent.com/' + \
-                'htjb/globalemu/master/T_release/'
+                'htjb/globalemu/kwargs/T_release/'
         else:
             base_url = \
                 'https://raw.githubusercontent.com/' + \
-                'htjb/globalemu/master/xHI_release/'
+                'htjb/globalemu/kwargs/xHI_release/'
 
         for i in range(len(files)):
             if i > 8 and self.xHI is True:

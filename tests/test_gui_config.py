@@ -45,12 +45,11 @@ def test_config():
     # Providing this with global signal data as neutral fraction data is
     # not publicly available. Will not effect efficacy of the test.
     config('xHI_release/', paramnames, '21cmGEM_data/',
-           logs=[0, 1, 2], xHI=True)
+           logs=[0, 1, 2])
 
     assert(os.path.exists('xHI_release/gui_configuration.csv') is True)
 
     res = pd.read_csv('xHI_release/gui_configuration.csv')
-    assert(res['xHI'][0] is True)
     logs = res['logs'].tolist()
     logs = [int(x) for x in logs if x != '--']
     assert(logs == [0, 1, 2])
@@ -63,17 +62,12 @@ def test_config():
 
     assert(os.path.exists('T_release/gui_configuration.csv') is True)
 
-    res = pd.read_csv('T_release/gui_configuration.csv')
-    assert(res['xHI'][0] is False)
-
     with pytest.raises(KeyError):
         config('T_release', paramnames, '21cmGEM_data/')
     with pytest.raises(TypeError):
         config(10, paramnames, '21cmGEM_data/')
     with pytest.raises(KeyError):
         config('T_release/', paramnames, '21cmGEM_data')
-    with pytest.raises(TypeError):
-        config('T_release/', paramnames, '21cmGEM_data/', xHI=4)
     with pytest.raises(TypeError):
         config('T_release/', paramnames, '21cmGEM_data/', logs='banana')
     with pytest.raises(TypeError):
