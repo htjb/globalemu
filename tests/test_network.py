@@ -39,6 +39,8 @@ def test_process_nn():
     process(10, z, data_location='21cmGEM_data/', xHI=True)
     nn(batch_size=451, layer_sizes=[8], epochs=5, xHI=True)
 
+    nn(batch_size=451, layer_sizes=[8], epochs=5, output_activation='linear')
+
     # test early_stop code
     nn(batch_size=451, layer_sizes=[], epochs=20, early_stop=True)
 
@@ -76,6 +78,8 @@ def test_process_nn():
         nn(xHI='false')
     with pytest.raises(TypeError):
         nn(resume=10)
+    with pytest.raises(TypeError):
+        nn(output_activation=2)
 
     process(10, z, data_location='21cmGEM_data/', base_dir='base_dir/')
     nn(batch_size=451, layer_sizes=[], random_seed=10,

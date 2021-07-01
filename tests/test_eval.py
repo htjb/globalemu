@@ -41,6 +41,11 @@ def test_existing_dir():
 
     predictor = evaluate(z=10, base_dir='T_release/')
     signal, z = predictor(params)
+    preprocess = predictor.preprocess_settings
+    assert(preprocess['AFB'] is True)
+    assert(preprocess['resampling'] is True)
+    assert(preprocess['std_division'] is True)
+
     predictor = evaluate(z=originalz, base_dir='xHI_release/')
     signal, z = predictor(params)
 
