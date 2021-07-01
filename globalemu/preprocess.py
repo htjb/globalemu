@@ -128,7 +128,7 @@ class process():
         bool_kwargs = [self.xHI, self.preprocess_settings['AFB'],
                        self.preprocess_settings['std_division'],
                        self.preprocess_settings['resampling']]
-        bool_strings = ['xHI', 'AFB', 'std_division']
+        bool_strings = ['xHI', 'AFB', 'std_division', 'resampling']
         for i in range(len(bool_kwargs)):
             if type(bool_kwargs[i]) is not bool:
                 raise TypeError(bool_strings[i] + " must be a bool.")
