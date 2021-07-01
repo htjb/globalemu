@@ -11,6 +11,7 @@ def test_preprocess():
     z = np.arange(5, 50.1, 0.1)
 
     process(10, z, data_location='21cmGEM_data/')
+    process(10, z, data_location='21cmGEM_data/', xHI=True)
 
     files = ['AFB_norm_factor.npy', 'AFB.txt', 'cdf.txt', 'data_maxs.txt',
              'data_mins.txt', 'indices.txt', 'labels_stds.npy', 'samples.txt',

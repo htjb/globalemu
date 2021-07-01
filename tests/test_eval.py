@@ -18,7 +18,8 @@ def test_existing_dir():
     download().model()
     download(xHI=True).model()
 
-    predictor = evaluate(z=originalz, base_dir='T_release/')
+    predictor = evaluate(z=originalz,
+                         base_dir='T_release/', gc=True)
     signal, z = predictor(params)
 
     assert(len(signal.shape) == 1)
