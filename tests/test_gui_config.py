@@ -7,26 +7,6 @@ import os
 import pytest
 
 
-def download_21cmGEM_data():
-    data_dir = '21cmGEM_data/'
-    if not os.path.exists(data_dir):
-        os.mkdir(data_dir)
-
-    files = ['Par_test_21cmGEM.txt',
-             'Par_train_21cmGEM.txt',
-             'T21_test_21cmGEM.txt',
-             'T21_train_21cmGEM.txt']
-    saves = ['test_data.txt',
-             'train_data.txt',
-             'test_labels.txt',
-             'train_labels.txt']
-
-    for i in range(len(files)):
-        url = 'https://zenodo.org/record/4541500/files/' + files[i]
-        with open(data_dir + saves[i], 'wb') as f:
-            f.write(requests.get(url).content)
-
-
 def test_config():
     if os.path.exists('T_release/'):
         shutil.rmtree('T_release/')
@@ -35,8 +15,6 @@ def test_config():
 
     download().model()
     download(xHI=True).model()
-
-    download_21cmGEM_data()
 
     paramnames = [r'$\log(f_*)$', r'$\log(V_c)$', r'$\log(f_X)$',
                   r'$\nu_\mathrm{min}$', r'$\tau$', r'$\alpha$',
@@ -75,5 +53,3 @@ def test_config():
 
     with pytest.raises(KeyError):
         config('T_release/', paramnames, '21cmGEM_data/', color='C0')
-
-    shutil.rmtree('21cmGEM_data/')

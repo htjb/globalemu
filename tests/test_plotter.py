@@ -10,27 +10,6 @@ import requests
 params = [0.25, 30, 2, 0.056, 1.3, 2, 30]
 z = np.arange(10, 20, 100)
 
-
-def download_21cmGEM_data():
-    data_dir = '21cmGEM_data/'
-    if not os.path.exists(data_dir):
-        os.mkdir(data_dir)
-
-    files = ['Par_test_21cmGEM.txt',
-             'Par_train_21cmGEM.txt',
-             'T21_test_21cmGEM.txt',
-             'T21_train_21cmGEM.txt']
-    saves = ['test_data.txt',
-             'train_data.txt',
-             'test_labels.txt',
-             'train_labels.txt']
-
-    for i in range(len(files)):
-        url = 'https://zenodo.org/record/4541500/files/' + files[i]
-        with open(data_dir + saves[i], 'wb') as f:
-            f.write(requests.get(url).content)
-
-
 def test_existing_dir():
     if os.path.exists('T_release/'):
         shutil.rmtree('T_release/')
@@ -41,8 +20,6 @@ def test_existing_dir():
     download(xHI=True).model()
 
     predictor = evaluate(base_dir='T_release/')
-
-    download_21cmGEM_data()
 
     parameters = np.loadtxt('21cmGEM_data/test_data.txt')
     labels = np.loadtxt('21cmGEM_data/test_labels.txt')
@@ -104,6 +81,3 @@ def test_existing_dir():
 
     signal_plot(parameters, labels, 'GEMLoss',
                 predictor, 'T_release/')
-
-    if os.path.exists('21cmGEM_data/'):
-        shutil.rmtree('21cmGEM_data/')

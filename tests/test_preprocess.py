@@ -7,28 +7,7 @@ import pandas as pd
 import shutil
 
 
-def download_21cmGEM_data():
-    data_dir = '21cmGEM_data/'
-    if not os.path.exists(data_dir):
-        os.mkdir(data_dir)
-
-    files = ['Par_test_21cmGEM.txt',
-             'Par_train_21cmGEM.txt',
-             'T21_test_21cmGEM.txt',
-             'T21_train_21cmGEM.txt']
-    saves = ['test_data.txt',
-             'train_data.txt',
-             'test_labels.txt',
-             'train_labels.txt']
-
-    for i in range(len(files)):
-        url = 'https://zenodo.org/record/4541500/files/' + files[i]
-        with open(data_dir + saves[i], 'wb') as f:
-            f.write(requests.get(url).content)
-
-
 def test_preprocess():
-    download_21cmGEM_data()
     z = np.arange(5, 50.1, 0.1)
 
     process(10, z, data_location='21cmGEM_data/')
