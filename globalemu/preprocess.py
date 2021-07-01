@@ -89,7 +89,7 @@ class process():
         for key, values in kwargs.items():
             if key not in set(
                     ['base_dir', 'data_location', 'xHI', 'logs', 'AFB',
-                    'std_division', 'resampling']):
+                     'std_division', 'resampling']):
                 raise KeyError("Unexpected keyword argument in process()")
 
         self.num = num
