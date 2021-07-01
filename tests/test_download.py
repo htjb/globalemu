@@ -2,6 +2,8 @@ from globalemu.downloads import download
 import os
 import pytest
 import requests
+import pandas as pd
+import numpy as np
 
 def download_21cmGEM_data():
     data_dir = '21cmGEM_data/'
@@ -21,6 +23,16 @@ def download_21cmGEM_data():
         url = 'https://zenodo.org/record/4541500/files/' + files[i]
         with open(data_dir + saves[i], 'wb') as f:
             f.write(requests.get(url).content)
+
+    td = pd.read_csv(
+        data_dir + 'train_data.txt',
+        delim_whitespace=True, header=None).values
+    tl = pd.read_csv(
+        data_dir + 'train_labels.txt',
+        delim_whitespace=True, header=None).values
+
+    np.savetxt(data_dir + 'train_data.txt', td[:500, :])
+    np.savetxt(data_dir + 'train_labels.txt', tl[:500, :])
 
 def test_existing_dir():
     if os.path.exists('kappa_HH.txt'):

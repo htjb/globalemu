@@ -12,6 +12,9 @@ def test_preprocess():
 
     process(10, z, data_location='21cmGEM_data/')
     process(10, z, data_location='21cmGEM_data/', xHI=True)
+    process('full', z, data_location='21cmGEM_data/')
+    process('full', z, data_location='21cmGEM_data/', AFB=False)
+    process(10, z, data_location='21cmGEM_data/', resampling=False)
 
     files = ['AFB_norm_factor.npy', 'AFB.txt', 'cdf.txt', 'data_maxs.txt',
              'data_mins.txt', 'indices.txt', 'labels_stds.npy', 'samples.txt',
