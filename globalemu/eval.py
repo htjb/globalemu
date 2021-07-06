@@ -244,4 +244,7 @@ class evaluate():
         if self.preprocess_settings['AFB'] is True:
             evaluation += np.interp(self.z, self.original_z, self.AFB)
 
+        if type(evaluation) is not np.ndarray:
+            evaluation = np.array(evaluation)
+        
         return evaluation, self.z
