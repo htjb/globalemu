@@ -53,10 +53,7 @@ def signal(_, parameters=None):
     plt.figure(figsize=(4, 3))
     plt.plot(z, signal, c='k')
     plt.xlabel('z')
-    if xHI is False:
-        plt.ylabel(r'$\delta T$ [mK]')
-    else:
-        plt.ylabel(r'$x_{HI}$')
+    plt.ylabel(ylabel)
     plt.ylim([label_min, label_max])
     plt.tight_layout()
     plt.savefig('img/img.png', dpi=100)
@@ -83,13 +80,13 @@ base_dir = sys.argv[1]
 
 config = pd.read_csv(base_dir + 'gui_configuration.csv')
 
-xHI = config['xHI'][0]
 logs = config['logs'].tolist()
 logs = [int(x) for x in logs if x != '--']
 label_min = config['label_min'][0]
 label_max = config['label_max'][0]
+ylabel = config['ylabel'][0]
 
-predictor = evaluate(base_dir=base_dir, xHI=xHI, logs=logs)
+predictor = evaluate(base_dir=base_dir, logs=logs)
 
 window = Tk()
 window.geometry("800x450")

@@ -18,7 +18,8 @@ def test_existing_dir():
     download().model()
     download(xHI=True).model()
 
-    predictor = evaluate(z=originalz, base_dir='T_release/')
+    predictor = evaluate(z=originalz,
+                         base_dir='T_release/', gc=True)
     signal, z = predictor(params)
 
     assert(len(signal.shape) == 1)
@@ -41,7 +42,12 @@ def test_existing_dir():
 
     predictor = evaluate(z=10, base_dir='T_release/')
     signal, z = predictor(params)
-    predictor = evaluate(z=originalz, base_dir='xHI_release/', xHI=True)
+    preprocess = predictor.preprocess_settings
+    assert(preprocess['AFB'] is True)
+    assert(preprocess['resampling'] is True)
+    assert(preprocess['std_division'] is True)
+
+    predictor = evaluate(z=originalz, base_dir='xHI_release/')
     signal, z = predictor(params)
 
     with pytest.raises(KeyError):
@@ -59,5 +65,3 @@ def test_existing_dir():
     with pytest.raises(TypeError):
         predictor = evaluate(z=originalz, base_dir='T_release/',
                              gc='false')
-    with pytest.raises(TypeError):
-        predictor = evaluate(z=originalz, base_dir='T_release/', xHI='bar')

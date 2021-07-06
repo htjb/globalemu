@@ -91,6 +91,15 @@ class nn():
             | If True then ``globalemu`` will act as if it is training a
                 neutral fraction history emulator.
 
+        output_activation: **string / default: 'linear'**
+            | Determines the output activation function for the network.
+                Modifying this
+                is useful if the emulator output is required to be positive or
+                negative etc. If xHI is True then the output activation is
+                set to 'relu' else the function is 'linear'. See the tensorflow
+                documentation for more details on the types of activation
+                functions available.
+
         resume: **Bool / default: False**
             | If set to ``True`` then ``globalemu`` will look in the
                 ``base_dir`` for a trained model and ``loss_history.txt``
@@ -123,7 +132,7 @@ class nn():
                         'lr', 'dropout', 'input_shape',
                         'output_shape', 'layer_sizes', 'base_dir',
                         'early_stop', 'early_stop_lim', 'xHI', 'resume',
-                        'random_seed']):
+                        'random_seed', 'output_activation']):
                 raise KeyError("Unexpected keyword argument in nn()")
 
         self.resume = kwargs.pop('resume', False)
@@ -206,20 +215,19 @@ class nn():
 
         train_dataset = train_dataset.map(pack_features_vector)
 
+        self.output_activation = kwargs.pop('output_activation', 'linear')
+        if self.xHI is True:
+            self.output_activation = 'relu'
+
         if self.resume is True:
             model = keras.models.load_model(
                 self.base_dir + 'model.h5',
                 compile=False)
-        elif self.xHI is False:
-            model = network_models().basic_model(
-                self.input_shape, self.output_shape,
-                self.layer_sizes, self.activation, self.drop_val,
-                'linear')
         else:
             model = network_models().basic_model(
                 self.input_shape, self.output_shape,
                 self.layer_sizes, self.activation, self.drop_val,
-                'relu')
+                self.output_activation)
 
         def loss(model, x, y, training):
             y_ = tf.transpose(model(x, training=training))[0]

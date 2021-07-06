@@ -9,7 +9,8 @@ of ``globalemu``. If you are just interested in evaluating the released models
 then take a look at the second part towards the bottom of the page.
 If you are intending to work with neutral fraction histories then the frame
 work for training and evaluating models is identical you just need to pass
-the kwarg ``xHI=True`` to all of the ``globalemu`` functions.
+the kwarg ``xHI=True`` to the pre-processing function, `process()`,
+and model building function, `nn()`, discussed below.
 
 The tutorial can also be found as a Jupyter notebook
 `here <https://mybinder.org/v2/gh/htjb/globalemu/master?filepath=notebooks%2F>`__.
@@ -69,6 +70,12 @@ saves a ``.csv`` file in the ``base_dir`` containing the preprocessed inputs
 for the neural network. It also saves some files used for normalisation in
 the ``base_dir`` so that when evaluating the network the inputs and outputs
 can be properly dealt with.
+
+By default the network subtracts and astrophysics free baseline from the models
+and resamples the signals at a higher rate in regions of high variation across
+the training data. Both of these pre-processing techniques are detailed in the
+`globalemu` MNRAS preprint. Users can prevent this happening by passing the
+kwargs `AFB=False` and `resampling=False` to `process()` if required.
 
 Once pre-processing has been performed we can train our network with the
 ``nn()`` function in ``globalemu.network``.

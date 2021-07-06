@@ -14,6 +14,7 @@ import numpy as np
 from tensorflow import keras
 from tensorflow.keras import backend as K
 import gc
+import pickle
 
 
 class evaluate():
@@ -28,10 +29,6 @@ class evaluate():
         predictor = evaluate(**kwargs)
 
     **kwargs:**
-
-        xHI: **Bool / default: False**
-            | If True then ``globalemu`` will act as if it is evaluating a
-                neutral fraction history emulator.
 
         base_dir: **string / default: 'model_dir/'**
             | The ``base_dir`` is where the trained model is saved.
@@ -120,10 +117,8 @@ class evaluate():
 
         for key, values in kwargs.items():
             if key not in set(
-                    ['xHI', 'base_dir', 'model', 'logs', 'gc', 'z']):
+                    ['base_dir', 'model', 'logs', 'gc', 'z']):
                 raise KeyError("Unexpected keyword argument in evaluate()")
-
-        self.xHI = kwargs.pop('xHI', False)
 
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
         if type(self.base_dir) is not str:
@@ -131,9 +126,13 @@ class evaluate():
         elif self.base_dir.endswith('/') is False:
             raise KeyError("'base_dir' must end with '/'.")
 
+        file = open(self.base_dir + "preprocess_settings.pkl", "rb")
+        self.preprocess_settings = pickle.load(file)
+
         self.data_mins = np.loadtxt(self.base_dir + 'data_mins.txt')
         self.data_maxs = np.loadtxt(self.base_dir + 'data_maxs.txt')
-        self.cdf = np.loadtxt(self.base_dir + 'cdf.txt')
+        if self.preprocess_settings['resampling'] is True:
+            self.cdf = np.loadtxt(self.base_dir + 'cdf.txt')
 
         self.model = kwargs.pop('model', None)
         if self.model is None:
@@ -146,14 +145,15 @@ class evaluate():
             raise TypeError("'logs' must be a list.")
         self.garbage_collection = kwargs.pop('gc', False)
 
-        boolean_kwargs = [self.garbage_collection, self.xHI]
-        boolean_strings = ['gc', 'xHI']
+        boolean_kwargs = [self.garbage_collection]
+        boolean_strings = ['gc']
         for i in range(len(boolean_kwargs)):
             if type(boolean_kwargs[i]) is not bool:
                 raise TypeError("'" + boolean_strings[i] + "' must be a bool.")
 
-        if self.xHI is False:
+        if self.preprocess_settings['AFB'] is True:
             self.AFB = np.loadtxt(self.base_dir + 'AFB.txt')
+        if self.preprocess_settings['std_division'] is True:
             self.label_stds = np.load(self.base_dir + 'labels_stds.npy')
 
         self.original_z = np.loadtxt(self.base_dir + 'z.txt')
@@ -200,7 +200,11 @@ class evaluate():
                 (self.data_maxs[i] - self.data_mins[i])
                 for i in range(params.shape[1])]).T
 
-        norm_z = np.interp(self.z, self.original_z, self.cdf)
+        if self.preprocess_settings['resampling'] is True:
+            norm_z = np.interp(self.z, self.original_z, self.cdf)
+        else:
+            norm_z = (self.z - self.original_z.min()) / \
+                     (self.original_z.max() - self.original_z.min())
         if isinstance(norm_z, np.ndarray):
             if len(normalised_params.shape) == 1:
                 x = np.tile(normalised_params, (len(norm_z), 1))
@@ -229,7 +233,7 @@ class evaluate():
             result = self.model(x[np.newaxis, :], training=False).numpy()
             evaluation = result[0][0]
 
-        if self.xHI is False:
+        if self.preprocess_settings['std_division'] is True:
             if isinstance(evaluation, np.ndarray):
                 evaluation = [
                     evaluation[i]*self.label_stds
@@ -237,6 +241,10 @@ class evaluate():
             else:
                 evaluation *= self.label_stds
 
+        if self.preprocess_settings['AFB'] is True:
             evaluation += np.interp(self.z, self.original_z, self.AFB)
 
+        if type(evaluation) is not np.ndarray:
+            evaluation = np.array(evaluation)
+        
         return evaluation, self.z

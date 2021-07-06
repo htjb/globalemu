@@ -7,35 +7,19 @@ import pandas as pd
 import shutil
 
 
-def download_21cmGEM_data():
-    data_dir = '21cmGEM_data/'
-    if not os.path.exists(data_dir):
-        os.mkdir(data_dir)
-
-    files = ['Par_test_21cmGEM.txt',
-             'Par_train_21cmGEM.txt',
-             'T21_test_21cmGEM.txt',
-             'T21_train_21cmGEM.txt']
-    saves = ['test_data.txt',
-             'train_data.txt',
-             'test_labels.txt',
-             'train_labels.txt']
-
-    for i in range(len(files)):
-        url = 'https://zenodo.org/record/4541500/files/' + files[i]
-        with open(data_dir + saves[i], 'wb') as f:
-            f.write(requests.get(url).content)
-
-
-def test_process_nn():
-    download_21cmGEM_data()
+def test_preprocess():
     z = np.arange(5, 50.1, 0.1)
 
     process(10, z, data_location='21cmGEM_data/')
+    process(10, z, data_location='21cmGEM_data/', xHI=True)
+    process('full', z, data_location='21cmGEM_data/')
+    process('full', z, data_location='21cmGEM_data/', AFB=False)
+    process(10, z, data_location='21cmGEM_data/', resampling=False)
 
     files = ['AFB_norm_factor.npy', 'AFB.txt', 'cdf.txt', 'data_maxs.txt',
              'data_mins.txt', 'indices.txt', 'labels_stds.npy', 'samples.txt',
-             'train_data.txt', 'train_dataset.csv', 'train_label.txt', 'z.txt']
+             'train_data.txt', 'train_dataset.csv', 'train_label.txt', 'z.txt',
+             'preprocess_settings.pkl']
 
     for i in range(len(files)):
         assert(os.path.exists('model_dir/' + files[i]) is True)
@@ -59,9 +43,13 @@ def test_process_nn():
     with pytest.raises(TypeError):
         process(10, z, data_location='21cmGEM_data/', base_dir=10)
     with pytest.raises(TypeError):
-        process(10, z, data_location='21cmGEM_data/', xHI=10)
-    with pytest.raises(TypeError):
         process(10, z, data_location='21cmGEM_data/', logs=True)
+    with pytest.raises(TypeError):
+        process(10, z, data_location='21cmGEM_data/', AFB=10)
+    with pytest.raises(TypeError):
+        process(10, z, data_location='21cmGEM_data/', resampling=10)
+    with pytest.raises(TypeError):
+        process(10, z, data_location='21cmGEM_data/', resampling=10)
 
     dir = ['21cmGEM_data/', 'model_dir/']
     for i in range(len(dir)):
