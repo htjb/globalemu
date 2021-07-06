@@ -7,7 +7,7 @@ Introduction
 
 :globalemu: Robust Global 21-cm Signal Emulation
 :Author: Harry Thomas Jones Bevins
-:Version: 1.3.1
+:Version: 1.4.0
 :Homepage: https://github.com/htjb/globalemu
 :Documentation: https://globalemu.readthedocs.io/
 
@@ -100,10 +100,8 @@ Results are accessed via 'res.z' and 'res.signal'.
 The code can also be used to train a network on your own Global 21-cm signal
 or neutral fraction simulations using the built in ``globalemu`` pre-processing
 techniques. There is some flexibility on the required astrophysical input
-parameters but the models are required to subscribe to the astrophysics free
-baseline calculation detailed in the ``globalemu`` paper (see below for a reference).
+parameters and the pre-processing steps which is detailed in the documentation.
 More details about training your own network can be found in the documentation.
-
 
 ``globalemu`` GUI
 -----------------
@@ -144,8 +142,9 @@ An image of the GUI is shown below.
   :alt: graphical user interface
 
 The GUI can also be used to investigate the physics of the neutral fraction
-history by generating a configuration file for the released trained model and
-setting the kwarg ``xHI=True`` in gui_config.config().
+history by generating a configuration file for the released trained model.
+There is no need to specify that the configuration file is for a neutral
+fraction emulator.
 
 Configuration files for the released models are provided.
 
