@@ -92,10 +92,8 @@ a set of parameters by running:
   # [fstar, vc, fx, nu_min, tau, alpha, R_mfp]
   params = [1e-3, 46.5, 1e-2, 1.5, 0.0775, 1.25, 30]
 
-  predictor = evaluate(base_dir='xHI_release/', xHI=True) # Redshift-Neutral Fraction Network
+  predictor = evaluate(base_dir='xHI_release/') # Redshift-Neutral Fraction Network
   signal, z = predictor(params)
-
-Results are accessed via 'res.z' and 'res.signal'.
 
 The code can also be used to train a network on your own Global 21-cm signal
 or neutral fraction simulations using the built in ``globalemu`` pre-processing
