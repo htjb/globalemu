@@ -9,8 +9,19 @@ import shutil
 import pandas as pd
 import os
 import sys
+import locale
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from globalemu.eval import evaluate
+
+if l[:2] != 'en':
+    try:
+        locale.setlocale(locale.LC_ALL, 'en_GB.UTF-8')
+    except OSError:
+        print("OSError: system locale is not set to 'en_' and " +
+              "'en_GB.UTF-8' is not available. This will cause " +
+              "issues with tkinter. To install 'en_GB.UTF-8' and run the " +
+              "GUI run 'sudo apt-get install language-pack-en' in " +
+              "the terminal.")
 
 def slider_var(name, lower, upper, position_y,
              initial, img_x_resize, img_y_resize, tickinterval,
