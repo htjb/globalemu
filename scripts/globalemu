@@ -13,6 +13,7 @@ import locale
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from globalemu.eval import evaluate
 
+l = '.'.join(locale.getlocale())
 if l[:2] != 'en':
     try:
         locale.setlocale(locale.LC_ALL, 'en_GB.UTF-8')
