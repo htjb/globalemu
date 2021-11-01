@@ -100,6 +100,24 @@ class nn():
                 documentation for more details on the types of activation
                 functions available.
 
+        loss_function: **Callable/ default: None**
+            | By default the code uses an MSE loss however users are able to
+                pass their own loss functions when training the neural
+                network. These should be functions that take in the true labels
+                (temperatures) and the predicted labels and return some measure
+                of loss. Care needs to be taken to ensure that the correct loss
+                function is supplied when resuming the training of
+                a previous run as ``globalemu`` will not check this. In order
+                for the loss function to work it must be built
+                using the tensorflow.keras backend. An example would be
+
+                .. code:: python
+
+                    from tensorflow.keras import backend as K
+
+                    def custom_loss(true_labels, predicted_labels):
+                        return K.mean(K.abs(true_labels - predicted_labels))
+
         resume: **Bool / default: False**
             | If set to ``True`` then ``globalemu`` will look in the
                 ``base_dir`` for a trained model and ``loss_history.txt``
@@ -132,7 +150,8 @@ class nn():
                         'lr', 'dropout', 'input_shape',
                         'output_shape', 'layer_sizes', 'base_dir',
                         'early_stop', 'early_stop_lim', 'xHI', 'resume',
-                        'random_seed', 'output_activation']):
+                        'random_seed', 'output_activation',
+                        'loss_function']):
                 raise KeyError("Unexpected keyword argument in nn()")
 
         self.resume = kwargs.pop('resume', False)
@@ -189,6 +208,11 @@ class nn():
                     raise TypeError("'" + float_strings[i] +
                                     "' must be a float.")
 
+        loss_function = kwargs.pop('loss_function', None)
+        if loss_function is not None:
+            if not callable(loss_function):
+                raise TypeError('loss_function should be a callable.')
+
         if self.random_seed is not None:
             tf.random.set_seed(self.random_seed)
 
@@ -232,7 +256,10 @@ class nn():
         def loss(model, x, y, training):
             y_ = tf.transpose(model(x, training=training))[0]
             lf = loss_functions(y, y_)
-            return lf.mse(), lf.rmse()
+            if loss_function is None:
+                return lf.mse(), lf.rmse()
+            else:
+                return loss_function(y, y_), lf.rmse()
 
         def grad(model, inputs, targets):
             with tf.GradientTape() as tape:
