@@ -1,6 +1,7 @@
 import numpy as np
 from globalemu.preprocess import process
 from globalemu.network import nn
+from tensorflow.keras import backend as K
 import requests
 import os
 import shutil
@@ -8,10 +9,14 @@ import pytest
 
 
 def test_process_nn():
+
+    def custom_loss(y, y_):
+        return K.mean(K.abs(y - y_))
+
     z = np.arange(5, 50.1, 0.1)
 
     process(10, z, data_location='21cmGEM_data/')
-    nn(batch_size=451, layer_sizes=[8], epochs=10)
+    nn(batch_size=451, layer_sizes=[8], epochs=10, loss_function=custom_loss)
 
     # results of below will not make sense as it is being run on the
     # global signal data but it will test the code (xHI data not public)
@@ -59,6 +64,8 @@ def test_process_nn():
         nn(resume=10)
     with pytest.raises(TypeError):
         nn(output_activation=2)
+    with pytest.raises(TypeError):
+        nn(loss_function='foobar')
 
     process(10, z, data_location='21cmGEM_data/', base_dir='base_dir/')
     nn(batch_size=451, layer_sizes=[], random_seed=10,
