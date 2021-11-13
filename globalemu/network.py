@@ -115,8 +115,12 @@ class nn():
 
                     from tensorflow.keras import backend as K
 
-                    def custom_loss(true_labels, predicted_labels):
+                    def custom_loss(true_labels, predicted_labels,
+                            netowrk_inputs):
                         return K.mean(K.abs(true_labels - predicted_labels))
+
+                The function must take in as arguments the `true_labels`,
+                the `predicted_labels` and the `network_inputs`.
 
         resume: **Bool / default: False**
             | If set to ``True`` then ``globalemu`` will look in the
@@ -259,7 +263,7 @@ class nn():
             if loss_function is None:
                 return lf.mse(), lf.rmse()
             else:
-                return loss_function(y, y_), lf.rmse()
+                return loss_function(y, y_, x), lf.rmse()
 
         def grad(model, inputs, targets):
             with tf.GradientTape() as tape:
