@@ -10,7 +10,7 @@ import pytest
 
 def test_process_nn():
 
-    def custom_loss(y, y_):
+    def custom_loss(y, y_, x):
         return K.mean(K.abs(y - y_))
 
     z = np.arange(5, 50.1, 0.1)
