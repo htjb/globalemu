@@ -7,6 +7,12 @@ import pandas as pd
 import shutil
 
 
+def test_preprocess_integer_redshift():
+    z = np.arange(5, 5 + 451, dtype=np.uint16)
+    process(10, z, data_location='21cmGEM_data/')
+    assert not np.any(np.isnan(np.loadtxt('model_dir/AFB.txt')))
+
+
 def test_preprocess():
     z = np.arange(5, 50.1, 0.1)
 
