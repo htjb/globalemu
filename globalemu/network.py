@@ -74,7 +74,7 @@ class nn():
 
         early_stop: **Bool / default: False**
             | If ``early_stop`` is set too ``True`` then the network will stop
-                learning if the loss has not changed within 
+                learning if the loss has not changed within
                 the last twenty epochs.
 
         xHI: **Bool / default: False**
@@ -290,28 +290,29 @@ class nn():
             train_loss_results.append(epoch_loss_avg.result())
             train_rmse_results.append(epoch_rmse_avg.result())
             e = time.time()
-            
+
             test_loss, _ = loss(model, test_data, test_labels, training=False)
             test_loss_results.append(test_loss)
-            
+
             print(
-                'Epoch: {:03d}, Loss: {:.5f}, Test Loss: {:.5f}, RMSE: {:.5f}, Time: {:.3f}'
-                .format(
-                    epoch, epoch_loss_avg.result(), test_loss_results[-1],
-                    epoch_rmse_avg.result(), e-s))
+                'Epoch: {:03d}, Loss: {:.5f}, Test Loss: {:.5f},'
+                .format(epoch, epoch_loss_avg.result(), test_loss_results[-1])
+                + 'RMSE: {:.5f}, Time: {:.3f}'
+                .format(epoch_rmse_avg.result(), e-s))
 
             if self.early_stop:
                 if len(test_loss_results) > 20:
-                    delta = 2*np.abs(test_loss_results[-21] - \
-                        test_loss_results[-1])/ \
-                        (test_loss_results[-21] + test_loss_results[-1])
-                        
+                    delta = 2*np.abs(test_loss_results[-21] -
+                                     test_loss_results[-1]) / \
+                                     (test_loss_results[-21] +
+                                      test_loss_results[-1])
+
                     if delta*100 < 1e-2:
-                        print('Early Stopped: {:.5f}'.format(delta.numpy()*100) +
-                              ' < 1e-2')
+                        print('Early Stopped: {:.5f}'.format(delta.numpy()*100)
+                              + ' < 1e-2')
                         print('Epochs used = ' + str(len(test_loss_results)))
                         break
-            
+
             if (epoch + 1) % 10 == 0:
                 model.save(self.base_dir + 'model.h5')
                 np.savetxt(

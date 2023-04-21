@@ -100,7 +100,8 @@ class process():
         if type(z) not in set([np.ndarray, list]):
             raise TypeError("'z' should be a numpy array or list.")
 
-        # Convert to numpy array, and cast to float to avoid NaN errors in AFB later
+        # Convert to numpy array, and cast to float to
+        # avoid NaN errors in AFB later
         z = np.array(z, dtype=float)
         self.z = z
 
@@ -246,15 +247,15 @@ class process():
         norm_train_data = []
         for i in range(train_data.shape[1]):
             norm_train_data.append(
-                (train_data[:, i] - train_data_mins[i])/ \
-                    (train_data_maxs[i]-train_data_mins[i]))
+                                   (train_data[:, i] - train_data_mins[i]) /
+                                   (train_data_maxs[i] - train_data_mins[i]))
         norm_train_data = np.array(norm_train_data).T
 
         norm_test_data = []
         for i in range(test_data.shape[1]):
             norm_test_data.append(
-                (test_data[:, i] - test_data_mins[i])/ \
-                    (test_data_maxs[i]-test_data_mins[i]))
+                                  (test_data[:, i] - test_data_mins[i]) /
+                                  (test_data_maxs[i] - test_data_mins[i]))
         norm_test_data = np.array(norm_test_data).T
 
         if self.preprocess_settings['std_division'] is True:
@@ -298,7 +299,7 @@ class process():
                     np.hstack([norm_test_data[i, :], norm_s[j]]))
         flattened_test_data = np.array(flattened_test_data)
 
-        train_dataset = np.hstack([flattened_train_data, 
+        train_dataset = np.hstack([flattened_train_data,
                                    norm_train_labels[:, np.newaxis]])
 
         np.savetxt(
