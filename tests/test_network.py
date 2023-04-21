@@ -2,7 +2,6 @@ import numpy as np
 from globalemu.preprocess import process
 from globalemu.network import nn
 from tensorflow.keras import backend as K
-import requests
 import os
 import shutil
 import pytest

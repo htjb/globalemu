@@ -5,6 +5,7 @@ import requests
 import pandas as pd
 import numpy as np
 
+
 def download_21cmGEM_data():
     data_dir = '21cmGEM_data/'
     if not os.path.exists(data_dir):
@@ -33,6 +34,7 @@ def download_21cmGEM_data():
 
     np.savetxt(data_dir + 'train_data.txt', td[:500, :])
     np.savetxt(data_dir + 'train_labels.txt', tl[:500, :])
+
 
 def test_existing_dir():
     if os.path.exists('kappa_HH.txt'):

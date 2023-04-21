@@ -5,10 +5,10 @@ from globalemu.downloads import download
 import os
 import shutil
 import pytest
-import requests
 
 params = [0.25, 30, 2, 0.056, 1.3, 2, 30]
 z = np.arange(10, 20, 100)
+
 
 def test_existing_dir():
     if os.path.exists('T_release/'):
