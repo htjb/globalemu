@@ -65,7 +65,7 @@ def test_process_nn():
         nn(loss_function='foobar')
 
     process(10, z, data_location='21cmGEM_data/', base_dir='base_dir/')
-    nn(batch_size=451, layer_sizes=[], random_seed=10,
+    nn(batch_size=451, layer_sizes=[], random_seed=10, epochs=30,
        base_dir='base_dir/', early_stop=True)
 
     dir = ['model_dir/', 'base_dir/']
