@@ -97,9 +97,12 @@ class process():
             if self.num != 'full':
                 raise TypeError("'num' must be an integer or 'full'.")
 
-        self.z = z
-        if type(self.z) not in set([np.ndarray, list]):
+        if type(z) not in set([np.ndarray, list]):
             raise TypeError("'z' should be a numpy array or list.")
+
+        # Convert to numpy array, and cast to float to avoid NaN errors in AFB later
+        z = np.array(z, dtype=float)
+        self.z = z
 
         self.base_dir = kwargs.pop('base_dir', 'model_dir/')
         self.data_location = kwargs.pop('data_location', 'data/')
