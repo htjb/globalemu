@@ -1,6 +1,5 @@
 import numpy as np
 from globalemu.preprocess import process
-import requests
 import os
 import pytest
 import pandas as pd

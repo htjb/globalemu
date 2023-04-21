@@ -100,7 +100,8 @@ class process():
         if type(z) not in set([np.ndarray, list]):
             raise TypeError("'z' should be a numpy array or list.")
 
-        # Convert to numpy array, and cast to float to avoid NaN errors in AFB later
+        # Convert to numpy array, and cast to float to
+        # avoid NaN errors in AFB later
         z = np.array(z, dtype=float)
         self.z = z
 
@@ -149,12 +150,15 @@ class process():
 
         np.savetxt(self.base_dir + 'z.txt', self.z)
 
-        full_train_data = pd.read_csv(
-            self.data_location + 'train_data.txt',
-            delim_whitespace=True, header=None).values
-        full_train_labels = pd.read_csv(
-            self.data_location + 'train_labels.txt',
-            delim_whitespace=True, header=None).values
+        def load_data(file):
+            return pd.read_csv(
+                self.data_location + file,
+                delim_whitespace=True, header=None).values
+
+        full_train_data = load_data('train_data.txt')
+        full_train_labels = load_data('train_labels.txt')
+        full_test_data = load_data('test_data.txt')
+        test_labels = load_data('test_labels.txt')
 
         if self.preprocess_settings['AFB'] is True:
             np.save(
@@ -166,6 +170,7 @@ class process():
             train_data = full_train_data.copy()
             if self.preprocess_settings['AFB'] is True:
                 train_labels = full_train_labels.copy() - res.deltaT
+                test_labels -= res.deltaT
             else:
                 train_labels = full_train_labels.copy()
         else:
@@ -189,16 +194,27 @@ class process():
             train_data, train_labels = np.array(train_data), \
                 np.array(train_labels)
 
-        log_td = []
+        log_train_data = []
         for i in range(train_data.shape[1]):
             if i in set(self.logs):
                 for j in range(train_data.shape[0]):
                     if train_data[j, i] == 0:
                         train_data[j, i] = 1e-6
-                log_td.append(np.log10(train_data[:, i]))
+                log_train_data.append(np.log10(train_data[:, i]))
             else:
-                log_td.append(train_data[:, i])
-        train_data = np.array(log_td).T
+                log_train_data.append(train_data[:, i])
+        train_data = np.array(log_train_data).T
+
+        log_test_data = []
+        for i in range(full_test_data.shape[1]):
+            if i in set(self.logs):
+                for j in range(full_test_data.shape[0]):
+                    if full_test_data[j, i] == 0:
+                        full_test_data[j, i] = 1e-6
+                log_test_data.append(np.log10(full_test_data[:, i]))
+            else:
+                log_test_data.append(full_test_data[:, i])
+        test_data = np.array(log_test_data).T
 
         if self.preprocess_settings['resampling'] is True:
             sampling_call = sampling(
@@ -213,17 +229,34 @@ class process():
             train_labels = np.array(resampled_labels)
 
             norm_s = np.interp(samples, self.z, cdf)
+
+            resampled_test_labels = []
+            for i in range(len(test_labels)):
+                resampled_test_labels.append(
+                    np.interp(samples, self.z, test_labels[i]))
+            test_labels = np.array(resampled_test_labels)
         else:
             norm_s = (self.z - self.z.min())/(self.z.max() - self.z.min())
 
-        data_mins = train_data.min(axis=0)
-        data_maxs = train_data.max(axis=0)
+        train_data_mins = train_data.min(axis=0)
+        train_data_maxs = train_data.max(axis=0)
+
+        test_data_mins = test_data.min(axis=0)
+        test_data_maxs = test_data.max(axis=0)
 
         norm_train_data = []
         for i in range(train_data.shape[1]):
             norm_train_data.append(
-                (train_data[:, i] - data_mins[i])/(data_maxs[i]-data_mins[i]))
+                                   (train_data[:, i] - train_data_mins[i]) /
+                                   (train_data_maxs[i] - train_data_mins[i]))
         norm_train_data = np.array(norm_train_data).T
+
+        norm_test_data = []
+        for i in range(test_data.shape[1]):
+            norm_test_data.append(
+                                  (test_data[:, i] - test_data_mins[i]) /
+                                  (test_data_maxs[i] - test_data_mins[i]))
+        norm_test_data = np.array(norm_test_data).T
 
         if self.preprocess_settings['std_division'] is True:
             labels_stds = train_labels.std()
@@ -234,13 +267,23 @@ class process():
 
             norm_train_labels = norm_train_labels.flatten()
             np.save(self.base_dir + 'labels_stds.npy', labels_stds)
+
+            test_labels_stds = test_labels.std()
+            norm_test_labels = [
+                test_labels[i, :]/test_labels_stds
+                for i in range(test_labels.shape[0])]
+            norm_test_labels = np.array(norm_test_labels)
+
+            norm_test_labels = norm_test_labels.flatten()
+
         else:
             norm_train_labels = train_labels.flatten()
+            norm_test_labels = test_labels.flatten()
 
         if self.num != 'full':
             np.savetxt(self.base_dir + 'indices.txt', ind)
-        np.savetxt(self.base_dir + 'data_mins.txt', data_mins)
-        np.savetxt(self.base_dir + 'data_maxs.txt', data_maxs)
+        np.savetxt(self.base_dir + 'data_mins.txt', train_data_mins)
+        np.savetxt(self.base_dir + 'data_maxs.txt', train_data_maxs)
 
         flattened_train_data = []
         for i in range(len(norm_train_data)):
@@ -249,12 +292,21 @@ class process():
                     np.hstack([norm_train_data[i, :], norm_s[j]]))
         flattened_train_data = np.array(flattened_train_data)
 
-        train_data, train_label = flattened_train_data, norm_train_labels
-        train_dataset = np.hstack([train_data, train_label[:, np.newaxis]])
+        flattened_test_data = []
+        for i in range(len(norm_test_data)):
+            for j in range(len(norm_s)):
+                flattened_test_data.append(
+                    np.hstack([norm_test_data[i, :], norm_s[j]]))
+        flattened_test_data = np.array(flattened_test_data)
+
+        train_dataset = np.hstack([flattened_train_data,
+                                   norm_train_labels[:, np.newaxis]])
 
         np.savetxt(
             self.base_dir + 'train_dataset.csv', train_dataset, delimiter=',')
-        np.savetxt(self.base_dir + 'train_data.txt', train_data)
-        np.savetxt(self.base_dir + 'train_label.txt', train_label)
+        np.savetxt(self.base_dir + 'train_data.txt', flattened_train_data)
+        np.savetxt(self.base_dir + 'train_label.txt', norm_train_labels)
+        np.savetxt(self.base_dir + 'test_data.txt', flattened_test_data)
+        np.savetxt(self.base_dir + 'test_label.txt', norm_test_labels)
 
         print('...preprocessing done.')

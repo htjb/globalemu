@@ -1,7 +1,6 @@
 import pandas as pd
 from globalemu.gui_config import config
 from globalemu.downloads import download
-import requests
 import shutil
 import os
 import pytest
