@@ -238,6 +238,9 @@ class nn():
             label_name=label_names,
             num_epochs=1)
 
+        test_data = np.loadtxt(self.base_dir + 'test_data.txt')
+        test_labels = np.loadtxt(self.base_dir + 'test_labels.txt')
+
         def pack_features_vector(features, labels):
             return tf.stack(list(features.values()), axis=1), labels
 
@@ -276,8 +279,11 @@ class nn():
         if self.resume is True:
             train_loss_results = list(
                 np.loadtxt(self.base_dir + 'loss_history.txt'))
+            test_loss_results = list(
+                np.loadtxt(self.base_dir + 'test_loss_history.txt'))
         else:
             train_loss_results = []
+            test_loss_result = []
         train_rmse_results = []
         num_epochs = self.epochs
         for epoch in range(num_epochs):
@@ -295,25 +301,35 @@ class nn():
             train_loss_results.append(epoch_loss_avg.result())
             train_rmse_results.append(epoch_rmse_avg.result())
             e = time.time()
-
+            
+            test_loss, _ = loss(model, test_data, test_labels, training=False)
+            test_loss_results.append(test_loss)
+            
             print(
                 'Epoch: {:03d}, Loss: {:.5f}, RMSE: {:.5f}, Time: {:.3f}'
                 .format(
                     epoch, epoch_loss_avg.result(),
                     epoch_rmse_avg.result(), e-s))
 
-            if self.early_stop is True:
-                if len(train_loss_results) > 10:
-                    if np.isclose(
-                            train_loss_results[-10], train_loss_results[-1],
-                            self.early_stop_lim, self.early_stop_lim):
-                        print('Early Stop')
-                        model.save(self.base_dir + 'model.h5')
+            if self.early_stop:
+                if len(self.test_loss_history) > 20:
+                    delta = 2*np.abs(self.test_loss_history[-21] - \
+                        self.test_loss_history[-1])/ \
+                        (self.test_loss_history[-21] + self.test_loss_history[-1])
+                        
+                    if delta*100 < 1e-2:
+                        print('Early Stopped:' + str(delta.numpy()*100) +
+                              ' < 1e-2')
+                        print('Epochs used = ' + str(i))
                         break
+            
             if (epoch + 1) % 10 == 0:
                 model.save(self.base_dir + 'model.h5')
                 np.savetxt(
                     self.base_dir + 'loss_history.txt', train_loss_results)
+                np.savetxt(
+                    self.base_dir + 'test_loss_history.txt', test_loss_results)
 
         model.save(self.base_dir + 'model.h5')
         np.savetxt(self.base_dir + 'loss_history.txt', train_loss_results)
+        np.savetxt(self.base_dir + 'test_loss_history.txt', test_loss_results)
