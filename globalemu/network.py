@@ -295,9 +295,9 @@ class nn():
             test_loss_results.append(test_loss)
             
             print(
-                'Epoch: {:03d}, Loss: {:.5f}, RMSE: {:.5f}, Time: {:.3f}'
+                'Epoch: {:03d}, Loss: {:.5f}, Test Loss: {:.5f}, RMSE: {:.5f}, Time: {:.3f}'
                 .format(
-                    epoch, epoch_loss_avg.result(),
+                    epoch, epoch_loss_avg.result(), test_loss_results[-1],
                     epoch_rmse_avg.result(), e-s))
 
             if self.early_stop:
