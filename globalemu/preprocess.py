@@ -166,7 +166,7 @@ class process():
             train_data = full_train_data.copy()
             if self.preprocess_settings['AFB'] is True:
                 train_labels = full_train_labels.copy() - res.deltaT
-                test_labels = full_test_labels.copy() - res.deltaT
+                full_test_labels -= res.deltaT
             else:
                 train_labels = full_train_labels.copy()
         else:
@@ -227,9 +227,9 @@ class process():
             norm_s = np.interp(samples, self.z, cdf)
 
             resampled_test_labels = []
-            for i in range(len(test_labels)):
+            for i in range(len(full_test_labels)):
                 resampled_test_labels.append(
-                    np.interp(samples, self.z, test_labels[i]))
+                    np.interp(samples, self.z, full_test_labels[i]))
             test_labels = np.array(resampled_test_labels)
         else:
             norm_s = (self.z - self.z.min())/(self.z.max() - self.z.min())
