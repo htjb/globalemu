@@ -74,18 +74,8 @@ class nn():
 
         early_stop: **Bool / default: False**
             | If ``early_stop`` is set too ``True`` then the network will stop
-                learning if the loss has not changed up to an accuracy given
-                by ``early_stop_lim`` within the last ten epochs.
-
-        early_stop_lim: **float / default: 1e-4**
-            | The precision with which to assess the change in loss over the
-                last ten epochs when ``early_stop=True``. The value of this
-                parameter is strongly dependent on the magnitude of the
-                evaluated loss at each epoch and the default may be to high or
-                too low for the desired outcome. For example if our loss value
-                is initially 0.01 and decreases with each epoch then a
-                ``epoch_stop_lim`` of 0.1 will cause training to stop after
-                10 epochs and give poor results.
+                learning if the loss has not changed within 
+                the last twenty epochs.
 
         xHI: **Bool / default: False**
             | If True then ``globalemu`` will act as if it is training a
@@ -153,7 +143,7 @@ class nn():
                     ['batch_size', 'activation', 'epochs',
                         'lr', 'dropout', 'input_shape',
                         'output_shape', 'layer_sizes', 'base_dir',
-                        'early_stop', 'early_stop_lim', 'xHI', 'resume',
+                        'early_stop', 'xHI', 'resume',
                         'random_seed', 'output_activation',
                         'loss_function']):
                 raise KeyError("Unexpected keyword argument in nn()")
@@ -184,7 +174,6 @@ class nn():
             'layer_sizes', [self.input_shape, self.input_shape])
         if type(self.layer_sizes) is not list:
             raise TypeError("'layer_sizes' must be a list.")
-        self.early_stop_lim = kwargs.pop('early_stop_lim', 1e-4)
         self.early_stop = kwargs.pop('early_stop', False)
         self.xHI = kwargs.pop('xHI', False)
         self.random_seed = kwargs.pop('random_seed', None)
@@ -203,9 +192,9 @@ class nn():
             if type(int_kwargs[i]) is not int:
                 raise TypeError("'" + int_strings[i] + "' must be a int.")
 
-        float_kwargs = [self.lr, self.early_stop_lim, self.drop_val,
+        float_kwargs = [self.lr, self.drop_val,
                         self.random_seed]
-        float_strings = ['lr', 'early_stop_lim', 'dropout', 'random_seed']
+        float_strings = ['lr', 'dropout', 'random_seed']
         for i in range(len(float_kwargs)):
             if float_kwargs[i] is not None:
                 if type(float_kwargs[i]) not in set([float, int]):
@@ -239,7 +228,7 @@ class nn():
             num_epochs=1)
 
         test_data = np.loadtxt(self.base_dir + 'test_data.txt')
-        test_labels = np.loadtxt(self.base_dir + 'test_labels.txt')
+        test_labels = np.loadtxt(self.base_dir + 'test_label.txt')
 
         def pack_features_vector(features, labels):
             return tf.stack(list(features.values()), axis=1), labels
@@ -283,7 +272,7 @@ class nn():
                 np.loadtxt(self.base_dir + 'test_loss_history.txt'))
         else:
             train_loss_results = []
-            test_loss_result = []
+            test_loss_results = []
         train_rmse_results = []
         num_epochs = self.epochs
         for epoch in range(num_epochs):
@@ -312,10 +301,10 @@ class nn():
                     epoch_rmse_avg.result(), e-s))
 
             if self.early_stop:
-                if len(self.test_loss_history) > 20:
-                    delta = 2*np.abs(self.test_loss_history[-21] - \
-                        self.test_loss_history[-1])/ \
-                        (self.test_loss_history[-21] + self.test_loss_history[-1])
+                if len(test_loss_results) > 20:
+                    delta = 2*np.abs(test_loss_results[-21] - \
+                        test_loss_results[-1])/ \
+                        (test_loss_results[-21] + test_loss_results[-1])
                         
                     if delta*100 < 1e-2:
                         print('Early Stopped:' + str(delta.numpy()*100) +
