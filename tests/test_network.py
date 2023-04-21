@@ -57,8 +57,6 @@ def test_process_nn():
     with pytest.raises(TypeError):
         nn(early_stop='foo')
     with pytest.raises(TypeError):
-        nn(early_stop_lim=False)
-    with pytest.raises(TypeError):
         nn(xHI='false')
     with pytest.raises(TypeError):
         nn(resume=10)
@@ -69,7 +67,7 @@ def test_process_nn():
 
     process(10, z, data_location='21cmGEM_data/', base_dir='base_dir/')
     nn(batch_size=451, layer_sizes=[], random_seed=10,
-       base_dir='base_dir/')
+       base_dir='base_dir/', early_stop=True)
 
     dir = ['model_dir/', 'base_dir/']
     for i in range(len(dir)):
