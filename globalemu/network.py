@@ -307,9 +307,9 @@ class nn():
                         (test_loss_results[-21] + test_loss_results[-1])
                         
                     if delta*100 < 1e-2:
-                        print('Early Stopped:' + str(delta.numpy()*100) +
+                        print('Early Stopped: {:.5f}'.format(delta.numpy()*100) +
                               ' < 1e-2')
-                        print('Epochs used = ' + str(i))
+                        print('Epochs used = ' + str(len(test_loss_results)))
                         break
             
             if (epoch + 1) % 10 == 0:
