@@ -275,6 +275,7 @@ class nn():
             test_loss_results = []
         train_rmse_results = []
         num_epochs = self.epochs
+        c = 0
         for epoch in range(num_epochs):
             s = time.time()
             epoch_loss_avg = tf.keras.metrics.Mean()
@@ -301,21 +302,23 @@ class nn():
                 .format(epoch_rmse_avg.result(), e-s))
 
             if self.early_stop:
-                    c += 1
-                    if epoch == 0:
+                c += 1
+                if epoch == 0:
+                    minimum_loss = test_loss_results[-1]
+                    minimum_epoch = epoch
+                    minimum_model = None
+                else:
+                    if test_loss_results[-1] < minimum_loss:
                         minimum_loss = test_loss_results[-1]
                         minimum_epoch = epoch
-                        minimum_model = None
-                    else:
-                        if test_loss_results[-1] < minimum_loss:
-                            minimum_loss = test_loss_results[-1]
-                            minimum_epoch = epoch
-                            minimum_model = model
-                            c = 0
-                    if minimum_model:
-                        if c == round((self.epochs/100)*2):
-                            print('Early stopped. Epochs used = ' + str(epoch))
-                            break
+                        minimum_model = model
+                        c = 0
+                if minimum_model:
+                    if c == round((self.epochs/100)*2):
+                        print('Early stopped. Minimum at = ' +
+                              str(minimum_epoch) +
+                              ' Epochs used = ' + str(epoch))
+                        break
 
             if (epoch + 1) % 10 == 0:
                 model.save(self.base_dir + 'model.h5')
