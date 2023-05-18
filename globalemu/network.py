@@ -298,7 +298,7 @@ class nn():
                 'Epoch: {:03d}, Loss: {:.5f}, Test Loss: {:.5f},'
                 .format(epoch, epoch_loss_avg.result(), test_loss_results[-1])
                 + 'RMSE: {:.5f}, Time: {:.3f}'
-                .format(epoch_rmse_avg.result(), e-s))
+                .format(epoch_rmse_avg.result(), e-s), flush=True)
 
             if self.early_stop:
                 if len(test_loss_results) > 20:
@@ -309,8 +309,8 @@ class nn():
 
                     if delta*100 < 1e-2:
                         print('Early Stopped: {:.5f}'.format(delta.numpy()*100)
-                              + ' < 1e-2')
-                        print('Epochs used = ' + str(len(test_loss_results)))
+                              + ' < 1e-2', flush=True)
+                        print('Epochs used = ' + str(len(test_loss_results)), flush=True)
                         break
 
             if (epoch + 1) % 10 == 0:
