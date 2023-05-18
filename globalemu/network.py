@@ -301,17 +301,21 @@ class nn():
                 .format(epoch_rmse_avg.result(), e-s))
 
             if self.early_stop:
-                if len(test_loss_results) > 20:
-                    delta = 2*np.abs(test_loss_results[-21] -
-                                     test_loss_results[-1]) / \
-                                     (test_loss_results[-21] +
-                                      test_loss_results[-1])
-
-                    if delta*100 < 1e-2:
-                        print('Early Stopped: {:.5f}'.format(delta.numpy()*100)
-                              + ' < 1e-2')
-                        print('Epochs used = ' + str(len(test_loss_results)))
-                        break
+                    c += 1
+                    if epoch == 0:
+                        minimum_loss = test_loss_results[-1]
+                        minimum_epoch = epoch
+                        minimum_model = None
+                    else:
+                        if test_loss_results[-1] < minimum_loss:
+                            minimum_loss = test_loss_results[-1]
+                            minimum_epoch = epoch
+                            minimum_model = model
+                            c = 0
+                    if minimum_model:
+                        if c == round((self.epochs/100)*2):
+                            print('Early stopped. Epochs used = ' + str(epoch))
+                            break
 
             if (epoch + 1) % 10 == 0:
                 model.save(self.base_dir + 'model.h5')
@@ -320,6 +324,9 @@ class nn():
                 np.savetxt(
                     self.base_dir + 'test_loss_history.txt', test_loss_results)
 
-        model.save(self.base_dir + 'model.h5')
+        if minimum_model:
+            minimum_model.save(self.model_dir + 'model.h5')
+        else:
+            model.save(self.model_dir + 'model.h5')
         np.savetxt(self.base_dir + 'loss_history.txt', train_loss_results)
         np.savetxt(self.base_dir + 'test_loss_history.txt', test_loss_results)
