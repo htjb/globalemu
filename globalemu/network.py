@@ -276,6 +276,7 @@ class nn():
         train_rmse_results = []
         num_epochs = self.epochs
         c = 0
+        minimum_model = None
         for epoch in range(num_epochs):
             s = time.time()
             epoch_loss_avg = tf.keras.metrics.Mean()
@@ -328,8 +329,8 @@ class nn():
                     self.base_dir + 'test_loss_history.txt', test_loss_results)
 
         if minimum_model:
-            minimum_model.save(self.model_dir + 'model.h5')
+            minimum_model.save(self.base_dir + 'model.h5')
         else:
-            model.save(self.model_dir + 'model.h5')
+            model.save(self.base_dir + 'model.h5')
         np.savetxt(self.base_dir + 'loss_history.txt', train_loss_results)
         np.savetxt(self.base_dir + 'test_loss_history.txt', test_loss_results)
