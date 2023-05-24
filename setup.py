@@ -20,7 +20,7 @@ setup(
     license='MIT',
     scripts=['scripts/globalemu'],
     extras_require={
-          'docs': ['sphinx', 'sphinx_rtd_theme', 'numpydoc'],
+          'docs': ['sphinx', 'sphinx_rtd_theme', 'numpydoc', 'packaging'],
           },
     tests_require=['pytest'],
     classifiers=[
