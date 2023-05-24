@@ -76,12 +76,16 @@ def unit_incremented(version_a: str, version_b: str) -> bool:
                 version_a.minor == 0 and
                 version_a.major == version_b.major+1)
 
+def get_current_version() -> str:
+    """Get current version of package from README.rst"""
+    current_version = run_on_commandline("grep", ":Version:", readme_file)
+    current_version = current_version.split(":")[-1].strip()
+    return current_version
 
 def main():
     """Check version is consistent and incremented correctly."""
     # Get current version from readme
-    current_version = run_on_commandline("grep", ":Version:", readme_file)
-    current_version = current_version.split(":")[-1].strip()
+    current_version = get_current_version()
 
     # Get previous version from main branch of code
     run_on_commandline("git", "fetch", "origin", "master")

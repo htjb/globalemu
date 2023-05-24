@@ -6,14 +6,13 @@ This script will print the version of the current project.
 
 
 import sys
-from check_version import run_on_commandline, readme_file
+from check_version import run_on_commandline, readme_file, get_current_version
 
 
 def main():
     """Print the current version of the project."""
     # Get current version from readme
-    current_version = run_on_commandline("grep", ":Version:", readme_file)
-    current_version = current_version.split(":")[-1].strip()
+    current_version = get_current_version()
 
     # Print current version
     sys.stdout.write(f"{current_version}")
