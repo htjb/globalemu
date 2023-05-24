@@ -96,7 +96,7 @@ def main():
     previous_version = None
     for line in readme_contents.splitlines():
         if ":Version:" in line:
-            previous_version = line.split("=")[-1].strip().strip("'")
+            previous_version = line.split(":")[-1].strip()
             break
 
     if previous_version is None:
