@@ -7,9 +7,18 @@ def readme(short=False):
         else:
             return f.read()
 
+def get_version_from_readme() -> str:
+    """Get current version of package from README.rst"""
+    readme_text = readme()
+    for line in readme_text.splitlines():
+        if ":Version:" in line:
+            current_version = line.split(":")[-1].strip()
+            return current_version
+    raise ValueError("Could not find version in README.rst")
+
 setup(
     name='globalemu',
-    version='1.7.0',
+    version=get_version_from_readme(),
     description='globalemu: Robust and Fast Global 21-cm Signal Emulation',
     long_description=readme(),
     author='Harry T. J. Bevins',
@@ -20,7 +29,7 @@ setup(
     license='MIT',
     scripts=['scripts/globalemu'],
     extras_require={
-          'docs': ['sphinx', 'sphinx_rtd_theme', 'numpydoc'],
+          'docs': ['sphinx', 'sphinx_rtd_theme', 'numpydoc', 'packaging'],
           },
     tests_require=['pytest'],
     classifiers=[
