@@ -7,7 +7,7 @@ Introduction
 
 :globalemu: Robust Global 21-cm Signal Emulation
 :Author: Harry Thomas Jones Bevins
-:Version: 1.7.2
+:Version: 1.7.3
 :Homepage: https://github.com/htjb/globalemu
 :Documentation: https://globalemu.readthedocs.io/
 
@@ -250,14 +250,20 @@ Below is the bibtex,
 .. code:: bibtex
 
   @article{Bevins2021,
-    title = {{GLOBALEMU}: {A} novel and robust approach for emulating the sky-averaged 21-cm signal from the cosmic dawn and epoch of reionisation},
-    url = {http://arxiv.org/abs/2104.04336},
-    urldate = {2021-04-12},
-    journal = {arXiv:2104.04336 [astro-ph]},
-    author = {Bevins, H. T. J. and Handley, W. J. and Fialkov, A. and Acedo, E. de Lera and Javid, K.},
-    month = apr,
-    year = {2021},
-    note = {arXiv: 2104.04336}
+        author = {{Bevins}, H.~T.~J. and {Handley}, W.~J. and {Fialkov}, A. and {de Lera Acedo}, E. and {Javid}, K.},
+          title = "{GLOBALEMU: a novel and robust approach for emulating the sky-averaged 21-cm signal from the cosmic dawn and epoch of reionization}",
+        journal = {\mnras},
+          year = 2021,
+          month = dec,
+        volume = {508},
+        number = {2},
+          pages = {2923-2936},
+            doi = {10.1093/mnras/stab2737},
+  archivePrefix = {arXiv},
+        eprint = {2104.04336},
+  primaryClass = {astro-ph.CO},
+        adsurl = {https://ui.adsabs.harvard.edu/abs/2021MNRAS.508.2923B},
+        adsnote = {Provided by the SAO/NASA Astrophysics Data System}
   }
 
 Requirements
