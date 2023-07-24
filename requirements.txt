@@ -1,6 +1,6 @@
 numpy
-tensorflow-macos; sys_platform == 'darwin/arm64'
-tensorflow; sys_platform != 'darwin/arm64'
+tensorflow-macos; sys_platform == 'darwin'
+tensorflow; sys_platform != 'darwin'
 pandas
 matplotlib
 Pillow
