@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 def readme(short=False):
-    with open('README.rst') as f:
+    with open('README.rst', encoding='utf-8') as f:
         if short:
             return f.readlines()[1].strip()
         else:
