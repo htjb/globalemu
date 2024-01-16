@@ -73,13 +73,9 @@ class process():
                 data set or not. Set to True by default as this is advised for
                 training both neutral fraction and global signal emulators.
 
-        logs: **list / default: [0, 1, 2]**
+        logs: **list / default: []**
             | The indices corresponding to the astrophysical parameters in
-                "train_data.txt" that need to be logged. The default assumes
-                that the first three columns in "train_data.txt" are
-                :math:`{f_*}` (star formation efficiency),
-                :math:`{V_c}` (minimum virial circular velocity) and
-                :math:`{f_x}` (X-ray efficieny).
+                "train_data.txt" that need to be logged.
     """
 
     def __init__(self, num, z, **kwargs):
@@ -137,7 +133,7 @@ class process():
             if type(bool_kwargs[i]) is not bool:
                 raise TypeError(bool_strings[i] + " must be a bool.")
 
-        self.logs = kwargs.pop('logs', [0, 1, 2])
+        self.logs = kwargs.pop('logs', [])
         if type(self.logs) is not list:
             raise TypeError("'logs' must be a list.")
 
