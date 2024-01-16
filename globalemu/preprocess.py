@@ -166,7 +166,6 @@ class process():
             train_data = full_train_data.copy()
             if self.preprocess_settings['AFB'] is True:
                 train_labels = full_train_labels.copy() - res.deltaT
-                test_labels -= res.deltaT
             else:
                 train_labels = full_train_labels.copy()
         else:
@@ -185,10 +184,14 @@ class process():
                     train_data.append(full_train_data[i, :])
                     if self.preprocess_settings['AFB'] is True:
                         train_labels.append(full_train_labels[i] - res.deltaT)
+                        
                     else:
                         train_labels.append(full_train_labels[i])
             train_data, train_labels = np.array(train_data), \
                 np.array(train_labels)
+        
+        if self.preprocess_settings['AFB'] is True:
+            test_labels = test_labels.copy() - res.deltaT
 
         log_train_data = []
         for i in range(train_data.shape[1]):
