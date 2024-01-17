@@ -198,7 +198,7 @@ class signal_plot():
 
         if self.xHI is False:
             for i in range(len(axes)):
-                axes[i].set_ylabel(r'$T_{21}$ [mk]')
+                axes[i].set_ylabel(r'$T_{21}$ [mK]')
         else:
             for i in range(len(axes)):
                 axes[i].set_ylabel(r'$x_{HI}$')
