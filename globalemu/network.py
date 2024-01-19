@@ -227,8 +227,8 @@ class nn():
             label_name=label_names,
             num_epochs=1)
 
-        test_data = np.loadtxt(self.base_dir + 'test_data.txt')
-        test_labels = np.loadtxt(self.base_dir + 'test_label.txt')
+        test_data = np.loadtxt(self.base_dir + 'test_data.txt').astype('float32')
+        test_labels = np.loadtxt(self.base_dir + 'test_label.txt').astype('float32')
 
         def pack_features_vector(features, labels):
             return tf.stack(list(features.values()), axis=1), labels
@@ -249,7 +249,8 @@ class nn():
                 self.layer_sizes, self.activation, self.drop_val,
                 self.output_activation)
 
-        def loss(model, x, y, training):
+        @tf.function(jit_compile=True, reduce_retracing=True)
+        def test_loss_func(model, x, y, training):
             y_ = tf.transpose(model(x, training=training))[0]
             lf = loss_functions(y, y_)
             if loss_function is None:
@@ -257,11 +258,19 @@ class nn():
             else:
                 return loss_function(y, y_, x), lf.rmse()
 
-        def grad(model, inputs, targets):
+        @tf.function(jit_compile=True, reduce_retracing=True)
+        def train_loss_func(model, inputs, targets, training=True):
             with tf.GradientTape() as tape:
-                loss_value, rmse = loss(model, inputs, targets, training=True)
-            return loss_value, rmse, tape.gradient(
-                loss_value, model.trainable_variables)
+                y_ = tf.transpose(model(x, training=training))[0]
+                lf = loss_functions(y, y_)
+                if loss_function is None:
+                    loss_value = lf.mse()
+                else:
+                    loss_value = loss_function(y, y_, x)
+            grads = tape.gradient(loss_value, model.trainable_variables)
+            optimizer.apply_gradients(
+                    zip(grads, model.trainable_variables))
+            return loss_value, lf.rmse()
 
         optimizer = keras.optimizers.Adam(learning_rate=self.lr)
 
@@ -283,9 +292,7 @@ class nn():
             epoch_rmse_avg = tf.keras.metrics.Mean()
 
             for x, y in train_dataset:
-                loss_values, rmse, grads = grad(model, x, y)
-                optimizer.apply_gradients(
-                    zip(grads, model.trainable_variables))
+                loss_values, rmse = train_loss_func(model, x, y)
                 epoch_loss_avg.update_state(loss_values)
                 epoch_rmse_avg.update_state(rmse)
 
@@ -293,7 +300,7 @@ class nn():
             train_rmse_results.append(epoch_rmse_avg.result())
             e = time.time()
 
-            test_loss, _ = loss(model, test_data, test_labels, training=False)
+            test_loss, _ = test_loss_func(model, test_data, test_labels, training=False)
             test_loss_results.append(test_loss)
 
             print(
