@@ -2,12 +2,16 @@
 globalemu: Robust and Fast Global 21-cm Signal Emulation
 ========================================================
 
+   Note: globalemu is dependent on TensorFlow. Some of the ideas
+    implemented in globalemu are being reimplemented in JAX in the 
+    code `emu<https://github.com/htjb/emu>`__.
+
 Introduction
 ------------
 
 :globalemu: Robust Global 21-cm Signal Emulation
 :Author: Harry Thomas Jones Bevins
-:Version: 1.8.2
+:Version: 1.8.1
 :Homepage: https://github.com/htjb/globalemu
 :Documentation: https://globalemu.readthedocs.io/
 
