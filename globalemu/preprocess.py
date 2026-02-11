@@ -149,7 +149,7 @@ class process():
         def load_data(file):
             return pd.read_csv(
                 self.data_location + file,
-                delim_whitespace=True, header=None).values
+                sep='\s+', header=None).values
 
         full_train_data = load_data('train_data.txt')
         full_train_labels = load_data('train_labels.txt')

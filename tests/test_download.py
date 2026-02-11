@@ -27,10 +27,10 @@ def download_21cmGEM_data():
 
     td = pd.read_csv(
         data_dir + 'train_data.txt',
-        delim_whitespace=True, header=None).values
+        sep='\s+', header=None).values
     tl = pd.read_csv(
         data_dir + 'train_labels.txt',
-        delim_whitespace=True, header=None).values
+        sep='\s+', header=None).values
 
     np.savetxt(data_dir + 'train_data.txt', td[:500, :])
     np.savetxt(data_dir + 'train_labels.txt', tl[:500, :])
