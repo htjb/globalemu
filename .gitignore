@@ -1,2 +1,6 @@
 build/
 globalemu.egg-info/
+env*
+__pycache__/
+venv*
+.coverage
