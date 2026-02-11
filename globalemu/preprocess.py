@@ -13,7 +13,6 @@ astrophysical parameters (network inputs excluding redshift) as
 
 import numpy as np
 import os
-import pandas as pd
 import pickle
 from globalemu.cmSim import calc_signal
 from globalemu.resample import sampling
@@ -146,10 +145,12 @@ class process():
 
         np.savetxt(self.base_dir + 'z.txt', self.z)
 
-        def load_data(file):
-            return pd.read_csv(
+        def load_data(file: str) -> np.ndarray:
+            """Helper function to load the data from the provided directory."""
+            return np.loadtxt(
                 self.data_location + file,
-                sep='\s+', header=None).values
+                dtype=float
+            )
 
         full_train_data = load_data('train_data.txt')
         full_train_labels = load_data('train_labels.txt')

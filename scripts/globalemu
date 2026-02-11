@@ -90,7 +90,13 @@ def reset(parameters=None):
 
 base_dir = sys.argv[1]
 
-config = pd.read_csv(base_dir + 'gui_configuration.csv')
+config = np.genfromtxt(
+    base_dir + 'gui_configuration.csv',
+    delimiter=',',
+    names=True,
+    dtype=None,
+    encoding='utf-8'
+)
 
 logs = config['logs'].tolist()
 logs = [int(x) for x in logs if x != '--']

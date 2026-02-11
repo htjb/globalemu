@@ -2,7 +2,6 @@ import numpy as np
 from globalemu.preprocess import process
 import os
 import pytest
-import pandas as pd
 import shutil
 
 
@@ -29,8 +28,9 @@ def test_preprocess():
     for i in range(len(files)):
         assert(os.path.exists('model_dir/' + files[i]) is True)
 
-    full_train_data = pd.read_csv(
-        'model_dir/train_dataset.csv', header=None).values
+    full_train_data = np.loadtxt(
+        'model_dir/train_dataset.csv', dtype=float,
+        delimiter=',')
 
     for i in range(full_train_data.shape[1]):
         if i < full_train_data.shape[1] - 1:

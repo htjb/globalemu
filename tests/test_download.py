@@ -2,7 +2,6 @@ from globalemu.downloads import download
 import os
 import pytest
 import requests
-import pandas as pd
 import numpy as np
 
 
@@ -25,12 +24,8 @@ def download_21cmGEM_data():
         with open(data_dir + saves[i], 'wb') as f:
             f.write(requests.get(url).content)
 
-    td = pd.read_csv(
-        data_dir + 'train_data.txt',
-        sep='\s+', header=None).values
-    tl = pd.read_csv(
-        data_dir + 'train_labels.txt',
-        sep='\s+', header=None).values
+    td = np.loadtxt(data_dir + 'train_data.txt', dtype=float) 
+    tl = np.loadtxt(data_dir + 'train_labels.txt', dtype=float)
 
     np.savetxt(data_dir + 'train_data.txt', td[:500, :])
     np.savetxt(data_dir + 'train_labels.txt', tl[:500, :])
