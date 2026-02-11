@@ -1,5 +1,0 @@
-numpy
-tensorflow
-pandas
-matplotlib
-Pillow

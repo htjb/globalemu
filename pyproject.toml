@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=77.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "globalemu"
+version = "1.8.3"
+description = "globalemu: Robust and Fast Global 21-cm Signal Emulation."
+readme = "README.md"
+authors = [
+    {name = "Harry T. J. Bevins", email = "htjb2@cam.ac.uk"}]
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = [
+    'numpy',
+    'tensorflow',
+    'matplotlib',
+    'Pillow'
+]
+
+[project.scripts]
+globalemu = "scripts.globalemu:main"
+
+classifiers=[
+    'Intended Audience :: Science/Research',
+    'Natural Language :: English',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
+    'Topic :: Scientific/Engineering',
+    'Topic :: Scientific/Engineering :: Astronomy',
+    'Topic :: Scientific/Engineering :: Physics',
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+docs = [
+    "sphinx",
+    "sphinx_rtd_theme",
+    "numpydoc",
+    "packaging"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["globalemu*"]
