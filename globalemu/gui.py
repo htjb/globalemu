@@ -15,7 +15,7 @@ def main():
         base_dir + 'gui_configuration.csv',
         delimiter=',',
         names=True,
-        dtype=None,
+        dtype='U100,f8,f8,f8,f8,U100,U100',  # Explicitly specify types
         encoding='utf-8'
     )
     
