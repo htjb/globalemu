@@ -15,7 +15,6 @@ GUI and once generated the gui can be run from the command line
 """
 
 import numpy as np
-import pandas as pd
 import pickle
 
 
@@ -115,14 +114,33 @@ class config():
             else:
                 full_logs.append('--')
 
-        df = pd.DataFrame({'names': self.paramnames,
-                           'mins': data_mins,
-                           'maxs': data_maxs,
-                           'label_min':
-                           [test_labels.min()] + ['']*(len(data_maxs)-1),
-                           'label_max':
-                           [test_labels.max()] + ['']*(len(data_maxs)-1),
-                           'logs': full_logs,
-                           'ylabel': self.ylabel})
+        # Create the data arrays
+        n = len(data_maxs)
+        names = np.array(self.paramnames, dtype='U100')  # Unicode strings
+        mins = np.array(data_mins, dtype=float)
+        maxs = np.array(data_maxs, dtype=float)
 
-        df.to_csv(base_dir + 'gui_configuration.csv', index=False)
+        # label_min: first value is test_labels.min(), rest are empty strings
+        label_min = np.array([test_labels.min()] + ['']*(n-1), dtype='U100')
+
+        # label_max: first value is test_labels.max(), rest are empty strings
+        label_max = np.array([test_labels.max()] + ['']*(n-1), dtype='U100')
+
+        logs = np.array(full_logs, dtype='U100')
+        ylabel = np.array([self.ylabel]*n, dtype='U100')
+
+        # Stack into 2D array (transpose to get columns)
+        data = np.column_stack([names, mins, maxs, label_min, label_max, logs, ylabel])
+
+        # Write header
+        header = 'names,mins,maxs,label_min,label_max,logs,ylabel'
+
+        # Save to CSV
+        np.savetxt(
+            base_dir + 'gui_configuration.csv',
+            data,
+            delimiter=',',
+            header=header,
+            comments='',  # Prevents '#' being added to header
+            fmt='%s'      # String format for all columns
+        )
