@@ -18,9 +18,6 @@ dependencies = [
     'Pillow'
 ]
 
-[project.scripts]
-globalemu = "scripts.globalemu:main"
-
 classifiers=[
     'Intended Audience :: Science/Research',
     'Natural Language :: English',
@@ -33,6 +30,10 @@ classifiers=[
     'Topic :: Scientific/Engineering :: Astronomy',
     'Topic :: Scientific/Engineering :: Physics',
 ]
+
+[project.scripts]
+globalemu = "globalemu.gui:main"
+
 
 [project.optional-dependencies]
 dev = [
