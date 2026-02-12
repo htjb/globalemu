@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "globalemu"
-version = "1.9.0"
+version = "1.9.1"
 description = "globalemu: Robust and Fast Global 21-cm Signal Emulation."
-readme = "README.md"
+readme = "README.rst"
 authors = [
     {name = "Harry T. J. Bevins", email = "htjb2@cam.ac.uk"}]
 license = {text = "MIT"}
