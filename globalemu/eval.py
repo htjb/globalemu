@@ -15,6 +15,7 @@ from tensorflow import keras
 from tensorflow.keras import backend as K
 import gc
 import pickle
+import warnings
 
 
 class evaluate():
@@ -48,7 +49,7 @@ class evaluate():
                         base_dir + 'model.h5',
                         compile=False)
 
-        logs: **list / default: [0, 1, 2]**
+        logs: **list / default: []**
             | The indices corresponding to the astrophysical
                 parameters that
                 were logged during training. The default assumes
@@ -140,7 +141,14 @@ class evaluate():
                 self.base_dir + 'model.h5',
                 compile=False)
 
-        self.logs = kwargs.pop('logs', [0, 1, 2])
+        self.logs = kwargs.pop('logs', [])
+        if self.logs == []:
+            warnings.warn("logs has defaulted to [] i.e. " + 
+                          "log no input parameters. Older versions " +
+                          "assumed logs=[0, 1, 2]. If logs is not in " +
+                          "{base_dir}/kwargs.txt and the network " +
+                          "was trained with globalemu < 1.9 there is a " +
+                          "good chance logs should be [0, 1, 2]!")
         if type(self.logs) is not list:
             raise TypeError("'logs' must be a list.")
         self.garbage_collection = kwargs.pop('gc', False)
