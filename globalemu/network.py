@@ -35,6 +35,9 @@ class nn():
                 large for every sample to have influenced an update of the
                 network hyperparameters.
 
+        save_after **int / default: 10**
+            | After how many epochs do you want to save the trained model?
+
         activation: **string / default: 'tanh'**
             | The type of activation function used in the neural networks
                 hidden layers. The activation function effects the way that the
@@ -140,7 +143,7 @@ class nn():
 
         for key, values in kwargs.items():
             if key not in set(
-                    ['batch_size', 'activation', 'epochs',
+                    ['batch_size', 'activation', 'epochs','save_after',
                         'lr', 'dropout', 'input_shape',
                         'output_shape', 'layer_sizes', 'base_dir',
                         'early_stop', 'xHI', 'resume',
@@ -166,6 +169,7 @@ class nn():
         if type(self.activation) is not str:
             raise TypeError("'activation' must be a string.")
         self.epochs = kwargs.pop('epochs', 10)
+        self.save_after = kwargs.pop('save_after',10)
         self.lr = kwargs.pop('lr', 1e-3)
         self.drop_val = kwargs.pop('dropout', 0)
         self.input_shape = kwargs.pop('input_shape', 8)
@@ -321,7 +325,7 @@ class nn():
                               ' Epochs used = ' + str(epoch))
                         break
 
-            if (epoch + 1) % 10 == 0:
+            if (epoch + 1) % self.save_after == 0:
                 model.save(self.base_dir + 'model.h5')
                 np.savetxt(
                     self.base_dir + 'loss_history.txt', train_loss_results)
